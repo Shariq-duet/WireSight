@@ -29,6 +29,18 @@ interface ActiveWallPinchData {
     startYaw?: number;
 }
 
+export interface BreakerInfo {
+    isBreaker: boolean;
+    num: number;
+    label: string;
+    room: string;
+    amperage: number;
+    isOn: boolean;
+    terminalPos: vec3;
+    isLeftCol: boolean;
+    isMain: boolean;
+}
+
 @component
 export class ConduitXRMain extends BaseScriptComponent {
     // Sub-components
@@ -346,11 +358,11 @@ export class ConduitXRMain extends BaseScriptComponent {
         isOn: boolean;
         textComp?: Text;
     }[] = [
-        { num: 0, label: "MAIN 200A SERVICE DISCONNECT", room: "all", x: 0, y: 15, amperage: 200, isOn: true },
-        { num: 1, label: "B1: 20A Master Bed Outlets", room: "bedroom", x: -14, y: 5, amperage: 20, isOn: true },
-        { num: 2, label: "B2: 15A Living Room TV", room: "living", x: 14, y: 5, amperage: 15, isOn: true },
-        { num: 3, label: "B3: 15A Living Room Sofa", room: "sofa", x: -14, y: -5, amperage: 15, isOn: true },
-        { num: 4, label: "B4: 30A Utility & Battery Hub", room: "utility", x: 14, y: -5, amperage: 30, isOn: true }
+        { num: 0, label: "MAIN 200A SERVICE DISCONNECT", room: "all", x: 0, y: 35, amperage: 200, isOn: true },
+        { num: 1, label: "B1: 20A Master Bed Outlets", room: "bedroom", x: -14, y: 17, amperage: 20, isOn: true },
+        { num: 2, label: "B2: 15A Living Room TV", room: "living", x: 14, y: 17, amperage: 15, isOn: true },
+        { num: 3, label: "B3: 15A Living Room Sofa", room: "sofa", x: -14, y: 5, amperage: 15, isOn: true },
+        { num: 4, label: "B4: 30A Utility & Battery Hub", room: "utility", x: 14, y: 5, amperage: 30, isOn: true }
     ];
 
     private buildBreakerPanel() {
@@ -360,7 +372,7 @@ export class ConduitXRMain extends BaseScriptComponent {
             // Panel Enclosure Header
             const headerObj = global.scene.createSceneObject("PanelHeader");
             headerObj.setParent(this.breakerPanelRoot);
-            headerObj.getTransform().setLocalPosition(new vec3(0, 24, 0));
+            headerObj.getTransform().setLocalPosition(new vec3(0, 46, 0));
             const headText = headerObj.createComponent("Component.Text") as Text;
             headText.text = " ⚡ LOAD CENTER: 200A MAIN SERVICE PANEL ";
             headText.size = 32;
@@ -602,8 +614,114 @@ export class ConduitXRMain extends BaseScriptComponent {
         return bestWall || (this.activeWalls.length > 0 ? this.activeWalls[0] : null);
     }
 
-    // Formats 3D node badges: Distinct Duplex Outlet faceplate, Ceiling Luminaire, J-Box, or Grip Handle
+    // Computes world coordinates for a given breaker on the load center panel
+    public getBreakerWorldPosition(num: number): vec3 {
+        const rootPos = this.breakerPanelRoot
+            ? this.breakerPanelRoot.getTransform().getWorldPosition()
+            : new vec3(380.0, 140.0, -200.0);
+        const rootRot = this.breakerPanelRoot
+            ? this.breakerPanelRoot.getTransform().getWorldRotation()
+            : quat.fromEulerAngles(0, 0, 0);
+
+        const b = this.breakerBranches.find(item => item.num === num);
+        if (!b) return rootPos;
+        return rootPos.add(rootRot.multiplyVec3(new vec3(b.x, b.y, -1.0)));
+    }
+
+    // Resolves whether a 3D point is on an active Circuit Breaker switch terminal
+    public getBreakerForPoint(p: vec3, run?: ConduitRun): BreakerInfo | null {
+        for (const b of this.breakerBranches) {
+            const worldPos = this.getBreakerWorldPosition(b.num);
+            if (worldPos.distance(p) <= 8.5) {
+                return {
+                    isBreaker: true,
+                    num: b.num,
+                    label: b.label,
+                    room: b.room,
+                    amperage: b.amperage,
+                    isOn: b.isOn,
+                    terminalPos: worldPos,
+                    isLeftCol: b.x < 0,
+                    isMain: b.num === 0
+                };
+            }
+        }
+
+        // Contextual fallback: check if run name / id points directly to a breaker terminal
+        if (run) {
+            const nameLower = (run.name + " " + run.id).toLowerCase();
+            let matchedNum = -1;
+            if (nameLower.includes("breaker b1") || nameLower.includes("-b1")) matchedNum = 1;
+            else if (nameLower.includes("breaker b2") || nameLower.includes("-b2")) matchedNum = 2;
+            else if (nameLower.includes("breaker b3") || nameLower.includes("-b3")) matchedNum = 3;
+            else if (nameLower.includes("breaker b4") || nameLower.includes("-b4")) matchedNum = 4;
+            else if (nameLower.includes("main 200a") || nameLower.includes("main-disconnect")) matchedNum = 0;
+
+            if (matchedNum >= 0) {
+                const b = this.breakerBranches.find(item => item.num === matchedNum);
+                if (b) {
+                    const worldPos = this.getBreakerWorldPosition(b.num);
+                    return {
+                        isBreaker: true,
+                        num: b.num,
+                        label: b.label,
+                        room: b.room,
+                        amperage: b.amperage,
+                        isOn: b.isOn,
+                        terminalPos: worldPos,
+                        isLeftCol: b.x < 0,
+                        isMain: b.num === 0
+                    };
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public getBreakerByNum(num: number): BreakerInfo | null {
+        const b = this.breakerBranches.find(item => item.num === num);
+        if (!b) return null;
+        return {
+            isBreaker: true,
+            num: b.num,
+            label: b.label,
+            room: b.room,
+            amperage: b.amperage,
+            isOn: b.isOn,
+            terminalPos: this.getBreakerWorldPosition(b.num),
+            isLeftCol: b.x < 0,
+            isMain: b.num === 0
+        };
+    }
+
+    // Formats 3D node badges: Distinct Duplex Outlet faceplate, Circuit Breaker, Ceiling Luminaire, J-Box, or Grip Handle
     private applyNodeVisualText(textComp: Text, pt: vec3, run: ConduitRun, isJunc: boolean, isStart: boolean) {
+        const breakerInfo = this.getBreakerForPoint(pt, run);
+        if (breakerInfo) {
+            const statusLabel = breakerInfo.isOn ? "[■ ON]" : "[○ OFF TRIPPED]";
+            const circuitDesc = breakerInfo.num === 0 ? "MAIN 200A DISCONNECT" : `B${breakerInfo.num} (${breakerInfo.amperage}A)`;
+            textComp.text = breakerInfo.isOn
+                ? ` ⚡ ${statusLabel} ${circuitDesc} `
+                : ` ❄️ ${statusLabel} ${circuitDesc} (0V SAFE) `;
+            textComp.size = breakerInfo.isMain ? 52 : 46;
+            textComp.textFill.color = breakerInfo.isOn
+                ? (breakerInfo.isMain ? new vec4(1.0, 0.45, 0.45, 1.0) : new vec4(0.3, 1.0, 0.6, 1.0))
+                : new vec4(1.0, 0.35, 0.3, 1.0);
+            textComp.backgroundSettings.enabled = true;
+            textComp.backgroundSettings.fill.color = breakerInfo.isOn
+                ? new vec4(0.02, 0.12, 0.06, 0.92)
+                : new vec4(0.25, 0.04, 0.04, 0.92);
+            textComp.backgroundSettings.cornerRadius = 0.45;
+            textComp.outlineSettings.enabled = true;
+            textComp.outlineSettings.fill.color = breakerInfo.isOn
+                ? (breakerInfo.isMain ? new vec4(0.9, 0.2, 0.2, 0.85) : new vec4(0.25, 0.85, 0.5, 0.85))
+                : new vec4(0.9, 0.2, 0.2, 0.9);
+            textComp.outlineSettings.size = 0.16;
+            textComp.enabled = true;
+            return;
+        }
+
         const outletInfo = this.isOutletPoint(pt);
 
         if (outletInfo.isCeilingFixture) {
@@ -1269,9 +1387,8 @@ export class ConduitXRMain extends BaseScriptComponent {
 
             // Check if user tapped a Breaker on the Main Service Breaker Panel
             if (this.breakerPanelRoot) {
-                const panelPos = this.breakerPanelRoot.getTransform().getWorldPosition();
                 for (const b of this.breakerBranches) {
-                    const bWorld = new vec3(panelPos.x, panelPos.y + b.y, panelPos.z);
+                    const bWorld = this.getBreakerWorldPosition(b.num);
                     const screenPt = camComp.worldSpaceToScreenSpace(bWorld);
                     const dist = Math.sqrt((pos.x - screenPt.x) ** 2 + (pos.y - screenPt.y) ** 2);
                     if (dist <= 0.08) {
@@ -2629,6 +2746,13 @@ export class ConduitXRMain extends BaseScriptComponent {
             return;
         }
 
+        const breakerInfo = this.getBreakerForPoint(pt, run);
+        if (breakerInfo) {
+            // ⚡ REALISTIC 3D LOAD CENTER CIRCUIT BREAKER HARDWARE VISUAL
+            this.renderBreakerVisual(pt, breakerInfo, isSelected);
+            return;
+        }
+
         if (isJunc) {
             // ⬢ UNIFIED CIRCUIT JUNCTION BOX
             const jBoxCol = new vec4(1.0, 0.85, 0.20, 1.0);
@@ -2640,6 +2764,164 @@ export class ConduitXRMain extends BaseScriptComponent {
         // ◉ STANDARD WIRE GRIP NODE
         global.debugRenderSystem.drawSolidSphere(pt, sphereRadius, wireColor);
         global.debugRenderSystem.drawCircle(pt, sphereRadius + 2.2, ringColor);
+    }
+
+    // Renders realistic 3D Circuit Breaker hardware: molded-case body, mechanical ON/OFF toggle switch,
+    // metallic screw terminal lug, copper bus bar clip, and live energization / red warning trip flag indicator
+    private renderBreakerVisual(pt: vec3, breaker: BreakerInfo, isSelected: boolean) {
+        if (!global.debugRenderSystem) return;
+
+        const wall = this.getWallForPoint(pt);
+        const wallRot = wall ? wall.getSceneObject().getTransform().getWorldRotation() : quat.fromEulerAngles(0, 0, 0);
+
+        const halfW = breaker.isMain ? 11.0 : 8.5;
+        const halfH = breaker.isMain ? 5.2 : 4.2;
+        const faceOffsetZ = 1.0;
+
+        // 1. Molded-Case Outer Bevel Enclosure Frame
+        const cTL = pt.add(wallRot.multiplyVec3(new vec3(-halfW, halfH, faceOffsetZ)));
+        const cTR = pt.add(wallRot.multiplyVec3(new vec3(halfW, halfH, faceOffsetZ)));
+        const cBR = pt.add(wallRot.multiplyVec3(new vec3(halfW, -halfH, faceOffsetZ)));
+        const cBL = pt.add(wallRot.multiplyVec3(new vec3(-halfW, -halfH, faceOffsetZ)));
+
+        const frameCol = isSelected
+            ? new vec4(1.0, 0.95, 0.35, 1.0)
+            : (!breaker.isOn
+                ? new vec4(1.0, 0.40, 0.25, 0.95)
+                : (breaker.isMain ? new vec4(0.85, 0.22, 0.22, 0.95) : new vec4(0.42, 0.46, 0.52, 0.95)));
+
+        global.debugRenderSystem.drawLine(cTL, cTR, frameCol);
+        global.debugRenderSystem.drawLine(cTR, cBR, frameCol);
+        global.debugRenderSystem.drawLine(cBR, cBL, frameCol);
+        global.debugRenderSystem.drawLine(cBL, cTL, frameCol);
+
+        // 2. Inner Chamfer / Molded-Case Recess Frame
+        const inW = halfW - 0.9;
+        const inH = halfH - 0.7;
+        const iTL = pt.add(wallRot.multiplyVec3(new vec3(-inW, inH, faceOffsetZ)));
+        const iTR = pt.add(wallRot.multiplyVec3(new vec3(inW, inH, faceOffsetZ)));
+        const iBR = pt.add(wallRot.multiplyVec3(new vec3(inW, -inH, faceOffsetZ)));
+        const iBL = pt.add(wallRot.multiplyVec3(new vec3(-inW, -inH, faceOffsetZ)));
+
+        const innerCol = new vec4(0.12, 0.14, 0.18, 0.95);
+        global.debugRenderSystem.drawLine(iTL, iTR, innerCol);
+        global.debugRenderSystem.drawLine(iTR, iBR, innerCol);
+        global.debugRenderSystem.drawLine(iBR, iBL, innerCol);
+        global.debugRenderSystem.drawLine(iBL, iTL, innerCol);
+
+        // 3. Metallic Screw Terminal Clamp Lug (Where Conduit / Feeder Enters Breaker)
+        const collarCol = new vec4(0.85, 0.72, 0.28, 0.95); // Brass clamp ring
+        const lugBarrelCol = new vec4(0.70, 0.72, 0.78, 0.95); // Zinc-plated steel clamp lug
+        global.debugRenderSystem.drawCircle(pt, 2.6, collarCol);
+        global.debugRenderSystem.drawSolidSphere(pt, 1.6, lugBarrelCol);
+
+        // Slotted screw drive on terminal lug
+        const slotL = pt.add(wallRot.multiplyVec3(new vec3(-1.1, 0, 0.2)));
+        const slotR = pt.add(wallRot.multiplyVec3(new vec3(1.1, 0, 0.2)));
+        global.debugRenderSystem.drawLine(slotL, slotR, new vec4(0.12, 0.12, 0.15, 1.0));
+
+        // Conduit clamping bracket linking lug to case edge
+        const bracketTop = pt.add(wallRot.multiplyVec3(new vec3(0, halfH, 0)));
+        global.debugRenderSystem.drawLine(pt, bracketTop, new vec4(0.55, 0.60, 0.65, 0.85));
+
+        // 4. Mechanical Toggle Switch Lever
+        if (breaker.isMain) {
+            // Main 200A Service Disconnect: Dual-pole coupled toggle switch
+            const switchPosL = pt.add(wallRot.multiplyVec3(new vec3(-3.5, 0, faceOffsetZ + 0.3)));
+            const switchPosR = pt.add(wallRot.multiplyVec3(new vec3(3.5, 0, faceOffsetZ + 0.3)));
+            global.debugRenderSystem.drawCircle(switchPosL, 1.8, innerCol);
+            global.debugRenderSystem.drawCircle(switchPosR, 1.8, innerCol);
+
+            const leverY = breaker.isOn ? 2.0 : -2.0;
+            const leverCol = breaker.isOn ? new vec4(0.95, 0.20, 0.20, 1.0) : new vec4(1.0, 0.40, 0.25, 1.0);
+            const tipL = pt.add(wallRot.multiplyVec3(new vec3(-3.5, leverY, faceOffsetZ + 1.2)));
+            const tipR = pt.add(wallRot.multiplyVec3(new vec3(3.5, leverY, faceOffsetZ + 1.2)));
+
+            global.debugRenderSystem.drawLine(switchPosL, tipL, leverCol);
+            global.debugRenderSystem.drawLine(switchPosR, tipR, leverCol);
+            global.debugRenderSystem.drawLine(tipL, tipR, leverCol); // Dual-pole tie-bar!
+            global.debugRenderSystem.drawSolidSphere(tipL, 1.5, leverCol);
+            global.debugRenderSystem.drawSolidSphere(tipR, 1.5, leverCol);
+
+            // Dual utility feeder service lugs at top of main breaker
+            const lugA = pt.add(wallRot.multiplyVec3(new vec3(-4.5, halfH, 0)));
+            const lugB = pt.add(wallRot.multiplyVec3(new vec3(4.5, halfH, 0)));
+            global.debugRenderSystem.drawCircle(lugA, 2.8, collarCol);
+            global.debugRenderSystem.drawSolidSphere(lugA, 1.7, lugBarrelCol);
+            global.debugRenderSystem.drawCircle(lugB, 2.8, collarCol);
+            global.debugRenderSystem.drawSolidSphere(lugB, 1.7, lugBarrelCol);
+
+            if (!breaker.isOn) {
+                // Whole house blackout warning aura
+                global.debugRenderSystem.drawCircle(pt, 8.0, new vec4(1.0, 0.2, 0.2, 0.85));
+            }
+        } else {
+            // Branch Circuit Breaker (B1, B2, B3, B4)
+            const switchOffsetX = breaker.isLeftCol ? 3.6 : -3.6;
+            const switchCenter = pt.add(wallRot.multiplyVec3(new vec3(switchOffsetX, 0, faceOffsetZ + 0.3)));
+            global.debugRenderSystem.drawCircle(switchCenter, 2.1, innerCol);
+
+            if (breaker.isOn) {
+                // [ | ON ] Lever thrown towards center bus bar
+                const leverVec = breaker.isLeftCol ? new vec3(1.8, 0.7, 0.9) : new vec3(-1.8, 0.7, 0.9);
+                const leverTip = switchCenter.add(wallRot.multiplyVec3(leverVec));
+                const leverCol = new vec4(0.25, 0.95, 0.55, 1.0); // Vibrant emerald green
+                global.debugRenderSystem.drawLine(switchCenter, leverTip, leverCol);
+                global.debugRenderSystem.drawSolidSphere(leverTip, 1.4, leverCol);
+
+                // Active Energized Green LED Indicator Dot
+                const ledPos = switchCenter.add(wallRot.multiplyVec3(new vec3(breaker.isLeftCol ? -2.2 : 2.2, 0, 0.1)));
+                global.debugRenderSystem.drawCircle(ledPos, 1.3, new vec4(0.2, 1.0, 0.5, 0.95));
+                global.debugRenderSystem.drawSolidSphere(ledPos, 0.8, new vec4(0.35, 1.0, 0.65, 1.0));
+            } else {
+                // [ ○ OFF ] Lever dropped to center/down (TRIPPED)
+                const leverVec = new vec3(0, -1.8, 0.7);
+                const leverTip = switchCenter.add(wallRot.multiplyVec3(leverVec));
+                const leverCol = new vec4(1.0, 0.35, 0.25, 1.0); // Warning trip red
+                global.debugRenderSystem.drawLine(switchCenter, leverTip, leverCol);
+                global.debugRenderSystem.drawSolidSphere(leverTip, 1.4, leverCol);
+
+                // High-visibility TRIP FLAG / Warning Red Indicator
+                const ledPos = switchCenter.add(wallRot.multiplyVec3(new vec3(breaker.isLeftCol ? -2.2 : 2.2, 0, 0.1)));
+                global.debugRenderSystem.drawCircle(ledPos, 2.0, new vec4(1.0, 0.2, 0.15, 0.95));
+                global.debugRenderSystem.drawSolidSphere(ledPos, 1.1, new vec4(1.0, 0.15, 0.10, 1.0));
+                // Warning trip aura ring around the breaker
+                global.debugRenderSystem.drawCircle(pt, 5.5, new vec4(1.0, 0.3, 0.2, 0.65));
+            }
+
+            // 5. Copper Bus Bar Contact Clip
+            const busClipX = breaker.isLeftCol ? 7.2 : -7.2;
+            const busClipPos = pt.add(wallRot.multiplyVec3(new vec3(busClipX, 0, 0)));
+            global.debugRenderSystem.drawCircle(busClipPos, 1.4, new vec4(0.85, 0.52, 0.25, 0.95));
+            global.debugRenderSystem.drawLine(switchCenter, busClipPos, new vec4(0.85, 0.52, 0.25, 0.85));
+
+            // 6. Amperage Rating Stencil Badge
+            const badgeX = breaker.isLeftCol ? -4.0 : 4.0;
+            const badgePos = pt.add(wallRot.multiplyVec3(new vec3(badgeX, 0, faceOffsetZ + 0.2)));
+            const badgeRingCol = breaker.isOn ? new vec4(0.9, 0.9, 0.95, 0.9) : new vec4(1.0, 0.45, 0.35, 0.9);
+            const badgeCoreCol = breaker.isOn ? new vec4(0.12, 0.15, 0.20, 1.0) : new vec4(0.35, 0.08, 0.08, 1.0);
+            global.debugRenderSystem.drawCircle(badgePos, 1.7, badgeRingCol);
+            global.debugRenderSystem.drawSolidSphere(badgePos, 0.9, badgeCoreCol);
+        }
+    }
+
+    // Renders all load center circuit breakers across the electrical panel
+    private renderAllBreakersDebug(alreadyRendered?: vec3[]) {
+        if (!global.debugRenderSystem) return;
+        const hasHouse = this.activeRuns.some(r => r.id.startsWith("scen") || r.isWorldCoords);
+        if (!hasHouse) return;
+
+        for (const b of this.breakerBranches) {
+            const worldPos = this.getBreakerWorldPosition(b.num);
+            if (alreadyRendered && alreadyRendered.some(p => p.distance(worldPos) <= 5.0)) {
+                continue;
+            }
+            const info = this.getBreakerByNum(b.num);
+            if (info) {
+                this.renderBreakerVisual(worldPos, info, false);
+                if (alreadyRendered) alreadyRendered.push(worldPos);
+            }
+        }
     }
 
     // Renders glowing 3D world-locked lines, grip spheres, and midpoint handles
@@ -2656,6 +2938,7 @@ export class ConduitXRMain extends BaseScriptComponent {
                     this.renderPointVisual(run.endPoint, run, false, run.id === this.selectedRunId);
                 }
             }
+            this.renderAllBreakersDebug();
             return;
         }
 
@@ -2722,6 +3005,9 @@ export class ConduitXRMain extends BaseScriptComponent {
                 global.debugRenderSystem.drawSolidSphere(pulsePt, 2.6, pulseCol);
             }
         }
+
+        // 6. Real-time 3D Load Center Circuit Breaker System
+        this.renderAllBreakersDebug(renderedJunctions);
     }
 
     // Applies room isolation filter to 3D labels and grip handles

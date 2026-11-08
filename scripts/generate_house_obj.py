@@ -211,6 +211,9 @@ def build_house():
     # Centered at X = 380, Y: 170 to 180, Z: -207 to -202
     add_box((372.0, 170, -207), (388.0, 180, -203), "Breaker_200A_Main_Case", "Mat_BreakerBlack")
     add_box((376.0, 173, -203), (384.0, 177, -199), "Breaker_200A_Main_Handle", "Mat_MainBreakerRed")
+    add_box((374.0, 178.5, -204.0), (378.0, 181.5, -200.5), "Breaker_Main_Lug_PhaseA", "Mat_CopperBus")
+    add_box((382.0, 178.5, -204.0), (386.0, 181.5, -200.5), "Breaker_Main_Lug_PhaseB", "Mat_CopperBus")
+    add_box((374.0, 171.0, -202.8), (386.0, 172.5, -202.2), "Breaker_Main_Hazard_Label", "Mat_SafetyRed")
 
     # E. Dual-Column Branch Circuit Breakers:
     # -------------------------------------------------------------
@@ -218,10 +221,14 @@ def build_house():
     # Breaker 1: Master Bedroom (20A) - Controls Scenario 1 Circuit
     add_box((356.0, 153, -207), (376.0, 161, -203), "Breaker_1_Case_MasterBed", "Mat_BreakerBlack")
     add_box((370.0, 155, -203), (375.0, 159, -200), "Breaker_1_Handle_20A", "Mat_BreakerHandle")
+    add_box((363.5, 159.0, -204.0), (368.5, 162.0, -200.5), "Breaker_1_Terminal_Lug", "Mat_CopperBus")
+    add_box((360.0, 156.0, -202.8), (363.0, 158.0, -202.2), "Breaker_1_Trip_Flag", "Mat_LedGreen")
 
     # Breaker 3: Living Room Sofa & Floor Lamp (15A) - Controls Scenario 3
     add_box((356.0, 141, -207), (376.0, 149, -203), "Breaker_3_Case_SofaBranch", "Mat_BreakerBlack")
     add_box((370.0, 143, -203), (375.0, 147, -200), "Breaker_3_Handle_15A", "Mat_BreakerHandle")
+    add_box((363.5, 147.0, -204.0), (368.5, 150.0, -200.5), "Breaker_3_Terminal_Lug", "Mat_CopperBus")
+    add_box((360.0, 144.0, -202.8), (363.0, 146.0, -202.2), "Breaker_3_Trip_Flag", "Mat_LedGreen")
 
     # Breaker 5: Spare Circuit
     add_box((356.0, 129, -207), (376.0, 137, -203), "Breaker_5_Case_Spare", "Mat_BreakerBlack")
@@ -236,10 +243,14 @@ def build_house():
     # Breaker 2: Living Room 65" TV & Media Console (15A) - Controls Scenario 2
     add_box((384.0, 153, -207), (404.0, 161, -203), "Breaker_2_Case_LivingTV", "Mat_BreakerBlack")
     add_box((385.0, 155, -203), (390.0, 159, -200), "Breaker_2_Handle_15A", "Mat_BreakerHandle")
+    add_box((391.5, 159.0, -204.0), (396.5, 162.0, -200.5), "Breaker_2_Terminal_Lug", "Mat_CopperBus")
+    add_box((397.0, 156.0, -202.8), (400.0, 158.0, -202.2), "Breaker_2_Trip_Flag", "Mat_LedGreen")
 
     # Breaker 4: Utility & Battery Storage (30A) - Controls Scenario 4
     add_box((384.0, 141, -207), (404.0, 149, -203), "Breaker_4_Case_Utility", "Mat_BreakerBlack")
     add_box((385.0, 143, -203), (390.0, 147, -200), "Breaker_4_Handle_30A", "Mat_BreakerHandle")
+    add_box((391.5, 147.0, -204.0), (396.5, 150.0, -200.5), "Breaker_4_Terminal_Lug", "Mat_CopperBus")
+    add_box((397.0, 144.0, -202.8), (400.0, 146.0, -202.2), "Breaker_4_Trip_Flag", "Mat_LedGreen")
 
     # Breaker 6: Spare Circuit
     add_box((384.0, 129, -207), (404.0, 137, -203), "Breaker_6_Case_Spare", "Mat_BreakerBlack")

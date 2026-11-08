@@ -629,11 +629,66 @@ class ConduitXRMain extends BaseScriptComponent {
         };
         this.activeRoomFilter = "all";
         this.breakerBranches = [
-            { num: 1, label: "B1: 20A Kitchen GFCI", room: "Kitchen", isOn: true },
-            { num: 2, label: "B2: 15A Living Room", room: "Living", isOn: true },
-            { num: 3, label: "B3: 15A Master Bed", room: "Bedroom", isOn: true },
-            { num: 4, label: "B4: 20A Bath GFCI", room: "Bathroom", isOn: true }
+            { num: 0, label: "MAIN 200A SERVICE DISCONNECT", room: "all", x: 0, y: 35, amperage: 200, isOn: true },
+            { num: 1, label: "B1: 20A Kitchen & Master Bed", room: "Kitchen", x: -14, y: 17, amperage: 20, isOn: true },
+            { num: 2, label: "B2: 15A Living Room TV", room: "Living", x: 14, y: 17, amperage: 15, isOn: true },
+            { num: 3, label: "B3: 15A Living Room Sofa", room: "Sofa", x: -14, y: 5, amperage: 15, isOn: true },
+            { num: 4, label: "B4: 30A Utility & Battery Hub", room: "Utility", x: 14, y: 5, amperage: 30, isOn: true }
         ];
+    }
+
+    getBreakerWorldPosition(num) {
+        const rootPos = new vec3(380.0, 140.0, -200.0);
+        const b = this.breakerBranches.find(item => item.num === num);
+        if (!b) return rootPos;
+        return new vec3(rootPos.x + b.x, rootPos.y + b.y, rootPos.z - 1.0);
+    }
+
+    getBreakerForPoint(p, run) {
+        for (const b of this.breakerBranches) {
+            const worldPos = this.getBreakerWorldPosition(b.num);
+            if (worldPos.distance(p) <= 8.5) {
+                return {
+                    isBreaker: true,
+                    num: b.num,
+                    label: b.label,
+                    room: b.room,
+                    amperage: b.amperage,
+                    isOn: b.isOn,
+                    terminalPos: worldPos,
+                    isLeftCol: b.x < 0,
+                    isMain: b.num === 0
+                };
+            }
+        }
+        return null;
+    }
+
+    getBreakerByNum(num) {
+        const b = this.breakerBranches.find(item => item.num === num);
+        if (!b) return null;
+        return {
+            isBreaker: true,
+            num: b.num,
+            label: b.label,
+            room: b.room,
+            amperage: b.amperage,
+            isOn: b.isOn,
+            terminalPos: this.getBreakerWorldPosition(b.num),
+            isLeftCol: b.x < 0,
+            isMain: b.num === 0
+        };
+    }
+
+    renderBreakerVisual(pt, breaker, isSelected) {
+        const calls = [];
+        // Molded-case outer bevel enclosure frame
+        calls.push({ type: "frame", col: isSelected ? "gold" : (breaker.isOn ? "slate" : "red") });
+        // Metallic terminal screw lug
+        calls.push({ type: "lug", pos: pt, col: "brass/silver" });
+        // Mechanical toggle switch lever
+        calls.push({ type: "toggle", state: breaker.isOn ? "ON" : "TRIPPED" });
+        return calls;
     }
     toggleBreaker(num) {
         const b = this.breakerBranches.find(item => item.num === num);
@@ -1626,6 +1681,46 @@ async function runLeafSuite() {
     results.push({
         test: "Soft Copy JSON Import & 3D Reconstruction (Parses JSON soft copy and reinstantiates full 3D network)",
         passed: importedCount === 12 && hasImportedRuns
+    });
+
+    // Test 57: Realistic 3D Load Center Breaker Terminals & World Positions
+    const breakerApp = new ConduitXRMain();
+    const b1Pos = breakerApp.getBreakerWorldPosition(1);
+    const b2Pos = breakerApp.getBreakerWorldPosition(2);
+    const b3Pos = breakerApp.getBreakerWorldPosition(3);
+    const b4Pos = breakerApp.getBreakerWorldPosition(4);
+    const mainPos = breakerApp.getBreakerWorldPosition(0);
+
+    const b1Aligned = Math.abs(b1Pos.x - 366) <= 1 && Math.abs(b1Pos.y - 157) <= 1 && Math.abs(b1Pos.z - (-201)) <= 1;
+    const b2Aligned = Math.abs(b2Pos.x - 394) <= 1 && Math.abs(b2Pos.y - 157) <= 1 && Math.abs(b2Pos.z - (-201)) <= 1;
+    const b3Aligned = Math.abs(b3Pos.x - 366) <= 1 && Math.abs(b3Pos.y - 145) <= 1 && Math.abs(b3Pos.z - (-201)) <= 1;
+    const b4Aligned = Math.abs(b4Pos.x - 394) <= 1 && Math.abs(b4Pos.y - 145) <= 1 && Math.abs(b4Pos.z - (-201)) <= 1;
+    const mainAligned = Math.abs(mainPos.x - 380) <= 1 && Math.abs(mainPos.y - 175) <= 1 && Math.abs(mainPos.z - (-201)) <= 1;
+    const b1Info = breakerApp.getBreakerForPoint(new vec3(366, 157, -201));
+
+    results.push({
+        test: "Realistic 3D Load Center Breaker Terminals & World Positions (B1-B4 and Main 200A Disconnect alignment)",
+        passed: b1Aligned && b2Aligned && b3Aligned && b4Aligned && mainAligned && b1Info && b1Info.num === 1
+    });
+
+    // Test 58: Dynamic Breaker Visual State & ON/OFF Trip Flag Indication
+    const b1Before = breakerApp.getBreakerByNum(1);
+    const vCallsOn = breakerApp.renderBreakerVisual(b1Pos, b1Before, false);
+    const hasOnVisuals = vCallsOn.some(c => c.type === "toggle" && c.state === "ON") &&
+        vCallsOn.some(c => c.type === "lug");
+
+    breakerApp.toggleBreaker(1); // Trip B1
+    const b1Tripped = breakerApp.getBreakerByNum(1);
+    const vCallsTripped = breakerApp.renderBreakerVisual(b1Pos, b1Tripped, false);
+    const hasTrippedVisuals = vCallsTripped.some(c => c.type === "toggle" && c.state === "TRIPPED") &&
+        vCallsTripped.some(c => c.type === "frame" && c.col === "red");
+
+    breakerApp.toggleBreaker(1); // Reset B1
+    const b1Reset = breakerApp.getBreakerByNum(1);
+
+    results.push({
+        test: "Dynamic Breaker Visual State & ON/OFF Trip Flag Indication (Molded case, metallic lug, toggle switch)",
+        passed: hasOnVisuals && hasTrippedVisuals && b1Reset.isOn === true
     });
 
     console.log("----------------------------------------------------------");
