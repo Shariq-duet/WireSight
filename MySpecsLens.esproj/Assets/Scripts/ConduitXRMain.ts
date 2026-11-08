@@ -101,6 +101,15 @@ export class ConduitXRMain extends BaseScriptComponent {
         // Guaranteed Self-Healing: Foundation bedroom walls & 10 circuit runs are permanently maintained
         this.setupDefaultCornerWalls();
         this.setupDefaultBedroomCircuit();
+        // Clean up any stray HouseWall_ objects from previous test runs so no phantom walls follow the camera
+        const rootCount = global.scene.getRootObjectsCount();
+        for (let i = rootCount - 1; i >= 0; i--) {
+            const rootObj = global.scene.getRootObject(i);
+            if (rootObj && rootObj.name.startsWith("HouseWall_") && (rootObj.name.includes("bedroom") || rootObj.name.includes("living") || rootObj.name.includes("utility"))) {
+                rootObj.destroy();
+            }
+        }
+
         // Disable original reference walls & user runs by default so new 3D model & scenarios are cleanly shown
         for (const wall of this.activeWalls) {
             if (wall.getSceneObject()) {
@@ -2462,65 +2471,47 @@ export class ConduitXRMain extends BaseScriptComponent {
             roomLabel = "Living Room";
         }
 
-        // 2. Select the wall FOR THIS ROOM (Never a wall in another room!)
-        let targetWall = this.activeWalls.find(w => w.wallId === `wall-${currentRoomId}`);
-        if (!targetWall && currentRoomId === "bedroom") {
-            targetWall = this.activeWalls.find(w => w.wallId === "wall-bedroom" || w.wallIndex === 1);
+        // 2. Identify room boundaries and default bedside outlet location
+        let minRoomX = -430.0;
+        let maxRoomX = -95.0;
+        let defaultOutletX = -177.5; // Beside the master bed / nightstand
+
+        if (currentRoomId === "utility") {
+            minRoomX = 320.0;
+            maxRoomX = 530.0;
+            defaultOutletX = 425.0;
+        } else if (currentRoomId === "living") {
+            minRoomX = -55.0;
+            maxRoomX = 280.0;
+            defaultOutletX = 45.0;
         }
 
-        if (!targetWall) {
-            const wallObj = global.scene.createSceneObject(`HouseWall_${currentRoomId}`);
-            targetWall = wallObj.createComponent(ReferenceWall.getTypeName()) as ReferenceWall;
-            targetWall.wallIndex = this.activeWalls.length + 1;
-            targetWall.wallId = `wall-${currentRoomId}`;
-            this.activeWalls.push(targetWall);
-        }
-
-        // Lock targetWall to the 3D house model's true back wall plane (z = -225.0)
-        targetWall.widthCm = defaultWallW;
-        targetWall.heightCm = 240.0;
-        targetWall.initialPosition = new vec3(defaultWallX, 120.0, -225.0);
-        targetWall.initialRotation = quat.fromEulerAngles(0, 0, 0);
-        targetWall.getSceneObject().getTransform().setWorldPosition(targetWall.initialPosition);
-        targetWall.getSceneObject().getTransform().setWorldRotation(targetWall.initialRotation);
-        targetWall.rebuildWall(targetWall.initialPosition, targetWall.initialRotation, defaultWallW, 240.0);
-        targetWall.setWallYaw(0.0);
-        targetWall.getSceneObject().enabled = true;
-
-        // Synchronize active wall state and UI
-        for (let i = 0; i < this.activeWalls.length; i++) {
-            const isMatch = (this.activeWalls[i] === targetWall);
-            this.activeWalls[i].setIsActiveWall(isMatch);
-            if (isMatch) this.activeWallIndex = i;
-        }
-        this.referenceWall = targetWall;
-        if (this.lineMarkerTool) this.lineMarkerTool.setReferenceWalls(this.activeWalls);
-        this.updateMultiWallUI();
-
-        // 3. Compute outlet world position flush on THIS room's wall surface (z = -221.0)
+        // 3. Compute outlet world position flush on the room's drywall face (Z = -221.0)
+        // Never spawn or create a new holographic wall — mount directly to the room's drywall!
         let outletWorldPos: vec3;
-        const hit = this.lineMarkerTool ? this.lineMarkerTool.getSurfaceHit(centerScreen) : null;
-        let placedFromHit = false;
+        let placedFromRay = false;
 
-        if (hit && hit.isHit && hit.isOnWall && hit.hitWall && hit.hitWall.wallId.includes(currentRoomId)) {
-            const outletY = (hit.point.y > 15.0 && hit.point.y < 120.0) ? hit.point.y : 40.0;
-            outletWorldPos = new vec3(hit.point.x, outletY, -221.0);
-            placedFromHit = true;
-        }
-
-        if (!placedFromHit && activeCam) {
+        if (activeCam) {
             const rayOrigin = activeCam.screenSpaceToWorldSpace(centerScreen, 1.0);
             const rayFar = activeCam.screenSpaceToWorldSpace(centerScreen, 600.0);
             const rayDir = rayFar.sub(rayOrigin).normalize();
-            const wallHit = targetWall.raycastWall(rayOrigin, rayDir);
-            if (wallHit && wallHit.isHit) {
-                outletWorldPos = new vec3(wallHit.point.x, 40.0, -221.0);
-            } else {
-                const targetX = Math.max(defaultWallX - defaultWallW * 0.42, Math.min(defaultWallX + defaultWallW * 0.42, camPos.x));
-                outletWorldPos = new vec3(targetX, 40.0, -221.0);
+
+            // Intersect user gaze ray with the room's back drywall plane at Z = -225.0
+            if (Math.abs(rayDir.z) > 0.05) {
+                const t = (-225.0 - rayOrigin.z) / rayDir.z;
+                if (t > 10.0 && t < 900.0) {
+                    const hitX = rayOrigin.x + t * rayDir.x;
+                    const hitY = rayOrigin.y + t * rayDir.y;
+                    const clampedX = Math.max(minRoomX, Math.min(maxRoomX, hitX));
+                    const clampedY = (hitY >= 15.0 && hitY <= 120.0) ? hitY : 40.0;
+                    outletWorldPos = new vec3(clampedX, clampedY, -221.0);
+                    placedFromRay = true;
+                }
             }
-        } else if (!placedFromHit) {
-            outletWorldPos = new vec3(defaultWallX, 40.0, -221.0);
+        }
+
+        if (!placedFromRay) {
+            outletWorldPos = new vec3(defaultOutletX, 40.0, -221.0);
         }
 
         // 4. Project onto the nearest existing in-wall branch wire in THIS room
