@@ -2437,33 +2437,42 @@ export class ConduitXRMain extends BaseScriptComponent {
 
         if (hit && hit.isHit && hit.isOnWall && hit.hitWall) {
             targetWall = hit.hitWall;
-            outletWorldPos = hit.point;
+            outletWorldPos = new vec3(hit.point.x, 40.0, hit.point.z);
         } else if (targetWall) {
             const wPos = targetWall.getSceneObject().getTransform().getWorldPosition();
             const wRot = targetWall.getSceneObject().getTransform().getWorldRotation();
-            // Standard receptacle height (-40cm from center, +4cm drywall surface)
+            // Standard receptacle height (40cm from floor, +4cm drywall surface)
             outletWorldPos = wPos.add(wRot.multiplyVec3(new vec3(0, -40.0, 4.0)));
+            outletWorldPos.y = 40.0;
         } else {
-            outletWorldPos = new vec3(0, -40.0, -180.0);
+            // Default bedside outlet position in Master Bedroom
+            outletWorldPos = new vec3(-262.5, 40.0, -223.0);
         }
 
         if (targetWall) {
             outletWorldPos = targetWall.projectPointToWall(outletWorldPos);
         }
 
-        // Look for an existing conduit overhead to connect down from
-        let dropTop = new vec3(outletWorldPos.x, outletWorldPos.y + 65.0, outletWorldPos.z);
+        // Project onto the nearest existing in-wall branch wire to create clean T-splice drop
+        let dropTop = new vec3(outletWorldPos.x, 110.0, outletWorldPos.z);
         let bestDist = 999.0;
         for (const run of this.activeRuns) {
             if (run.layer !== "electrical") continue;
-            const mid = run.startPoint.add(run.endPoint).uniformScale(0.5);
-            if (mid.y > outletWorldPos.y) {
-                const horizDist = Math.sqrt((mid.x - outletWorldPos.x) ** 2 + (mid.z - outletWorldPos.z) ** 2);
-                if (horizDist < bestDist && horizDist < 140.0) {
-                    bestDist = horizDist;
-                    dropTop = new vec3(outletWorldPos.x, Math.min(mid.y, 110.0), outletWorldPos.z);
-                    if (targetWall) dropTop = targetWall.projectPointToWall(dropTop);
-                }
+            const a = run.startPoint;
+            const b = run.endPoint;
+            const ab = b.sub(a);
+            const abLenSq = ab.dot(ab);
+            let t = 0.5;
+            if (abLenSq > 0.001) {
+                t = Math.max(0.0, Math.min(1.0, outletWorldPos.sub(a).dot(ab) / abLenSq));
+            }
+            const ptOnSeg = a.add(ab.uniformScale(t));
+            const horizDist = Math.sqrt((ptOnSeg.x - outletWorldPos.x) ** 2 + (ptOnSeg.z - outletWorldPos.z) ** 2);
+            if (horizDist < bestDist && horizDist < 260.0) {
+                bestDist = horizDist;
+                const tapY = Math.max(ptOnSeg.y, outletWorldPos.y + 40.0);
+                dropTop = new vec3(outletWorldPos.x, tapY, ptOnSeg.z);
+                if (targetWall) dropTop = targetWall.projectPointToWall(dropTop);
             }
         }
 
@@ -2472,10 +2481,10 @@ export class ConduitXRMain extends BaseScriptComponent {
             id: `run-outlet-${Date.now()}`,
             name: `[${targetWall ? targetWall.wallId : "Bedroom"}] 120V 20A Duplex Outlet #${outletIdx}`,
             layer: "electrical",
-            voltageOrType: "120V AC - 20A Duplex Receptacle",
-            installer: "User (AR Spectacles Session)",
-            installDate: "Nov 07, 2026",
-            status: "INSTALLED & ENERGIZED",
+            voltageOrType: "120V AC 20A (In-Wall Tap)",
+            installer: "AR Optical Tap-In (Zero Wall Damage)",
+            installDate: "Nov 09, 2026",
+            status: "TAP-IN READY: 1-GANG CUTOUT 5.7×9.5cm",
             color: new vec4(1.0, 0.88, 0.15, 1.0),
             startPoint: dropTop,
             endPoint: outletWorldPos,
@@ -2801,6 +2810,26 @@ export class ConduitXRMain extends BaseScriptComponent {
 
             // Center mounting screw
             global.debugRenderSystem.drawSolidSphere(pt.add(wallRot.multiplyVec3(new vec3(0, 0, faceOffsetZ + 0.2))), 0.4, new vec4(0.85, 0.85, 0.90, 0.95));
+
+            // 5. Holographic Drywall Jab-Saw Cutout Stencil (1-Gang Remodel Box: 5.7cm x 9.5cm)
+            const cutW = 2.85; // half width (5.7cm total)
+            const cutH = 4.75; // half height (9.5cm total)
+            const sTL = pt.add(wallRot.multiplyVec3(new vec3(-cutW, cutH, faceOffsetZ + 0.1)));
+            const sTR = pt.add(wallRot.multiplyVec3(new vec3(cutW, cutH, faceOffsetZ + 0.1)));
+            const sBR = pt.add(wallRot.multiplyVec3(new vec3(cutW, -cutH, faceOffsetZ + 0.1)));
+            const sBL = pt.add(wallRot.multiplyVec3(new vec3(-cutW, -cutH, faceOffsetZ + 0.1)));
+            const stencilCol = new vec4(0.2, 1.0, 0.45, 0.95); // High-viz laser neon green
+            global.debugRenderSystem.drawLine(sTL, sTR, stencilCol);
+            global.debugRenderSystem.drawLine(sTR, sBR, stencilCol);
+            global.debugRenderSystem.drawLine(sBR, sBL, stencilCol);
+            global.debugRenderSystem.drawLine(sBL, sTL, stencilCol);
+
+            // Stencil corner tick marks (for carpenter's pencil alignment)
+            const tickLen = 0.8;
+            global.debugRenderSystem.drawLine(sTL, sTL.add(wallRot.multiplyVec3(new vec3(0, tickLen, 0))), stencilCol);
+            global.debugRenderSystem.drawLine(sTR, sTR.add(wallRot.multiplyVec3(new vec3(0, tickLen, 0))), stencilCol);
+            global.debugRenderSystem.drawLine(sBL, sBL.add(wallRot.multiplyVec3(new vec3(0, -tickLen, 0))), stencilCol);
+            global.debugRenderSystem.drawLine(sBR, sBR.add(wallRot.multiplyVec3(new vec3(0, -tickLen, 0))), stencilCol);
             return;
         }
 
