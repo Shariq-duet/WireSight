@@ -332,10 +332,10 @@ export class ConduitXRMain extends BaseScriptComponent {
         isOn: boolean;
         textComp?: Text;
     }[] = [
-        { num: 1, label: "B1: 20A Kitchen GFCI", room: "Kitchen", y: 6, isOn: true },
-        { num: 2, label: "B2: 15A Living Room", room: "Living", y: 0, isOn: true },
-        { num: 3, label: "B3: 15A Master Bed", room: "Bedroom", y: -6, isOn: true },
-        { num: 4, label: "B4: 20A Bath GFCI", room: "Bathroom", y: -12, isOn: true }
+        { num: 1, label: "B1: 20A Master Bed Outlets", room: "Bedroom", y: 6, isOn: true },
+        { num: 2, label: "B2: 15A Living TV & Console", room: "Living", y: 0, isOn: true },
+        { num: 3, label: "B3: 15A Sofa & Corner Branch", room: "Living", y: -6, isOn: true },
+        { num: 4, label: "B4: 200A Utility & Battery Hub", room: "Utility", y: -12, isOn: true }
     ];
 
     private buildBreakerPanel() {
@@ -385,6 +385,14 @@ export class ConduitXRMain extends BaseScriptComponent {
 
     public alignBreakerPanelToActiveWall() {
         if (!this.breakerPanelRoot) return;
+        // Check if scenario house runs are active -> Anchor directly to 200A panel inside Electrical Room
+        const hasHouseModel = this.activeRuns.some(r => r.id.startsWith("scen1-") || r.id.startsWith("scen2-") || r.id.startsWith("scen3-"));
+        if (hasHouseModel) {
+            this.breakerPanelRoot.getTransform().setWorldPosition(new vec3(380.0, 140.0, -200.0));
+            this.breakerPanelRoot.getTransform().setWorldRotation(quat.fromEulerAngles(0, 0, 0));
+            return;
+        }
+
         // When whole house environment is wired (multiple walls exist), breaker panel stays anchored to utility wall
         const utilityWall = this.activeWalls.find(w => w.wallId === "wall-utility");
         const wall = (this.activeWalls.length > 1 && utilityWall) ? utilityWall : this.getActiveWall();

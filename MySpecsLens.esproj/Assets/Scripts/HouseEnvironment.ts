@@ -16,9 +16,9 @@ export const HOUSE_ROOMS: RoomZoneInfo[] = [
         id: "hallway",
         name: "Central Hallway",
         icon: "🚪",
-        label: "CENTRAL GRAND GALLERY (SPATIAL ORIGIN)",
-        center: new vec3(0, -180, -200),
-        cameraPos: new vec3(0, -30, 200),
+        label: "CENTRAL ENTRANCE THRESHOLD",
+        center: new vec3(50, 120, 0),
+        cameraPos: new vec3(50, 120, 220),
         cameraRot: quat.fromEulerAngles(0, 0, 0)
     },
     {
@@ -26,45 +26,45 @@ export const HOUSE_ROOMS: RoomZoneInfo[] = [
         name: "Kitchen Zone",
         icon: "🍳",
         label: "KITCHEN (20A GFCI & WATER RISERS)",
-        center: new vec3(-500, -180, -550),
-        cameraPos: new vec3(-500, -30, -350),
-        cameraRot: quat.fromEulerAngles(0, 0, 0) // Looking at North Wall
+        center: new vec3(112.5, 120, -225),
+        cameraPos: new vec3(112.5, 120, 100),
+        cameraRot: quat.fromEulerAngles(0, 0, 0)
     },
     {
         id: "living",
-        name: "Living Room",
+        name: "Living Room (Scenario 2 & 3)",
         icon: "🛋️",
-        label: "LIVING ROOM (15A RECEPTACLES & 85\" TV)",
-        center: new vec3(500, -180, -550),
-        cameraPos: new vec3(500, -30, -350),
+        label: "LIVING ROOM (TV, HIDDEN J-BOX & SOFA TAP-IN)",
+        center: new vec3(112.5, 120, -225),
+        cameraPos: new vec3(112.5, 120, 100),
         cameraRot: quat.fromEulerAngles(0, 0, 0)
     },
     {
         id: "utility",
-        name: "Utility & Breaker Hub",
+        name: "Electrical Room (Scenario 1 & 4)",
         icon: "⚡",
-        label: "UTILITY ROOM (400A/200A SERVICE & BREAKER HUB)",
-        center: new vec3(-500, -180, 250),
-        cameraPos: new vec3(-500, -30, 50),
-        cameraRot: quat.fromEulerAngles(0, 0, 0) // Looking at breaker panel
+        label: "ELECTRICAL MEP ROOM (200A SERVICE & BREAKER HUB)",
+        center: new vec3(425, 120, -225),
+        cameraPos: new vec3(380, 140, 30),
+        cameraRot: quat.fromEulerAngles(0, 0, 0)
     },
     {
         id: "bedroom",
-        name: "Master Bedroom",
+        name: "Master Bedroom (Scenario 1)",
         icon: "🛏️",
-        label: "MASTER BEDROOM (CIRCUIT 4B & DRILL HUD)",
-        center: new vec3(500, -180, 250),
-        cameraPos: new vec3(500, -30, 50),
+        label: "MASTER BEDROOM (BED, NIGHTSTANDS & WIRE TRACING)",
+        center: new vec3(-262.5, 120, -225),
+        cameraPos: new vec3(-262.5, 120, 100),
         cameraRot: quat.fromEulerAngles(0, 0, 0)
     },
     {
         id: "overview",
-        name: "Architectural Overview",
+        name: "Architectural Cutaway Overview",
         icon: "📐",
-        label: "BIRD'S-EYE 45° ISOMETRIC ESTATE OVERVIEW",
-        center: new vec3(0, 0, -150),
-        cameraPos: new vec3(0, 950, 1200),
-        cameraRot: quat.fromEulerAngles(-0.75, 0, 0) // Looking down at 45°
+        label: "BIRD'S-EYE 45° ISOMETRIC HOUSE OVERVIEW",
+        center: new vec3(50, 0, 0),
+        cameraPos: new vec3(50, 480, 480),
+        cameraRot: quat.fromEulerAngles(-0.70, 0, 0)
     }
 ];
 
