@@ -1,0 +1,166 @@
+{
+  "house_dimensions_cm": {
+    "width": 800,
+    "depth": 500,
+    "height": 240
+  },
+  "rooms": {
+    "bedroom": {
+      "name": "Master Bedroom",
+      "bounds": {
+        "x_min": -400,
+        "x_max": 0,
+        "z_min": -250,
+        "z_max": 250
+      },
+      "accent_wall": {
+        "x_center": -200,
+        "y": 120,
+        "z": -250,
+        "normal": [
+          0,
+          0,
+          1
+        ]
+      },
+      "left_wall": {
+        "x": -400,
+        "y": 120,
+        "z_center": 0,
+        "normal": [
+          1,
+          0,
+          0
+        ]
+      },
+      "partition_wall": {
+        "x": 0,
+        "y": 120,
+        "z_center": -115,
+        "normal": [
+          -1,
+          0,
+          0
+        ]
+      }
+    },
+    "living_room": {
+      "name": "Living Room",
+      "bounds": {
+        "x_min": 0,
+        "x_max": 400,
+        "z_min": -250,
+        "z_max": 250
+      },
+      "tv_wall": {
+        "x_center": 200,
+        "y": 120,
+        "z": -250,
+        "normal": [
+          0,
+          0,
+          1
+        ]
+      },
+      "right_wall": {
+        "x": 400,
+        "y": 120,
+        "z_center": 0,
+        "normal": [
+          -1,
+          0,
+          0
+        ]
+      },
+      "partition_wall": {
+        "x": 0,
+        "y": 120,
+        "z_center": -115,
+        "normal": [
+          1,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "doorway": {
+    "name": "Bedroom to Living Room Passage",
+    "position": {
+      "x": 0,
+      "y_floor": 0,
+      "z_start": 20,
+      "z_end": 115
+    },
+    "width_cm": 95,
+    "height_cm": 210
+  },
+  "planned_mep_nodes": {
+    "main_breaker_panel": {
+      "x": -390,
+      "y": 140,
+      "z": 200,
+      "description": "200A Main Service Panel on Bedroom Entrance Wall"
+    },
+    "bedroom_outlet_left": {
+      "x": -340,
+      "y": 40,
+      "z": -248,
+      "description": "120V 15A Duplex Receptacle (Nightstand Left)"
+    },
+    "bedroom_outlet_right": {
+      "x": -60,
+      "y": 40,
+      "z": -248,
+      "description": "120V 15A Duplex Receptacle (Nightstand Right)"
+    },
+    "bedroom_light_switch": {
+      "x": -15,
+      "y": 120,
+      "z": 15,
+      "description": "Single-Pole Switch by Bedroom Doorway"
+    },
+    "bedroom_ceiling_box": {
+      "x": -200,
+      "y": 240,
+      "z": 0,
+      "description": "Octagonal J-Box for Ceiling Fan / Chandelier"
+    },
+    "living_tv_quad_receptacle": {
+      "x": 200,
+      "y": 110,
+      "z": -248,
+      "description": "Dedicated Quad Outlet behind 65in TV"
+    },
+    "living_console_receptacle": {
+      "x": 130,
+      "y": 40,
+      "z": -248,
+      "description": "120V 20A Duplex Receptacle for Audio/Console"
+    },
+    "living_sofa_receptacle": {
+      "x": 395,
+      "y": 40,
+      "z": 10,
+      "description": "120V 15A Convenience Receptacle by Sofa"
+    },
+    "living_floor_lamp_outlet": {
+      "x": 395,
+      "y": 40,
+      "z": -220,
+      "description": "Switched Receptacle for Corner Floor Lamp"
+    },
+    "living_light_switch": {
+      "x": 15,
+      "y": 120,
+      "z": 15,
+      "description": "3-Way Switch by Living Room Walkthrough"
+    },
+    "living_ceiling_box": {
+      "x": 200,
+      "y": 240,
+      "z": -60,
+      "description": "Octagonal J-Box for Living Room Recessed Light Array"
+    }
+  }
+}
