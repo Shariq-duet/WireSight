@@ -181,12 +181,12 @@
   Enabled: true
   ScriptAsset: !<reference> eea56aec-3621-4e07-9663-1162d1385a7b
   ScriptInputsDefault:
-    {}
+    importJsonString: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
     "":
-      {}
+      importJsonString: ""
   ScriptTypes:
     "":
       {}
