@@ -1,0 +1,1532 @@
+[
+  {
+    "id": "run-4-1794040573094",
+    "name": "[Bedroom] Left Bedside Drop",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -188.6,
+      "y": -90.2,
+      "z": 123.7
+    },
+    "endPoint": {
+      "x": -188.6,
+      "y": 70,
+      "z": 123.7
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-5-1794040576289",
+    "name": "[Bedroom] Bed Headboard Overhead Feeder",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -188.6,
+      "y": 70,
+      "z": 123.7
+    },
+    "endPoint": {
+      "x": -369.7,
+      "y": 70,
+      "z": 308
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-6-1794040579445",
+    "name": "[Bedroom] Right Bedside Nightstand Drop",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -369.7,
+      "y": 70,
+      "z": 308
+    },
+    "endPoint": {
+      "x": -369.7,
+      "y": -116.1,
+      "z": 308
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-7-1794040583308",
+    "name": "[Bedroom] Right Bedside Branch Riser",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -369.7,
+      "y": -116.1,
+      "z": 308
+    },
+    "endPoint": {
+      "x": -369.7,
+      "y": -20.3,
+      "z": 308
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-8-1794040588474",
+    "name": "[Bedroom] Headboard to Corner Conduit",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -369.7,
+      "y": -20.3,
+      "z": 308
+    },
+    "endPoint": {
+      "x": -441,
+      "y": -20.3,
+      "z": 380.5
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-9-1794040604226",
+    "name": "[Bedroom] Corner Wall Transition Feeder",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -441,
+      "y": -20.3,
+      "z": 380.5
+    },
+    "endPoint": {
+      "x": -477.6,
+      "y": -20.3,
+      "z": 402
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-10-1794040609014",
+    "name": "[Bedroom] TV Wall Corner Entry",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -477.6,
+      "y": -20.3,
+      "z": 402
+    },
+    "endPoint": {
+      "x": -567.7,
+      "y": -20.3,
+      "z": 314.9
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-12-1794040630289",
+    "name": "[Bedroom] Wardrobe Corner Feeder",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -886.2,
+      "y": -20.6,
+      "z": 7.4
+    },
+    "endPoint": {
+      "x": -727.8,
+      "y": -20.6,
+      "z": 160.3
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-13-1794040633616",
+    "name": "[Bedroom] Ceiling Riser Stud Run",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -727.8,
+      "y": -20.6,
+      "z": 160.3
+    },
+    "endPoint": {
+      "x": -727.8,
+      "y": 100.2,
+      "z": 160.3
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-14-1794040636247",
+    "name": "[Bedroom] Overhead Ceiling Feeder to Center Light",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -727.8,
+      "y": 100.2,
+      "z": 160.3
+    },
+    "endPoint": {
+      "x": -518.5,
+      "y": 120,
+      "z": -41.3
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-15-1794040639608",
+    "name": "[Bedroom] Center Ceiling Luminaire Connection",
+    "layer": "electrical",
+    "voltageOrType": "Live 120V (12 AWG)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 120V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -518.5,
+      "y": 120,
+      "z": -41.3
+    },
+    "endPoint": {
+      "x": -481.8,
+      "y": 120,
+      "z": -5.2
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-1-1794058856713",
+    "name": "[Kitchen] Circuit #1: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -886.2,
+      "y": -20.6,
+      "z": 7.4
+    },
+    "endPoint": {
+      "x": -830,
+      "y": -17.8,
+      "z": -62.8
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-3-1794058865409",
+    "name": "[Kitchen] Circuit #3: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -830,
+      "y": 88,
+      "z": -62.8
+    },
+    "endPoint": {
+      "x": -595.1,
+      "y": 88.4,
+      "z": -296.9
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-outlet-1794058870118",
+    "name": "[wall-4] 120V 20A Duplex Outlet #1",
+    "layer": "electrical",
+    "voltageOrType": "120V AC - 20A Duplex Receptacle",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "INSTALLED & ENERGIZED",
+    "color": {
+      "x": 1,
+      "y": 0.88,
+      "z": 0.15,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -596.6,
+      "y": 34,
+      "z": -285.8
+    },
+    "endPoint": {
+      "x": -596.3,
+      "y": -14.5,
+      "z": -284.5
+    },
+    "isWorldCoords": true,
+    "roomZone": "wall-4",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-4-1794058876223",
+    "name": "[Kitchen] Circuit #4: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -592.5,
+      "y": 88,
+      "z": -288.1
+    },
+    "endPoint": {
+      "x": -596.3,
+      "y": 35.2,
+      "z": -284.5
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-5-1794059176402",
+    "name": "[Kitchen] Circuit #5: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -527,
+      "y": 84.2,
+      "z": -31.9
+    },
+    "endPoint": {
+      "x": -136.1,
+      "y": 92,
+      "z": -401
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-6-1794059210003",
+    "name": "[Kitchen] Circuit #6: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -138.5,
+      "y": 97.2,
+      "z": -408.6
+    },
+    "endPoint": {
+      "x": 46.8,
+      "y": 120,
+      "z": -398
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-7-1794059214822",
+    "name": "[Kitchen] Circuit #7: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 46.8,
+      "y": 120,
+      "z": -398
+    },
+    "endPoint": {
+      "x": 46.8,
+      "y": 120,
+      "z": -532.1
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-8-1794059217931",
+    "name": "[Kitchen] Circuit #8: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 46.8,
+      "y": 120,
+      "z": -532.1
+    },
+    "endPoint": {
+      "x": 20.8,
+      "y": 86.3,
+      "z": -527
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-9-1794059224822",
+    "name": "[Kitchen] Circuit #9: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 20.8,
+      "y": 81.4,
+      "z": -529.5
+    },
+    "endPoint": {
+      "x": -272.5,
+      "y": 90.2,
+      "z": -843.2
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-10-1794059228397",
+    "name": "[Kitchen] Circuit #10: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -276.6,
+      "y": -14.3,
+      "z": -847.8
+    },
+    "endPoint": {
+      "x": -275.4,
+      "y": 89.9,
+      "z": -847.5
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-11-1794059242035",
+    "name": "[Kitchen] Circuit #11: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -277.9,
+      "y": 91.2,
+      "z": -851.2
+    },
+    "endPoint": {
+      "x": -490.4,
+      "y": 113,
+      "z": -675.3
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-12-1794059257903",
+    "name": "[Kitchen] Circuit #12: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -361,
+      "y": 115.6,
+      "z": -871
+    },
+    "endPoint": {
+      "x": -266.6,
+      "y": 94.1,
+      "z": -845.6
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-13-1794059270761",
+    "name": "[Kitchen] Circuit #13: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -277.7,
+      "y": 89.3,
+      "z": -841.7
+    },
+    "endPoint": {
+      "x": -209.5,
+      "y": 101.2,
+      "z": -686.3
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-14-1794059421805",
+    "name": "[Kitchen] Circuit #14: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 20.8,
+      "y": 86.3,
+      "z": -527
+    },
+    "endPoint": {
+      "x": 427,
+      "y": 106.6,
+      "z": -147.3
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-15-1794059428366",
+    "name": "[Kitchen] Circuit #15: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 427,
+      "y": 106.6,
+      "z": -147.3
+    },
+    "endPoint": {
+      "x": 489.1,
+      "y": 106.6,
+      "z": -87.3
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-16-1794059430219",
+    "name": "[Kitchen] Circuit #16: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 489.1,
+      "y": 106.6,
+      "z": -87.3
+    },
+    "endPoint": {
+      "x": 489.1,
+      "y": -28.7,
+      "z": -87.3
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-outlet-1794059432207",
+    "name": "[wall-5] 120V 20A Duplex Outlet #2",
+    "layer": "electrical",
+    "voltageOrType": "120V AC - 20A Duplex Receptacle",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "INSTALLED & ENERGIZED",
+    "color": {
+      "x": 1,
+      "y": 0.88,
+      "z": 0.15,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 489.5,
+      "y": 39,
+      "z": -86.9
+    },
+    "endPoint": {
+      "x": 489.5,
+      "y": -20.5,
+      "z": -86.9
+    },
+    "isWorldCoords": true,
+    "roomZone": "wall-5",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-outlet-1794059634526",
+    "name": "[wall-bedroom] 120V 20A Duplex Outlet #3",
+    "layer": "electrical",
+    "voltageOrType": "120V AC - 20A Duplex Receptacle",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "INSTALLED & ENERGIZED",
+    "color": {
+      "x": 1,
+      "y": 0.88,
+      "z": 0.15,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -194.7,
+      "y": -9.9,
+      "z": 121
+    },
+    "endPoint": {
+      "x": -224.3,
+      "y": -84.3,
+      "z": 154.1
+    },
+    "isWorldCoords": true,
+    "roomZone": "wall-bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-19-1794065053409",
+    "name": "[Kitchen] Circuit #19: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 226.7,
+      "y": 99.6,
+      "z": -340.7
+    },
+    "endPoint": {
+      "x": 26.6,
+      "y": 120,
+      "z": -89.7
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-20-1794065058966",
+    "name": "[Kitchen] Circuit #20: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 26.6,
+      "y": 120,
+      "z": -89.7
+    },
+    "endPoint": {
+      "x": -46.9,
+      "y": 101.2,
+      "z": -4.8
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "run-21-1794065174757",
+    "name": "[Kitchen] Circuit #21: 12 AWG (20A)",
+    "layer": "electrical",
+    "voltageOrType": "Live 230V (12 AWG (20A))",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "LIVE 230V AC (ENERGIZED)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -63.9,
+      "y": 120,
+      "z": 1.2
+    },
+    "endPoint": {
+      "x": 115.3,
+      "y": 120,
+      "z": 195.6
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "elec-main-service-drop",
+    "name": "Utility Service Entrance (400A Main Overhead Drop)",
+    "layer": "electrical",
+    "voltageOrType": "240V Split-Phase 400A Main Service",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "HIGH VOLTAGE ENERGIZED",
+    "color": {
+      "x": 0.4,
+      "y": 0.95,
+      "z": 1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -500,
+      "y": 180,
+      "z": 390
+    },
+    "endPoint": {
+      "x": -500,
+      "y": 60,
+      "z": 390
+    },
+    "isWorldCoords": true,
+    "roomZone": "Utility",
+    "gauge": "10 AWG (30A Heavy/HVAC)",
+    "isLive": true,
+    "thickness": 14
+  },
+  {
+    "id": "elec-utility-hvac-feed",
+    "name": "HVAC Compressor 240V Dedicated Feeder (Breaker B5)",
+    "layer": "electrical",
+    "voltageOrType": "240V AC - 40A Heavy",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B5)",
+    "color": {
+      "x": 1,
+      "y": 0.5,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -480,
+      "y": 20,
+      "z": 390
+    },
+    "endPoint": {
+      "x": -750,
+      "y": -40,
+      "z": 390
+    },
+    "isWorldCoords": true,
+    "roomZone": "Utility",
+    "gauge": "10 AWG (30A Heavy/HVAC)",
+    "isLive": true,
+    "thickness": 8.5
+  },
+  {
+    "id": "elec-utility-water-heater",
+    "name": "Electric Water Heater 240V Circuit (Breaker B6)",
+    "layer": "electrical",
+    "voltageOrType": "240V AC - 30A",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B6)",
+    "color": {
+      "x": 1,
+      "y": 0.7,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -480,
+      "y": 0,
+      "z": 390
+    },
+    "endPoint": {
+      "x": -650,
+      "y": -120,
+      "z": 390
+    },
+    "isWorldCoords": true,
+    "roomZone": "Utility",
+    "gauge": "10 AWG (30A Heavy/HVAC)",
+    "isLive": true,
+    "thickness": 7
+  },
+  {
+    "id": "elec-utility-gfci-outlet",
+    "name": "Utility Workstation GFCI Duplex Outlet",
+    "layer": "electrical",
+    "voltageOrType": "120V AC - 20A GFCI",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED",
+    "color": {
+      "x": 1,
+      "y": 0.88,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -480,
+      "y": -20,
+      "z": 390
+    },
+    "endPoint": {
+      "x": -380,
+      "y": -135,
+      "z": 390
+    },
+    "isWorldCoords": true,
+    "roomZone": "Utility",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "elec-corridor-feeder-kitchen",
+    "name": "Main Feeder Trunk -> Kitchen Circuit B1 (Attic Raceway)",
+    "layer": "electrical",
+    "voltageOrType": "230V AC - 20A Home-Run",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B1)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -500,
+      "y": 40,
+      "z": 390
+    },
+    "endPoint": {
+      "x": -500,
+      "y": 160,
+      "z": -790
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 6.5
+  },
+  {
+    "id": "elec-corridor-feeder-living",
+    "name": "Main Feeder Trunk -> Living Room Circuit B2 (Attic Raceway)",
+    "layer": "electrical",
+    "voltageOrType": "230V AC - 15A Home-Run",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B2)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -500,
+      "y": 30,
+      "z": 390
+    },
+    "endPoint": {
+      "x": 500,
+      "y": 160,
+      "z": -790
+    },
+    "isWorldCoords": true,
+    "roomZone": "Living Room",
+    "gauge": "14 AWG (15A)",
+    "isLive": true,
+    "thickness": 6
+  },
+  {
+    "id": "elec-corridor-feeder-bedroom",
+    "name": "Main Feeder Trunk -> Bedroom Circuit B3 (Attic Raceway)",
+    "layer": "electrical",
+    "voltageOrType": "230V AC - 16A Home-Run",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B3)",
+    "color": {
+      "x": 1,
+      "y": 0.9,
+      "z": 0.25,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -500,
+      "y": 20,
+      "z": 390
+    },
+    "endPoint": {
+      "x": 500,
+      "y": 160,
+      "z": 390
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 6
+  },
+  {
+    "id": "elec-kitchen-feed-b1",
+    "name": "Kitchen Circuit 1 (20A GFCI Countertop Feeder)",
+    "layer": "electrical",
+    "voltageOrType": "230V AC - 20A - 3.5mm²",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B1)",
+    "color": {
+      "x": 1,
+      "y": 0.88,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -500,
+      "y": 160,
+      "z": -790
+    },
+    "endPoint": {
+      "x": -500,
+      "y": -85,
+      "z": -790
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "elec-kitchen-counter-run",
+    "name": "Kitchen Countertop Outlets Branch",
+    "layer": "electrical",
+    "voltageOrType": "230V AC - 20A",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B1)",
+    "color": {
+      "x": 1,
+      "y": 0.88,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -500,
+      "y": -85,
+      "z": -790
+    },
+    "endPoint": {
+      "x": -300,
+      "y": -85,
+      "z": -790
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "elec-kitchen-refrigerator",
+    "name": "Dedicated Refrigerator 120V 20A Home-Run",
+    "layer": "electrical",
+    "voltageOrType": "120V AC - 20A Dedicated",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED",
+    "color": {
+      "x": 1,
+      "y": 0.88,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -500,
+      "y": -85,
+      "z": -790
+    },
+    "endPoint": {
+      "x": -720,
+      "y": -135,
+      "z": -790
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "plumb-kitchen-cold",
+    "name": "Kitchen Potable Cold Water Riser",
+    "layer": "plumbing",
+    "voltageOrType": "Cold Potable Water (60 PSI)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "PRESSURIZED (60 PSI)",
+    "color": {
+      "x": 0.2,
+      "y": 0.75,
+      "z": 1,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -620,
+      "y": -180,
+      "z": -790
+    },
+    "endPoint": {
+      "x": -620,
+      "y": -60,
+      "z": -790
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "1/2\\",
+    "isLive": true,
+    "thickness": 8.5
+  },
+  {
+    "id": "plumb-kitchen-hot",
+    "name": "Kitchen Hot Water Loop (CLEARANCE HAZARD)",
+    "layer": "plumbing",
+    "voltageOrType": "Domestic Hot Water (140°F / 55 PSI)",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "PRESSURIZED (140°F)",
+    "color": {
+      "x": 1,
+      "y": 0.35,
+      "z": 0.3,
+      "w": 1
+    },
+    "startPoint": {
+      "x": -650,
+      "y": -70,
+      "z": -790
+    },
+    "endPoint": {
+      "x": -450,
+      "y": -70,
+      "z": -790
+    },
+    "isWorldCoords": true,
+    "roomZone": "Kitchen",
+    "gauge": "1/2\\",
+    "isLive": true,
+    "thickness": 8.5
+  },
+  {
+    "id": "elec-living-tv",
+    "name": "Living Room 85\\",
+    "layer": "electrical",
+    "voltageOrType": "230V AC - 15A - 2.5mm²",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B2)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 500,
+      "y": 160,
+      "z": -790
+    },
+    "endPoint": {
+      "x": 500,
+      "y": -50,
+      "z": -790
+    },
+    "isWorldCoords": true,
+    "roomZone": "Living Room",
+    "gauge": "14 AWG (15A)",
+    "isLive": true,
+    "thickness": 4.5
+  },
+  {
+    "id": "elec-living-perimeter",
+    "name": "Living Room East Wall Baseboard Run",
+    "layer": "electrical",
+    "voltageOrType": "230V AC - 15A",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B2)",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 500,
+      "y": -135,
+      "z": -790
+    },
+    "endPoint": {
+      "x": 750,
+      "y": -135,
+      "z": -790
+    },
+    "isWorldCoords": true,
+    "roomZone": "Living Room",
+    "gauge": "14 AWG (15A)",
+    "isLive": true,
+    "thickness": 4.2
+  },
+  {
+    "id": "elec-living-switch",
+    "name": "Living Room Entryway Wall Switch Drop",
+    "layer": "electrical",
+    "voltageOrType": "120V AC - 15A Switch",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED",
+    "color": {
+      "x": 1,
+      "y": 0.85,
+      "z": 0.2,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 220,
+      "y": 160,
+      "z": -790
+    },
+    "endPoint": {
+      "x": 220,
+      "y": -80,
+      "z": -790
+    },
+    "isWorldCoords": true,
+    "roomZone": "Living Room",
+    "gauge": "14 AWG (15A)",
+    "isLive": true,
+    "thickness": 4.2
+  },
+  {
+    "id": "elec-bedroom-overhead-4b",
+    "name": "Bedroom Circuit 4B (Overhead Live Feed)",
+    "layer": "electrical",
+    "voltageOrType": "230V AC - 16A - 2.5mm²",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B3)",
+    "color": {
+      "x": 1,
+      "y": 0.9,
+      "z": 0.25,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 500,
+      "y": 160,
+      "z": 390
+    },
+    "endPoint": {
+      "x": 500,
+      "y": -80,
+      "z": 390
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5.5
+  },
+  {
+    "id": "elec-bedroom-left-nightstand",
+    "name": "Master Bedroom Left Nightstand 120V Duplex Outlet",
+    "layer": "electrical",
+    "voltageOrType": "120V AC - 15A",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED",
+    "color": {
+      "x": 1,
+      "y": 0.9,
+      "z": 0.25,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 500,
+      "y": -80,
+      "z": 390
+    },
+    "endPoint": {
+      "x": 350,
+      "y": -135,
+      "z": 390
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5
+  },
+  {
+    "id": "elec-bedroom-right-nightstand",
+    "name": "Master Bedroom Right Nightstand 120V Duplex Outlet",
+    "layer": "electrical",
+    "voltageOrType": "120V AC - 15A",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED",
+    "color": {
+      "x": 1,
+      "y": 0.9,
+      "z": 0.25,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 500,
+      "y": -80,
+      "z": 390
+    },
+    "endPoint": {
+      "x": 650,
+      "y": -135,
+      "z": 390
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5
+  },
+  {
+    "id": "elec-bedroom-switch",
+    "name": "Bedroom Bedside 3-Way Light Switch Drop",
+    "layer": "electrical",
+    "voltageOrType": "230V AC - 16A",
+    "installer": "WireSight Certified",
+    "installDate": "2026-11-08",
+    "status": "ENERGIZED (Breaker B3)",
+    "color": {
+      "x": 1,
+      "y": 0.9,
+      "z": 0.25,
+      "w": 1
+    },
+    "startPoint": {
+      "x": 220,
+      "y": 160,
+      "z": 390
+    },
+    "endPoint": {
+      "x": 220,
+      "y": -80,
+      "z": 390
+    },
+    "isWorldCoords": true,
+    "roomZone": "Master Bedroom",
+    "gauge": "12 AWG (20A)",
+    "isLive": true,
+    "thickness": 5
+  }
+]

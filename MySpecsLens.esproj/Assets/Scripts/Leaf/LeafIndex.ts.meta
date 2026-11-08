@@ -1,0 +1,46 @@
+- !<AssetImportMetadata/351a269b-dda2-4321-9418-c17657986e7f>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 0ecffbfd-059b-4fcf-ab9a-79196745e82c
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 0ecffbfd-059b-4fcf-ab9a-79196745e82c
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 1843feaa-0fca-42bd-bcd5-b0b688d2d4e3
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/1843feaa-0fca-42bd-bcd5-b0b688d2d4e3>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  VersionPrerelease: ""
+  UpdateOrder: 0
+  ComponentUid: 0cb55f84-4029-4309-af1f-fbdb2b650caa
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    conduitXRMain: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - conduitXRMain: !<MappingBased.AssignableType_1> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - // @input AssignableType_1 conduitXRMain
