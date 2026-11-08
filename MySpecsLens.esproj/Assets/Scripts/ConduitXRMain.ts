@@ -2329,7 +2329,7 @@ export class ConduitXRMain extends BaseScriptComponent {
         print("[WireSight] Ensuring Master Bedroom Corner Walls from Architectural Blueprint...");
 
         // Wall 1: Master Bedroom Back Wall (behind bed & nightstands)
-        // Position: (0, 0, -180.0), Yaw: 0°, Width: 240cm, Height: 240cm
+        // Position: (-262.5, 120.0, -225.0), Yaw: 0°, Width: 375cm, Height: 240cm
         let wall1 = this.activeWalls.find(w => w.wallId === "wall-bedroom");
         if (!wall1) {
             const wall1Obj = global.scene.createSceneObject("HolographicReferenceWall_1");
@@ -2338,18 +2338,18 @@ export class ConduitXRMain extends BaseScriptComponent {
             wall1.wallId = "wall-bedroom";
             this.activeWalls.unshift(wall1);
         }
-        wall1.widthCm = 290.0;
+        wall1.widthCm = 375.0;
         wall1.heightCm = 240.0;
-        wall1.initialPosition = new vec3(-279.0, 0, 215.0);
-        wall1.initialRotation = quat.fromEulerAngles(0, (45.0 * Math.PI) / 180.0, 0);
+        wall1.initialPosition = new vec3(-262.5, 120.0, -225.0);
+        wall1.initialRotation = quat.fromEulerAngles(0, 0, 0);
         wall1.getSceneObject().getTransform().setWorldPosition(wall1.initialPosition);
         wall1.getSceneObject().getTransform().setWorldRotation(wall1.initialRotation);
-        wall1.rebuildWall(wall1.initialPosition, wall1.initialRotation, 290.0, 240.0);
-        wall1.setWallYaw(45.0);
-        wall1.getSceneObject().enabled = false; // Disable original preview wall
+        wall1.rebuildWall(wall1.initialPosition, wall1.initialRotation, 375.0, 240.0);
+        wall1.setWallYaw(0.0);
+        wall1.getSceneObject().enabled = true; // Enabled and aligned directly with 3D House Model drywall
 
-        // Wall 2: Master Bedroom Perpendicular Side Wall (along TV, Dresser & Wardrobe)
-        // Position: (-697.0, -17.0, 195.0), Yaw: 135°, Width: 560cm, Height: 240cm
+        // Wall 2: Master Bedroom Perpendicular Side Wall (along Wardrobe & Doorway)
+        // Position: (-450.0, 120.0, 0.0), Yaw: 90°, Width: 450cm, Height: 240cm
         let wall2 = this.activeWalls.find(w => w.wallId === "wall-corner");
         if (!wall2) {
             const wall2Obj = global.scene.createSceneObject("HolographicReferenceWall_2");
@@ -2362,15 +2362,15 @@ export class ConduitXRMain extends BaseScriptComponent {
                 this.activeWalls.splice(1, 0, wall2);
             }
         }
-        wall2.widthCm = 560.0;
+        wall2.widthCm = 450.0;
         wall2.heightCm = 240.0;
-        wall2.initialPosition = new vec3(-697.0, -17.0, 195.0);
-        wall2.initialRotation = quat.fromEulerAngles(0, (135.0 * Math.PI) / 180.0, 0);
+        wall2.initialPosition = new vec3(-450.0, 120.0, 0.0);
+        wall2.initialRotation = quat.fromEulerAngles(0, (90.0 * Math.PI) / 180.0, 0);
         wall2.getSceneObject().getTransform().setWorldPosition(wall2.initialPosition);
         wall2.getSceneObject().getTransform().setWorldRotation(wall2.initialRotation);
-        wall2.rebuildWall(wall2.initialPosition, wall2.initialRotation, 560.0, 240.0);
-        wall2.setWallYaw(135.0);
-        wall2.getSceneObject().enabled = false; // Disable original preview wall
+        wall2.rebuildWall(wall2.initialPosition, wall2.initialRotation, 450.0, 240.0);
+        wall2.setWallYaw(90.0);
+        wall2.getSceneObject().enabled = true; // Enabled and aligned with 3D House Model side wall
 
         // Renumber all active walls
         for (let i = 0; i < this.activeWalls.length; i++) {
@@ -2437,18 +2437,40 @@ export class ConduitXRMain extends BaseScriptComponent {
 
         if (hit && hit.isHit && hit.isOnWall && hit.hitWall) {
             targetWall = hit.hitWall;
-            outletWorldPos = new vec3(hit.point.x, 40.0, hit.point.z);
-        } else if (targetWall) {
-            const wPos = targetWall.getSceneObject().getTransform().getWorldPosition();
-            const wRot = targetWall.getSceneObject().getTransform().getWorldRotation();
-            // Standard receptacle height (40cm from floor, +4cm drywall surface)
-            outletWorldPos = wPos.add(wRot.multiplyVec3(new vec3(0, -40.0, 4.0)));
-            outletWorldPos.y = 40.0;
+            const outletY = (hit.point.y > 15.0 && hit.point.y < 120.0) ? hit.point.y : 40.0;
+            outletWorldPos = targetWall.projectPointToWall(new vec3(hit.point.x, outletY, hit.point.z));
         } else {
-            // Default bedside outlet position in Master Bedroom
-            outletWorldPos = new vec3(-262.5, 40.0, -223.0);
+            // Forward raycast from active camera against all active walls
+            let foundWallHit = false;
+            const activeCam = this.getActiveCamera();
+            if (activeCam) {
+                const rayOrigin = activeCam.screenSpaceToWorldSpace(centerScreen, 1.0);
+                const rayFar = activeCam.screenSpaceToWorldSpace(centerScreen, 600.0);
+                const rayDir = rayFar.sub(rayOrigin).normalize();
+                for (const wall of this.activeWalls) {
+                    const wallHit = wall.raycastWall(rayOrigin, rayDir);
+                    if (wallHit && wallHit.isHit) {
+                        targetWall = wall;
+                        outletWorldPos = wall.projectPointToWall(new vec3(wallHit.point.x, 40.0, wallHit.point.z));
+                        foundWallHit = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!foundWallHit) {
+                // If aiming at open air, mount directly flush on the Master Bedroom back wall
+                const bedWall = this.activeWalls.find(w => w.wallId === "wall-bedroom") || this.getActiveWall();
+                if (bedWall) {
+                    targetWall = bedWall;
+                    outletWorldPos = bedWall.projectPointToWall(new vec3(-262.5, 40.0, -225.0));
+                } else {
+                    outletWorldPos = new vec3(-262.5, 40.0, -221.0);
+                }
+            }
         }
 
+        // Guarantee outlet is locked flat onto the wall plane (never mid-air)
         if (targetWall) {
             outletWorldPos = targetWall.projectPointToWall(outletWorldPos);
         }
