@@ -72,6 +72,7 @@ export class ConduitXRMain extends BaseScriptComponent {
     private orbitYaw: number = -0.55;
     private orbitPitch: number = 0.32;
     private orbitDist: number = 220.0;
+    private orbitTarget: vec3 = new vec3(0, 0, -200);
 
     // Run registry
     private activeRuns: ConduitRun[] = [...INITIAL_CONDUIT_RUNS];
@@ -115,6 +116,9 @@ export class ConduitXRMain extends BaseScriptComponent {
     }
 
     private findCamera(): SceneObject | null {
+        if (this.activeCameraMode === "inspector" && this.inspectorCameraObj) {
+            return this.inspectorCameraObj;
+        }
         if (this.glassesCameraObj) return this.glassesCameraObj;
         const rootCount = global.scene.getRootObjectsCount();
         for (let i = 0; i < rootCount; i++) {
@@ -231,18 +235,32 @@ export class ConduitXRMain extends BaseScriptComponent {
     }
 
     private setupInspectorCamera() {
-        this.inspectorCameraObj = global.scene.createSceneObject("InspectorCamera");
-        this.inspectorCamera = this.inspectorCameraObj.createComponent("Component.Camera") as Camera;
+        if (!this.inspectorCameraObj) {
+            this.inspectorCameraObj = global.scene.createSceneObject("InspectorCamera");
+            this.inspectorCamera = this.inspectorCameraObj.createComponent("Component.Camera") as Camera;
+        }
 
-        if (this.glassesCamera) {
+        if (this.glassesCamera && this.inspectorCamera) {
             this.inspectorCamera.renderTarget = this.glassesCamera.renderTarget;
             this.inspectorCamera.near = this.glassesCamera.near || 1.0;
             this.inspectorCamera.far = this.glassesCamera.far || 2500.0;
             // Lens Studio camera FOV is in radians (0, PI)
             this.inspectorCamera.fov = this.glassesCamera.fov || ((65.0 * Math.PI) / 180.0);
+            try {
+                if (this.glassesCamera.renderOrder !== undefined) {
+                    this.inspectorCamera.renderOrder = this.glassesCamera.renderOrder;
+                }
+                if (this.glassesCamera.renderLayer) {
+                    this.inspectorCamera.renderLayer = this.glassesCamera.renderLayer;
+                }
+            } catch (e) {
+                // Ignore layer/order copy error if unsupported
+            }
         }
 
-        this.inspectorCamera.enabled = false;
+        if (this.inspectorCamera) {
+            this.inspectorCamera.enabled = false;
+        }
         this.applyInspectorPreset("iso");
         print("[WireSight] Camera 2 (InspectorCamera) created! Can move in Scene panel or orbit in Preview.");
     }
@@ -255,6 +273,11 @@ export class ConduitXRMain extends BaseScriptComponent {
 
         this.glassesCamera.enabled = isGlasses;
         this.inspectorCamera.enabled = !isGlasses;
+
+        if (this.glassesCameraObj) {
+            const dt = this.glassesCameraObj.getComponent("Component.DeviceTracking");
+            if (dt) dt.enabled = isGlasses;
+        }
 
         const activeCamComp = isGlasses ? this.glassesCamera : this.inspectorCamera;
         const activeCamObj = isGlasses ? this.glassesCameraObj! : this.inspectorCameraObj!;
@@ -274,6 +297,7 @@ export class ConduitXRMain extends BaseScriptComponent {
                 ? "🎥 Glasses POV (First Person)"
                 : `🎥 3rd-Person Inspector [${this.getPresetLabel()}]`;
             this.toolPalette.setStatusMessage(msg, new vec4(0.3, 0.95, 1.0, 1.0));
+            this.toolPalette.summonInWorld();
         }
 
         print(`[WireSight] Active Camera switched to: ${this.activeCameraMode.toUpperCase()}`);
@@ -329,6 +353,7 @@ export class ConduitXRMain extends BaseScriptComponent {
             this.orbitPitch = 0.32;
         }
 
+        this.orbitTarget = target;
         this.orbitDist = pos.distance(target);
         this.inspectorCameraObj.getTransform().setWorldPosition(pos);
         const forward = target.sub(pos).normalize();
@@ -1283,11 +1308,16 @@ export class ConduitXRMain extends BaseScriptComponent {
                     this.saveAndExportWiring();
                 } else if (isKey("I", "i", 73)) {
                     this.importWiringJson();
+                } else if (isKey("C", "c", 67)) {
+                    this.switchCameraView();
+                } else if (isKey("P", "p", 80)) {
+                    this.cycleInspectorPreset();
                 } else if (isKey("D", "d", 68)) {
                     const wall = this.getActiveWall();
                     if (wall && this.toolPalette) {
-                        const camPos = this.glassesCamera
-                            ? this.glassesCamera.screenSpaceToWorldSpace(new vec2(0.5, 0.5), 1.0)
+                        const activeCam = this.getActiveCamera();
+                        const camPos = activeCam
+                            ? activeCam.screenSpaceToWorldSpace(new vec2(0.5, 0.5), 1.0)
                             : new vec3(0, 0, 0);
                         const dist = wall.cycleWallDistance(camPos);
                         this.alignBreakerPanelToActiveWall();
@@ -1646,7 +1676,7 @@ export class ConduitXRMain extends BaseScriptComponent {
                     this.orbitYaw += dx * 3.2;
                     this.orbitPitch = Math.max(-0.25, Math.min(1.3, this.orbitPitch + dy * 2.5));
 
-                    const target = new vec3(0, 0, -200);
+                    const target = this.orbitTarget;
                     const cx = target.x + Math.sin(this.orbitYaw) * Math.cos(this.orbitPitch) * this.orbitDist;
                     const cy = target.y + Math.sin(this.orbitPitch) * this.orbitDist;
                     const cz = target.z + Math.cos(this.orbitYaw) * Math.cos(this.orbitPitch) * this.orbitDist;
@@ -3167,13 +3197,58 @@ export class ConduitXRMain extends BaseScriptComponent {
     public teleportToRoom(roomIndex: number): string {
         if (roomIndex < 0 || roomIndex >= HOUSE_ROOMS.length) return "";
         const room = HOUSE_ROOMS[roomIndex];
-        const camObj = this.findCamera();
-        if (camObj) {
-            camObj.getTransform().setWorldPosition(room.cameraPos);
-            camObj.getTransform().setWorldRotation(room.cameraRot);
-            if (this.toolPalette) {
-                this.toolPalette.setStatusMessage(`📍 Teleported to ${room.icon} ${room.name}`, new vec4(0.3, 0.95, 1.0, 1.0));
+
+        // 1. Ensure Inspector Camera exists
+        if (!this.inspectorCamera || !this.inspectorCameraObj) {
+            this.setupInspectorCamera();
+        }
+
+        // 2. Switch active camera to Inspector Camera (No DeviceTracking overrides!)
+        this.activeCameraMode = "inspector";
+        if (this.glassesCamera) this.glassesCamera.enabled = false;
+        if (this.inspectorCamera) this.inspectorCamera.enabled = true;
+
+        // 3. Disable DeviceTracking on glasses camera to prevent tracking snapback
+        if (this.glassesCameraObj) {
+            const dt = this.glassesCameraObj.getComponent("Component.DeviceTracking");
+            if (dt) dt.enabled = false;
+            this.glassesCameraObj.getTransform().setWorldPosition(room.cameraPos);
+            this.glassesCameraObj.getTransform().setWorldRotation(room.cameraRot);
+        }
+
+        // 4. Place Inspector Camera permanently at the designated room position & angle
+        if (this.inspectorCameraObj) {
+            this.inspectorCameraObj.getTransform().setWorldPosition(room.cameraPos);
+            this.inspectorCameraObj.getTransform().setWorldRotation(room.cameraRot);
+        }
+
+        // 5. Setup Orbit center and angles matching this room
+        this.orbitTarget = room.center;
+        const offset = room.cameraPos.sub(room.center);
+        const dist = Math.max(10.0, offset.length);
+        this.orbitDist = dist;
+        this.orbitPitch = Math.asin(Math.max(-0.99, Math.min(0.99, offset.y / dist)));
+        this.orbitYaw = Math.atan2(offset.x, offset.z);
+
+        // 6. Update all tools with the active camera
+        const activeCam = this.inspectorCamera || this.glassesCamera;
+        if (activeCam) {
+            if (this.lineMarkerTool) {
+                this.lineMarkerTool.setViewerCamera(activeCam);
             }
+            if (this.wallCreatorTool) {
+                this.wallCreatorTool.setCamera(activeCam);
+            }
+            if (this.toolPalette) {
+                this.toolPalette.setCamera(activeCam);
+                this.toolPalette.updateCameraBtnText("🎥 3RD POV");
+                this.toolPalette.updateCameraPresetText(room.name, true);
+                this.toolPalette.summonInWorld();
+            }
+        }
+
+        if (this.toolPalette) {
+            this.toolPalette.setStatusMessage(`📍 Teleported to ${room.icon} ${room.name}`, new vec4(0.3, 0.95, 1.0, 1.0));
         }
 
         // Set matching wall as active wall if one exists
@@ -3391,8 +3466,9 @@ export class ConduitXRMain extends BaseScriptComponent {
             yawDeg = 270.0;
         } else {
             // Default 1.8m in front of camera
-            const camPos = this.glassesCamera
-                ? this.glassesCamera.screenSpaceToWorldSpace(new vec2(0.5, 0.5), 180.0)
+            const activeCam = this.getActiveCamera();
+            const camPos = activeCam
+                ? activeCam.screenSpaceToWorldSpace(new vec2(0.5, 0.5), 180.0)
                 : new vec3(0, 0, -180.0);
             pos = new vec3(camPos.x, 0, camPos.z);
             yawDeg = 0;
