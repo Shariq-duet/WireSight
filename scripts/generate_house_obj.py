@@ -2,15 +2,21 @@
 generate_house_obj.py
 Creates an Architectural Cutaway 3D Interior Model (.obj + .mtl) for Snap Spectacles.
 
-Layout (3 Distinct Functional Zones):
-1. Left Room: Master Bedroom (King Bed, Headboard, Duvet, 2 Nightstands, Lamps, Wardrobe)
-2. Center Room: Modern Living Room (65" TV, Media Console, 3-Seater Sofa, Coffee Table, Rug, Floor Lamp)
-3. Right Room: Electrical / MEP Utility Room (200A Main Service Panel, Sub-Panel, Emergency Red Disconnect,
-   Smart Energy Storage Battery/Inverter, Step-Down Transformer, NEC 36" Yellow Safety Floor Zone,
-   Overhead Conduit Trunking, Fire Extinguisher)
-- Connectors: Framed interior doorways between all rooms for seamless AR walk-through
-- Dimensions: 10.0m total width (X: -450 to +550), 4.5m depth (Z: -225 to +225), 2.4m standard wall height
-- Open-top cutaway view: Designed for zero clipping & in-wall MEP wiring inspection on Snap Spectacles
+Layout:
+- Left Room: Master Bedroom (King Bed, Headboard, 2 Nightstands, Lamps, Wardrobe)
+- Center Room: Modern Living Room (65" TV, Media Console, 3-Seater Sofa, Coffee Table, Rug, Floor Lamp)
+- Right Room: Electrical / MEP Utility Room with a FULL REALISTIC RESIDENTIAL BREAKER PANEL:
+  * Open Hinged Cabinet Door with Inside Circuit Directory Index Schedule
+  * Interior Galvanized Steel Deadfront Chassis
+  * Top 200A Double-Pole Main Service Disconnect Switch
+  * Dual-Column Branch Breakers:
+    - B1 (Left Top): 20A Master Bedroom Outlets & Lights
+    - B2 (Right Top): 15A Living Room 65" TV & Media Console
+    - B3 (Left Middle): 15A Living Room Sofa & Floor Lamp Tap-In
+    - B4 (Right Middle): 30A Utility & Battery Storage
+    - B5-B8: Spare Breakers
+  * Copper Bus Bars & Neutral Bars
+  * Emergency Red Disconnect Switch, Smart Battery Powerwall, Transformer, and NEC Safety Floor Zone
 """
 
 import os
@@ -45,7 +51,14 @@ def build_house():
         "Mat_BrassLamp": {"Kd": "0.85 0.68 0.28", "Ks": "0.60 0.55 0.30", "Ns": "70"},
         "Mat_LampShade": {"Kd": "0.96 0.94 0.88", "Ks": "0.05 0.05 0.05", "Ns": "10"},
         "Mat_Glass": {"Kd": "0.30 0.45 0.55", "Ks": "0.90 0.90 0.90", "Ns": "100", "d": "0.6"},
-        "Mat_PanelMetal": {"Kd": "0.30 0.33 0.36", "Ks": "0.40 0.40 0.42", "Ns": "50"},
+        # Electrical Panel & Breaker Materials
+        "Mat_PanelCabinet": {"Kd": "0.40 0.43 0.46", "Ks": "0.30 0.30 0.32", "Ns": "40"},
+        "Mat_PanelChassis": {"Kd": "0.22 0.24 0.26", "Ks": "0.25 0.25 0.25", "Ns": "30"},
+        "Mat_BreakerBlack": {"Kd": "0.08 0.08 0.09", "Ks": "0.15 0.15 0.15", "Ns": "25"},
+        "Mat_BreakerHandle": {"Kd": "0.92 0.92 0.92", "Ks": "0.20 0.20 0.20", "Ns": "30"},
+        "Mat_MainBreakerRed": {"Kd": "0.85 0.15 0.12", "Ks": "0.30 0.30 0.30", "Ns": "45"},
+        "Mat_CircuitDirectory": {"Kd": "0.94 0.92 0.86", "Ks": "0.05 0.05 0.05", "Ns": "5"},
+        "Mat_CopperBus": {"Kd": "0.78 0.45 0.22", "Ks": "0.70 0.50 0.30", "Ns": "75"},
         "Mat_SafetyRed": {"Kd": "0.88 0.15 0.15", "Ks": "0.30 0.30 0.30", "Ns": "40"},
         "Mat_Powerwall": {"Kd": "0.92 0.93 0.95", "Ks": "0.50 0.50 0.50", "Ns": "80"},
         "Mat_LedGreen": {"Kd": "0.10 0.95 0.30", "Ks": "0.80 0.80 0.80", "Ns": "100"},
@@ -54,7 +67,7 @@ def build_house():
     }
 
     with open(mtl_path, "w", encoding="utf-8") as f:
-        f.write("# WireSight Architectural Cutaway Materials (3-Room Multi-Zone)\n\n")
+        f.write("# WireSight Architectural Cutaway Materials (With Detailed Breaker System)\n\n")
         for name, prop in materials.items():
             f.write(f"newmtl {name}\n")
             f.write("Ka 0.2 0.2 0.2\n")
@@ -109,40 +122,30 @@ def build_house():
     add_box((-75, -6, -225), (300, 0, 225), "Floor_Living", "Mat_FloorLiving")
     add_box((300, -6, -225), (550, 0, 225), "Floor_Electrical_Room", "Mat_FloorConcrete")
 
-    # Electrical Room NEC 36-Inch Yellow/Black Safety Zone in front of Panel
+    # Electrical Room NEC 36-Inch Yellow Safety Zone
     add_box((330, 0, -225), (480, 1, -135), "SafetyZone_NEC_Clearance", "Mat_HazardYellow")
 
     # Perimeter Walls (Thickness 15cm, Height 240cm)
-    # Back Wall (-Z): X: -450 to +550, Z: -240 to -225
     add_box((-450, 0, -240), (-75, 240, -225), "Wall_Back_Bedroom_Accent", "Mat_AccentWall")
     add_box((-75, 0, -240), (300, 240, -225), "Wall_Back_Living_Accent", "Mat_AccentWall")
     add_box((300, 0, -240), (550, 240, -225), "Wall_Back_Electrical_Room", "Mat_IndustrialWall")
-
-    # Left Wall (-X): X: -465 to -450, Z: -225 to +225
     add_box((-465, 0, -225), (-450, 240, 225), "Wall_Left_Bedroom", "Mat_Drywall")
-
-    # Right Wall (+X): X: +550 to +565, Z: -225 to +225
     add_box((550, 0, -225), (565, 240, 225), "Wall_Right_Electrical_Room", "Mat_IndustrialWall")
-
-    # Low Front Threshold (Z: 225 to 235, Height 15cm - architectural border)
     add_box((-450, 0, 225), (550, 15, 235), "Foundation_Front_Threshold", "Mat_Drywall")
 
-    # Partition 1: Between Bedroom & Living Room (X: -82.5 to -67.5, Width 15cm)
-    # Doorway: Z: 20cm to 115cm (95cm wide, 210cm high)
+    # Partition 1: Between Bedroom & Living Room (X: -82.5 to -67.5) with Walkthrough Doorway
     add_box((-82.5, 0, -225), (-67.5, 240, 20), "Wall_Partition_Bed_Living_Back", "Mat_Drywall")
     add_box((-82.5, 210, 20), (-67.5, 240, 115), "Wall_Door_Header_Bed_Living", "Mat_Drywall")
     add_box((-82.5, 0, 115), (-67.5, 240, 225), "Wall_Partition_Bed_Living_Front", "Mat_Drywall")
 
-    # Partition 2: Between Living Room & Electrical Room (X: 292.5 to 307.5, Width 15cm)
-    # Fire-Rated Utility Doorway: Z: -10cm to 80cm (90cm wide, 210cm high)
+    # Partition 2: Between Living Room & Electrical Room (X: 292.5 to 307.5) with Fire Doorway
     add_box((292.5, 0, -225), (307.5, 240, -10), "Wall_Partition_Living_Elec_Back", "Mat_Drywall")
     add_box((292.5, 210, -10), (307.5, 240, 80), "Wall_Door_Header_Living_Elec", "Mat_Drywall")
     add_box((292.5, 0, 80), (307.5, 240, 225), "Wall_Partition_Living_Elec_Front", "Mat_Drywall")
 
     # =============================================================
-    # 4. BEDROOM FURNITURE (LEFT ROOM, X: -450 to -75, Center X = -262.5)
+    # 4. BEDROOM FURNITURE (LEFT ROOM)
     # =============================================================
-    # King Bed (Centered at X = -262.5, Back at Z = -220)
     add_box((-357.5, 0, -220), (-167.5, 25, -20), "Bed_Frame", "Mat_WoodWalnut")
     add_box((-367.5, 0, -225), (-157.5, 115, -215), "Bed_Headboard", "Mat_WoodWalnut")
     add_box((-352.5, 25, -215), (-172.5, 55, -25), "Bed_Mattress", "Mat_BedLinen")
@@ -150,93 +153,132 @@ def build_house():
     add_box((-337.5, 55, -210), (-277.5, 68, -170), "Bed_Pillow_Left", "Mat_Pillow")
     add_box((-247.5, 55, -210), (-187.5, 68, -170), "Bed_Pillow_Right", "Mat_Pillow")
 
-    # Left Nightstand & Lamp
+    # Nightstands & Lamps
     add_box((-427.5, 0, -220), (-377.5, 52, -175), "Nightstand_Left", "Mat_WoodWalnut")
     add_box((-407.5, 52, -202), (-397.5, 55, -192), "Lamp_Left_Base", "Mat_BrassLamp")
     add_box((-404.5, 55, -199), (-400.5, 75, -195), "Lamp_Left_Stem", "Mat_BrassLamp")
     add_box((-412.5, 75, -207), (-392.5, 92, -187), "Lamp_Left_Shade", "Mat_LampShade")
 
-    # Right Nightstand & Lamp
     add_box((-147.5, 0, -220), (-97.5, 52, -175), "Nightstand_Right", "Mat_WoodWalnut")
     add_box((-127.5, 52, -202), (-117.5, 55, -192), "Lamp_Right_Base", "Mat_BrassLamp")
     add_box((-124.5, 55, -199), (-120.5, 75, -195), "Lamp_Right_Stem", "Mat_BrassLamp")
     add_box((-132.5, 75, -207), (-112.5, 92, -187), "Lamp_Right_Shade", "Mat_LampShade")
 
-    # Wardrobe along Left Wall
     add_box((-450, 0, -10), (-390, 215, 170), "Bedroom_Wardrobe", "Mat_WoodWalnut")
 
     # =============================================================
-    # 5. LIVING ROOM FURNITURE (CENTER ROOM, X: -75 to +300, Center X = 112.5)
+    # 5. LIVING ROOM FURNITURE (CENTER ROOM)
     # =============================================================
-    # Media Console (Centered at X = 112.5, Z = -225 to -180)
     add_box((22.5, 0, -225), (202.5, 48, -180), "TV_Media_Console", "Mat_WoodWalnut")
-
-    # Wall-Mounted 65" TV
     add_box((37.5, 90, -225), (187.5, 175, -221), "TV_Bezel_Frame", "Mat_TVBezel")
     add_box((39.5, 92, -221), (185.5, 173, -220), "TV_Screen_Display", "Mat_TVScreen")
-
-    # Modern Area Rug
     add_box((-12.5, 0, -150), (237.5, 2, 90), "Living_Room_Rug", "Mat_Rug")
 
-    # 3-Seater Charcoal Sofa
     add_box((2.5, 0, -10), (222.5, 42, 75), "Sofa_Seat_Base", "Mat_SofaCharcoal")
     add_box((2.5, 42, 55), (222.5, 80, 75), "Sofa_Backrest", "Mat_SofaCharcoal")
     add_box((2.5, 42, -10), (22.5, 62, 75), "Sofa_Armrest_Left", "Mat_SofaCharcoal")
     add_box((202.5, 42, -10), (222.5, 62, 75), "Sofa_Armrest_Right", "Mat_SofaCharcoal")
 
-    # Coffee Table
     add_box((57.5, 0, -115), (67.5, 38, -105), "CoffeeTable_Leg_1", "Mat_WoodWalnut")
     add_box((157.5, 0, -115), (167.5, 38, -105), "CoffeeTable_Leg_2", "Mat_WoodWalnut")
     add_box((57.5, 0, -75), (67.5, 38, -65), "CoffeeTable_Leg_3", "Mat_WoodWalnut")
     add_box((157.5, 0, -75), (167.5, 38, -65), "CoffeeTable_Leg_4", "Mat_WoodWalnut")
     add_box((52.5, 38, -120), (172.5, 42, -60), "CoffeeTable_GlassTop", "Mat_Glass")
 
-    # Standing Floor Lamp in Corner
     add_box((260, 0, -210), (280, 4, -190), "FloorLamp_Base", "Mat_BrassLamp")
     add_box((268, 4, -202), (272, 155, -198), "FloorLamp_Pole", "Mat_BrassLamp")
     add_box((255, 155, -215), (285, 185, -185), "FloorLamp_Shade", "Mat_LampShade")
 
     # =============================================================
-    # 6. ELECTRICAL & MEP UTILITY ROOM (RIGHT ROOM, X: 300 to 550)
-    # Designed for Scenarios: Main Service, Breakers, Emergency Shutoff,
-    # Battery Backup Inverter, Step-Down Transformer & Overhead Trunks
+    # 6. ELECTRICAL ROOM: REALISTIC RESIDENTIAL BREAKER PANEL SYSTEM
+    # Centered at X = 380, Y = 140, Z = -225 on Back Wall
     # =============================================================
 
-    # 1. Main 200A Service Distribution Center (Back Wall: X = 340 to 420, Y: 90 to 190, Z: -225 to -205)
-    add_box((340, 90, -225), (420, 190, -205), "Electrical_200A_Main_Panel", "Mat_PanelMetal")
-    # Panel Door Seam & Latch
-    add_box((410, 135, -205), (418, 145, -202), "Electrical_Panel_Handle", "Mat_BrassLamp")
+    # A. Panel Back Box (Enclosure Cabinet: 65cm wide, 95cm high, 15cm deep)
+    # Box spans X: 347.5 to 412.5, Y: 95 to 190, Z: -225 to -210
+    add_box((347.5, 95, -225), (412.5, 190, -210), "Panel_Enclosure_Cabinet", "Mat_PanelCabinet")
 
-    # 2. Industrial Emergency Main Disconnect Red Switch Box (Next to Panel: X = 435 to 470, Y: 115 to 165)
-    add_box((435, 115, -225), (470, 165, -210), "Electrical_Emergency_Disconnect_Box", "Mat_PanelMetal")
-    # Big Red Disconnect Pull Lever (Heavy Duty)
+    # B. Open Hinged Door (Swung open forward 85° to the left so interior is fully exposed)
+    # Door attached at X = 347.5, extends forward to Z = -150
+    add_box((345.5, 95, -210), (347.5, 190, -150), "Panel_Hinged_Door_Open", "Mat_PanelCabinet")
+    # Circuit Directory Schedule glued on the inside face of the open door
+    add_box((347.6, 115, -200), (348.0, 175, -160), "Panel_Circuit_Directory_Index", "Mat_CircuitDirectory")
+
+    # C. Interior Steel Deadfront Chassis (Galvanized faceplate with breaker rows)
+    add_box((352.5, 100, -210), (407.5, 185, -207), "Panel_Interior_Deadfront", "Mat_PanelChassis")
+
+    # D. Top Main 200A Service Breaker (Double-Pole Master Disconnect)
+    # Centered at X = 380, Y: 170 to 180, Z: -207 to -202
+    add_box((372.0, 170, -207), (388.0, 180, -203), "Breaker_200A_Main_Case", "Mat_BreakerBlack")
+    add_box((376.0, 173, -203), (384.0, 177, -199), "Breaker_200A_Main_Handle", "Mat_MainBreakerRed")
+
+    # E. Dual-Column Branch Circuit Breakers:
+    # -------------------------------------------------------------
+    # LEFT COLUMN (X: 356 to 376):
+    # Breaker 1: Master Bedroom (20A) - Controls Scenario 1 Circuit
+    add_box((356.0, 153, -207), (376.0, 161, -203), "Breaker_1_Case_MasterBed", "Mat_BreakerBlack")
+    add_box((370.0, 155, -203), (375.0, 159, -200), "Breaker_1_Handle_20A", "Mat_BreakerHandle")
+
+    # Breaker 3: Living Room Sofa & Floor Lamp (15A) - Controls Scenario 3
+    add_box((356.0, 141, -207), (376.0, 149, -203), "Breaker_3_Case_SofaBranch", "Mat_BreakerBlack")
+    add_box((370.0, 143, -203), (375.0, 147, -200), "Breaker_3_Handle_15A", "Mat_BreakerHandle")
+
+    # Breaker 5: Spare Circuit
+    add_box((356.0, 129, -207), (376.0, 137, -203), "Breaker_5_Case_Spare", "Mat_BreakerBlack")
+    add_box((370.0, 131, -203), (375.0, 135, -200), "Breaker_5_Handle_15A", "Mat_BreakerHandle")
+
+    # Breaker 7: Spare Circuit
+    add_box((356.0, 117, -207), (376.0, 125, -203), "Breaker_7_Case_Spare", "Mat_BreakerBlack")
+    add_box((370.0, 119, -203), (375.0, 123, -200), "Breaker_7_Handle_15A", "Mat_BreakerHandle")
+
+    # -------------------------------------------------------------
+    # RIGHT COLUMN (X: 384 to 404):
+    # Breaker 2: Living Room 65" TV & Media Console (15A) - Controls Scenario 2
+    add_box((384.0, 153, -207), (404.0, 161, -203), "Breaker_2_Case_LivingTV", "Mat_BreakerBlack")
+    add_box((385.0, 155, -203), (390.0, 159, -200), "Breaker_2_Handle_15A", "Mat_BreakerHandle")
+
+    # Breaker 4: Utility & Battery Storage (30A) - Controls Scenario 4
+    add_box((384.0, 141, -207), (404.0, 149, -203), "Breaker_4_Case_Utility", "Mat_BreakerBlack")
+    add_box((385.0, 143, -203), (390.0, 147, -200), "Breaker_4_Handle_30A", "Mat_BreakerHandle")
+
+    # Breaker 6: Spare Circuit
+    add_box((384.0, 129, -207), (404.0, 137, -203), "Breaker_6_Case_Spare", "Mat_BreakerBlack")
+    add_box((385.0, 131, -203), (390.0, 135, -200), "Breaker_6_Handle_15A", "Mat_BreakerHandle")
+
+    # Breaker 8: Spare Circuit
+    add_box((384.0, 117, -207), (404.0, 125, -203), "Breaker_8_Case_Spare", "Mat_BreakerBlack")
+    add_box((385.0, 119, -203), (390.0, 123, -200), "Breaker_8_Handle_15A", "Mat_BreakerHandle")
+
+    # F. Copper Neutral & Ground Bus Bars
+    add_box((350.0, 110, -209), (352.0, 170, -207), "Panel_Neutral_Bus_Bar", "Mat_CopperBus")
+    add_box((408.0, 110, -209), (410.0, 170, -207), "Panel_Ground_Bus_Bar", "Mat_CopperBus")
+
+    # G. Other Electrical Room Equipment:
+    # Heavy-Duty Emergency Disconnect Box & Big Red Lever
+    add_box((435, 115, -225), (470, 165, -210), "Electrical_Emergency_Disconnect_Box", "Mat_PanelCabinet")
     add_box((462, 130, -210), (478, 150, -202), "Electrical_Emergency_Red_Lever", "Mat_SafetyRed")
 
-    # 3. Smart Home Battery Storage / Solar Inverter (Mounted on Right Wall: X = 535 to 550, Z = -160 to -40, Y = 35 to 185)
-    # Sleek Powerwall unit with status LED strip
+    # Smart Energy Storage Battery (Powerwall) with Active Green LED strip
     add_box((535, 35, -160), (550, 185, -40), "Electrical_Smart_Battery_Powerwall", "Mat_Powerwall")
-    # Glowing Active Green Status Indicator Bar
     add_box((534, 165, -150), (535, 170, -50), "Electrical_Battery_Status_LED", "Mat_LedGreen")
 
-    # 4. Floor-Mounted Step-Down Transformer / AC Distribution Hub (Corner: X = 460 to 535, Z = 110 to 185, Y: 0 to 95)
+    # Step-Down Transformer
     add_box((460, 0, 110), (535, 95, 185), "Electrical_Transformer_Unit", "Mat_TransformerSteel")
-    # Transformer Cooling Fin Grids
-    add_box((458, 20, 125), (460, 80, 170), "Electrical_Transformer_CoolingFins", "Mat_PanelMetal")
+    add_box((458, 20, 125), (460, 80, 170), "Electrical_Transformer_CoolingFins", "Mat_PanelCabinet")
 
-    # 5. Overhead Rigid Metallic Conduit Trunk Racks (Runs along ceiling at Y = 220cm from Electrical Panel through to Living Room)
+    # Overhead Conduit Trunk Rack & Service Feeder Riser
     add_box((330, 220, -218), (480, 226, -212), "Electrical_Conduit_Trunk_Header", "Mat_ConduitMetallic")
-    # Vertical Service Feeder Riser (From Floor into Main 200A Panel)
-    add_box((375, 0, -220), (385, 90, -212), "Electrical_Feeder_Riser_Pipe", "Mat_ConduitMetallic")
+    add_box((375, 0, -220), (385, 95, -212), "Electrical_Feeder_Riser_Pipe", "Mat_ConduitMetallic")
 
-    # 6. Wall-Mounted Safety Fire Extinguisher (Mounted beside utility door: X = 320 to 335, Y: 85 to 145, Z = -5 to 15)
+    # Fire Extinguisher
     add_box((320, 85, -5), (335, 140, 10), "Safety_Fire_Extinguisher_Tank", "Mat_SafetyRed")
     add_box((324, 140, -1), (331, 150, 6), "Safety_Fire_Extinguisher_Valve", "Mat_BrassLamp")
 
     # =============================================================
-    # 7. WRITE OBJ FILE
+    # 7. WRITE OUT OBJ FILE
     # =============================================================
     with open(obj_path, "w", encoding="utf-8") as f:
-        f.write("# WireSight Architectural Cutaway 3D Model (3-Room Multi-Zone)\n")
+        f.write("# WireSight Architectural Cutaway 3D Model with Detailed Breaker Panel\n")
         f.write(f"mtllib {mtl_filename}\n\n")
 
         for vx, vy, vz in verts:
@@ -256,104 +298,62 @@ def build_house():
             f.write("\n")
 
     # =============================================================
-    # 8. EXPORT MEP BLUEPRINT SPECIFICATION WITH SCENARIOS
+    # 8. EXPORT MEP BLUEPRINT SPECIFICATION WITH EXACT BREAKER TERMINALS
     # =============================================================
     blueprint = {
         "house_dimensions_cm": {"width": 1000, "depth": 450, "height": 240},
-        "rooms": {
-            "bedroom": {
-                "name": "Master Bedroom",
-                "bounds": {"x_min": -450, "x_max": -75, "z_min": -225, "z_max": 225},
-                "accent_wall": {"x_center": -262.5, "y": 120, "z": -225, "normal": [0, 0, 1]},
-                "left_wall": {"x": -450, "y": 120, "z_center": 0, "normal": [1, 0, 0]},
-                "partition_wall": {"x": -75, "y": 120, "z_center": -102.5, "normal": [-1, 0, 0]}
-            },
-            "living_room": {
-                "name": "Living Room",
-                "bounds": {"x_min": -75, "x_max": 300, "z_min": -225, "z_max": 225},
-                "tv_wall": {"x_center": 112.5, "y": 120, "z": -225, "normal": [0, 0, 1]},
-                "partition_bedroom": {"x": -75, "y": 120, "z_center": -102.5, "normal": [1, 0, 0]},
-                "partition_electrical": {"x": 300, "y": 120, "z_center": -117.5, "normal": [-1, 0, 0]}
-            },
-            "electrical_room": {
-                "name": "Electrical & MEP Utility Room",
-                "bounds": {"x_min": 300, "x_max": 550, "z_min": -225, "z_max": 225},
-                "service_wall": {"x_center": 425, "y": 120, "z": -225, "normal": [0, 0, 1]},
-                "right_wall": {"x": 550, "y": 120, "z_center": 0, "normal": [-1, 0, 0]},
-                "partition_wall": {"x": 300, "y": 120, "z_center": -117.5, "normal": [1, 0, 0]},
-                "nec_safety_clearance_depth_cm": 90
-            }
-        },
-        "doorways": [
-            {
-                "name": "Bedroom to Living Room Passage",
-                "position": {"x": -75, "y_floor": 0, "z_start": 20, "z_end": 115},
-                "width_cm": 95,
-                "height_cm": 210
-            },
-            {
-                "name": "Living Room to Electrical Room Fire Door",
-                "position": {"x": 300, "y_floor": 0, "z_start": -10, "z_end": 80},
-                "width_cm": 90,
-                "height_cm": 210
-            }
-        ],
-        "planned_mep_nodes": {
-            "main_service_drop": {"x": 380, "y": 0, "z": -216, "description": "Underground 200A Utility Service Entrance Riser"},
-            "main_breaker_panel": {"x": 380, "y": 140, "z": -205, "description": "200A 42-Circuit Main Distribution Load Center"},
-            "emergency_disconnect_switch": {"x": 452.5, "y": 140, "z": -205, "description": "Heavy-Duty Red Safety Knife Disconnect Switch"},
-            "battery_storage_powerwall": {"x": 542.5, "y": 110, "z": -100, "description": "13.5 kWh Lithium-Ion Energy Storage Battery"},
-            "transformer_step_down": {"x": 497.5, "y": 47.5, "z": 147.5, "description": "480V to 120/240V Step-Down Transformer"},
-            "fire_extinguisher": {"x": 327.5, "y": 112.5, "z": 2.5, "description": "Class C Electrical Safety Fire Extinguisher"},
-            "conduit_trunk_junction": {"x": 300, "y": 223, "z": -215, "description": "High-Capacity Ceiling Feeder Penetration through Living Wall"},
-            "living_tv_quad_outlet": {"x": 112.5, "y": 110, "z": -223, "description": "Quad 120V 20A Surge Receptacle for 65in TV"},
-            "living_console_outlet": {"x": 50, "y": 40, "z": -223, "description": "120V 20A Duplex Receptacle for Media Console"},
-            "living_sofa_outlet": {"x": 290, "y": 40, "z": 30, "description": "120V 15A Convenience Receptacle by Sofa"},
-            "living_floor_lamp_switch": {"x": 285, "y": 120, "z": -15, "description": "Switched Circuit for Living Room Corner Lamp"},
-            "bedroom_outlet_left": {"x": -402.5, "y": 40, "z": -223, "description": "120V 15A Duplex Receptacle (Nightstand Left)"},
-            "bedroom_outlet_right": {"x": -122.5, "y": 40, "z": -223, "description": "120V 15A Duplex Receptacle (Nightstand Right)"},
-            "bedroom_light_switch": {"x": -85, "y": 120, "z": 15, "description": "Single-Pole Switch by Bedroom Doorway"}
-        },
-        "interactive_scenarios": [
-            {
-                "id": "scenario_main_trip",
-                "title": "Grid Power Outage & Main Breaker Trip",
-                "trigger_node": "main_breaker_panel",
-                "action": "Trip 200A Main Handle",
-                "effect": "De-energizes all circuits across Bedroom & Living Room; Emergency Battery kicks in"
-            },
-            {
-                "id": "scenario_emergency_shutoff",
-                "title": "Hazard Lockout / Tagout (LOTO)",
-                "trigger_node": "emergency_disconnect_switch",
-                "action": "Pull Red Safety Disconnect Lever",
-                "effect": "Instant mechanical isolation of all high-voltage feeders with safety warning"
-            },
-            {
-                "id": "scenario_battery_backup",
-                "title": "Solar & Battery Islanding",
-                "trigger_node": "battery_storage_powerwall",
-                "action": "Toggle Grid Island Mode",
-                "effect": "Maintains critical loads (TV, Bedroom outlets) via green indicator flow"
-            },
-            {
-                "id": "scenario_conduit_xray_trace",
-                "title": "Source-to-Load In-Wall X-Ray Tracing",
-                "trigger_node": "conduit_trunk_junction",
-                "action": "Gaze/Pinch Overhead Trunk Line",
-                "effect": "Illuminates full copper path from 200A panel, through studs, directly to the 65in TV"
-            }
-        ]
+        "breaker_panel": {
+            "center": {"x": 380, "y": 140, "z": -208},
+            "main_breaker_200a": {"x": 380, "y": 175, "z": -201, "amperage": 200, "service": "Whole House Main Disconnect"},
+            "branch_breakers": [
+                {
+                    "num": 1,
+                    "slot": "Left Row 1",
+                    "terminal": {"x": 366, "y": 157, "z": -201},
+                    "amperage": 20,
+                    "circuit": "Master Bedroom Outlets & Lights",
+                    "room": "bedroom",
+                    "scenario": 1
+                },
+                {
+                    "num": 2,
+                    "slot": "Right Row 1",
+                    "terminal": {"x": 394, "y": 157, "z": -201},
+                    "amperage": 15,
+                    "circuit": "Living Room 65in TV & Media Console",
+                    "room": "living",
+                    "scenario": 2
+                },
+                {
+                    "num": 3,
+                    "slot": "Left Row 2",
+                    "terminal": {"x": 366, "y": 145, "z": -201},
+                    "amperage": 15,
+                    "circuit": "Living Room Sofa & Corner Lamp Tap-In",
+                    "room": "sofa",
+                    "scenario": 3
+                },
+                {
+                    "num": 4,
+                    "slot": "Right Row 2",
+                    "terminal": {"x": 394, "y": 145, "z": -201},
+                    "amperage": 30,
+                    "circuit": "Utility & Energy Storage Battery System",
+                    "room": "utility",
+                    "scenario": 4
+                }
+            ]
+        }
     }
 
     with open(spec_path, "w", encoding="utf-8") as f:
         json.dump(blueprint, f, indent=2)
 
     print("==============================================================")
-    print(f" SUCCESS! Generated 3-Zone Architectural Cutaway House:")
+    print(f" SUCCESS! Generated 3D House with Realistic Breaker System:")
     print(f" -> OBJ: {obj_path} ({len(verts)} vertices, {len(objects)} objects)")
     print(f" -> MTL: {mtl_path} ({len(materials)} materials)")
-    print(f" -> MEP Blueprint & Scenarios: {spec_path}")
+    print(f" -> Blueprint Spec: {spec_path}")
     print("==============================================================")
 
 if __name__ == "__main__":

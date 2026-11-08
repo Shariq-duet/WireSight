@@ -67,7 +67,8 @@ export const INITIAL_WALL_CONFIGS: WallConfig[] = [
 
 export const SCENARIO_HOUSE_RUNS: ConduitRun[] = [
     // -------------------------------------------------------------------------
-    // SCENARIO 1: "Where Does This Wire Go?" (Master Bed -> Ceiling -> Breaker B1)
+    // CIRCUIT 1 (BREAKER B1 - 20A): Master Bedroom Outlets & Lighting
+    // Terminating directly at Breaker #1 Terminal: (366, 157, -201)
     // -------------------------------------------------------------------------
     {
         id: "scen1-outlet-bed-left",
@@ -215,7 +216,7 @@ export const SCENARIO_HOUSE_RUNS: ConduitRun[] = [
         status: "LIVE 120V AC (ENERGIZED)",
         color: new vec4(1.00, 0.85, 0.10, 1.00),
         startPoint: new vec3(300.0, 225.0, -223.0),
-        endPoint: new vec3(380.0, 225.0, -205.0),
+        endPoint: new vec3(366.0, 225.0, -205.0),
         isWorldCoords: true,
         roomZone: "bedroom",
         gauge: "12 AWG (20A)",
@@ -224,15 +225,15 @@ export const SCENARIO_HOUSE_RUNS: ConduitRun[] = [
     },
     {
         id: "scen1-panel-drop-b1",
-        name: "[Electrical] Breaker B1 (Bedroom Circuit) Feeder Drop",
+        name: "[Electrical] Breaker B1 (Master Bedroom 20A) Terminal Feeder",
         layer: "electrical",
         voltageOrType: "Live 120V (12 AWG)",
         installer: "Master AR Electrician",
         installDate: "11/08/2026",
         status: "LIVE 120V AC (ENERGIZED)",
         color: new vec4(1.00, 0.85, 0.10, 1.00),
-        startPoint: new vec3(380.0, 225.0, -205.0),
-        endPoint: new vec3(380.0, 146.0, -205.0),
+        startPoint: new vec3(366.0, 225.0, -205.0),
+        endPoint: new vec3(366.0, 157.0, -201.0), // <-- Exact Breaker B1 Terminal
         isWorldCoords: true,
         roomZone: "bedroom",
         gauge: "12 AWG (20A)",
@@ -241,7 +242,8 @@ export const SCENARIO_HOUSE_RUNS: ConduitRun[] = [
     },
 
     // -------------------------------------------------------------------------
-    // SCENARIO 2: "Finding Buried / Hidden Junction Boxes & Splices" (TV Circuit)
+    // CIRCUIT 2 (BREAKER B2 - 15A): Living Room 65" TV & Media Console
+    // Terminating directly at Breaker #2 Terminal: (394, 157, -201)
     // -------------------------------------------------------------------------
     {
         id: "scen2-outlet-tv-quad",
@@ -338,7 +340,7 @@ export const SCENARIO_HOUSE_RUNS: ConduitRun[] = [
         status: "LIVE 120V AC (ENERGIZED)",
         color: new vec4(1.00, 0.85, 0.10, 1.00),
         startPoint: new vec3(300.0, 40.0, -223.0),
-        endPoint: new vec3(380.0, 40.0, -205.0),
+        endPoint: new vec3(394.0, 40.0, -205.0),
         isWorldCoords: true,
         roomZone: "living",
         gauge: "14 AWG (15A)",
@@ -347,15 +349,15 @@ export const SCENARIO_HOUSE_RUNS: ConduitRun[] = [
     },
     {
         id: "scen2-panel-riser-b2",
-        name: "[Electrical] Breaker B2 (Living Room TV 15A) Feeder Riser",
+        name: "[Electrical] Breaker B2 (Living Room TV 15A) Terminal Feed",
         layer: "electrical",
         voltageOrType: "Live 120V (14 AWG)",
         installer: "Master AR Electrician",
         installDate: "11/08/2026",
         status: "LIVE 120V AC (ENERGIZED)",
         color: new vec4(1.00, 0.85, 0.10, 1.00),
-        startPoint: new vec3(380.0, 40.0, -205.0),
-        endPoint: new vec3(380.0, 140.0, -205.0),
+        startPoint: new vec3(394.0, 40.0, -205.0),
+        endPoint: new vec3(394.0, 157.0, -201.0), // <-- Exact Breaker B2 Terminal
         isWorldCoords: true,
         roomZone: "living",
         gauge: "14 AWG (15A)",
@@ -364,7 +366,8 @@ export const SCENARIO_HOUSE_RUNS: ConduitRun[] = [
     },
 
     // -------------------------------------------------------------------------
-    // SCENARIO 3: "Retrofit Planning: Fish-Tape Pull to Add a New Outlet"
+    // CIRCUIT 3 (BREAKER B3 - 15A): Living Room Sofa & Corner Lamp Tap-In
+    // Terminating directly at Breaker #3 Terminal: (366, 145, -201)
     // -------------------------------------------------------------------------
     {
         id: "scen3-outlet-floor-lamp",
@@ -378,24 +381,24 @@ export const SCENARIO_HOUSE_RUNS: ConduitRun[] = [
         startPoint: new vec3(285.0, 40.0, -190.0),
         endPoint: new vec3(285.0, 0.0, -190.0),
         isWorldCoords: true,
-        roomZone: "living",
+        roomZone: "sofa",
         gauge: "14 AWG (15A)",
         isLive: true,
         thickness: 5.5
     },
     {
         id: "scen3-panel-to-lamp",
-        name: "[Electrical] Breaker B3 Feeder to Corner Outlet",
+        name: "[Electrical] Breaker B3 (Living Sofa & Lamp 15A) Terminal Feed",
         layer: "electrical",
         voltageOrType: "Live 120V (14 AWG)",
         installer: "Master AR Electrician",
         installDate: "11/08/2026",
         status: "LIVE 120V AC (ENERGIZED)",
         color: new vec4(1.00, 0.85, 0.10, 1.00),
-        startPoint: new vec3(380.0, 134.0, -205.0),
+        startPoint: new vec3(366.0, 145.0, -201.0), // <-- Exact Breaker B3 Terminal
         endPoint: new vec3(285.0, 40.0, -190.0),
         isWorldCoords: true,
-        roomZone: "living",
+        roomZone: "sofa",
         gauge: "14 AWG (15A)",
         isLive: true,
         thickness: 5.5
@@ -412,7 +415,7 @@ export const SCENARIO_HOUSE_RUNS: ConduitRun[] = [
         startPoint: new vec3(290.0, 40.0, 30.0),
         endPoint: new vec3(290.0, 0.0, 30.0),
         isWorldCoords: true,
-        roomZone: "living",
+        roomZone: "sofa",
         gauge: "14 AWG (15A)",
         isLive: true,
         thickness: 6.0
@@ -429,8 +432,47 @@ export const SCENARIO_HOUSE_RUNS: ConduitRun[] = [
         startPoint: new vec3(285.0, 40.0, -190.0), // <-- Tap-in splice point at Lamp J-Box
         endPoint: new vec3(290.0, 40.0, 30.0),
         isWorldCoords: true,
-        roomZone: "living",
+        roomZone: "sofa",
         gauge: "14 AWG (15A)",
+        isLive: true,
+        thickness: 6.0
+    },
+
+    // -------------------------------------------------------------------------
+    // CIRCUIT 4 (BREAKER B4 - 30A): Utility & Battery Energy Storage System
+    // Terminating directly at Breaker #4 Terminal: (394, 145, -201)
+    // -------------------------------------------------------------------------
+    {
+        id: "scen4-panel-to-disconnect",
+        name: "[Electrical] Breaker B4 (Utility & Battery 30A) Terminal Feed",
+        layer: "electrical",
+        voltageOrType: "Live 240V (10 AWG)",
+        installer: "Master AR Electrician",
+        installDate: "11/08/2026",
+        status: "LIVE 240V AC (ENERGIZED)",
+        color: new vec4(1.00, 0.50, 0.10, 1.00),
+        startPoint: new vec3(394.0, 145.0, -201.0), // <-- Exact Breaker B4 Terminal
+        endPoint: new vec3(452.5, 140.0, -205.0), // Red Safety Disconnect
+        isWorldCoords: true,
+        roomZone: "utility",
+        gauge: "10 AWG (30A)",
+        isLive: true,
+        thickness: 6.0
+    },
+    {
+        id: "scen4-disconnect-to-battery",
+        name: "[Electrical] Inverter Feeder to Powerwall Battery",
+        layer: "electrical",
+        voltageOrType: "Live 240V (10 AWG)",
+        installer: "Master AR Electrician",
+        installDate: "11/08/2026",
+        status: "LIVE 240V AC (ENERGIZED)",
+        color: new vec4(1.00, 0.50, 0.10, 1.00),
+        startPoint: new vec3(452.5, 140.0, -205.0),
+        endPoint: new vec3(542.5, 110.0, -100.0), // Powerwall
+        isWorldCoords: true,
+        roomZone: "utility",
+        gauge: "10 AWG (30A)",
         isLive: true,
         thickness: 6.0
     }

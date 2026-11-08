@@ -340,14 +340,17 @@ export class ConduitXRMain extends BaseScriptComponent {
         num: number;
         label: string;
         room: string;
+        x: number;
         y: number;
+        amperage: number;
         isOn: boolean;
         textComp?: Text;
     }[] = [
-        { num: 1, label: "B1: 20A Master Bed Outlets", room: "Bedroom", y: 6, isOn: true },
-        { num: 2, label: "B2: 15A Living TV & Console", room: "Living", y: 0, isOn: true },
-        { num: 3, label: "B3: 15A Sofa & Corner Branch", room: "Living", y: -6, isOn: true },
-        { num: 4, label: "B4: 200A Utility & Battery Hub", room: "Utility", y: -12, isOn: true }
+        { num: 0, label: "MAIN 200A SERVICE DISCONNECT", room: "all", x: 0, y: 15, amperage: 200, isOn: true },
+        { num: 1, label: "B1: 20A Master Bed Outlets", room: "bedroom", x: -14, y: 5, amperage: 20, isOn: true },
+        { num: 2, label: "B2: 15A Living Room TV", room: "living", x: 14, y: 5, amperage: 15, isOn: true },
+        { num: 3, label: "B3: 15A Living Room Sofa", room: "sofa", x: -14, y: -5, amperage: 15, isOn: true },
+        { num: 4, label: "B4: 30A Utility & Battery Hub", room: "utility", x: 14, y: -5, amperage: 30, isOn: true }
     ];
 
     private buildBreakerPanel() {
@@ -357,13 +360,13 @@ export class ConduitXRMain extends BaseScriptComponent {
             // Panel Enclosure Header
             const headerObj = global.scene.createSceneObject("PanelHeader");
             headerObj.setParent(this.breakerPanelRoot);
-            headerObj.getTransform().setLocalPosition(new vec3(0, 14, 0));
+            headerObj.getTransform().setLocalPosition(new vec3(0, 24, 0));
             const headText = headerObj.createComponent("Component.Text") as Text;
-            headText.text = " ⚡ MAIN SERVICE PANEL (200A) ";
-            headText.size = 38;
+            headText.text = " ⚡ LOAD CENTER: 200A MAIN SERVICE PANEL ";
+            headText.size = 32;
             headText.textFill.color = new vec4(0.3, 0.95, 1.0, 1.0);
             headText.backgroundSettings.enabled = true;
-            headText.backgroundSettings.fill.color = new vec4(0.02, 0.05, 0.12, 0.40);
+            headText.backgroundSettings.fill.color = new vec4(0.02, 0.05, 0.12, 0.50);
             headText.backgroundSettings.cornerRadius = 0.4;
             headText.outlineSettings.enabled = true;
             headText.outlineSettings.fill.color = new vec4(0.2, 0.75, 1.0, 0.9);
@@ -372,23 +375,23 @@ export class ConduitXRMain extends BaseScriptComponent {
             for (const b of this.breakerBranches) {
                 const bObj = global.scene.createSceneObject(`Breaker_${b.num}`);
                 bObj.setParent(this.breakerPanelRoot);
-                bObj.getTransform().setLocalPosition(new vec3(0, b.y, 0));
+                bObj.getTransform().setLocalPosition(new vec3(b.x, b.y, 0));
                 const bText = bObj.createComponent("Component.Text") as Text;
                 bText.text = ` [■ ON] ${b.label} `;
-                bText.size = 28;
-                bText.textFill.color = new vec4(0.3, 1.0, 0.6, 0.95);
+                bText.size = b.num === 0 ? 24 : 20;
+                bText.textFill.color = b.num === 0 ? new vec4(1.0, 0.4, 0.4, 0.95) : new vec4(0.3, 1.0, 0.6, 0.95);
                 bText.backgroundSettings.enabled = true;
-                bText.backgroundSettings.fill.color = new vec4(0.01, 0.04, 0.10, 0.35);
+                bText.backgroundSettings.fill.color = new vec4(0.01, 0.04, 0.10, 0.45);
                 bText.backgroundSettings.cornerRadius = 0.35;
                 bText.outlineSettings.enabled = true;
-                bText.outlineSettings.fill.color = new vec4(0.25, 0.85, 0.5, 0.85);
+                bText.outlineSettings.fill.color = b.num === 0 ? new vec4(0.9, 0.2, 0.2, 0.85) : new vec4(0.25, 0.85, 0.5, 0.85);
                 bText.outlineSettings.size = 0.12;
 
                 b.textComp = bText;
 
                 const collider = bObj.createComponent("Physics.ColliderComponent") as ColliderComponent;
                 const box = Shape.createBoxShape();
-                box.size = new vec3(30, 5, 4);
+                box.size = new vec3(26, 4.5, 4);
                 collider.shape = box;
             }
         }
@@ -429,36 +432,55 @@ export class ConduitXRMain extends BaseScriptComponent {
         if (b.textComp) {
             b.textComp.text = b.isOn ? ` [■ ON] ${b.label} ` : ` [○ OFF] ${b.label} (TRIPPED) `;
             b.textComp.textFill.color = b.isOn
-                ? new vec4(0.3, 1.0, 0.6, 0.95)
+                ? (b.num === 0 ? new vec4(1.0, 0.4, 0.4, 0.95) : new vec4(0.3, 1.0, 0.6, 0.95))
                 : new vec4(1.0, 0.35, 0.3, 0.95);
             if (b.textComp.outlineSettings) {
                 b.textComp.outlineSettings.fill.color = b.isOn
-                    ? new vec4(0.25, 0.85, 0.5, 0.85)
+                    ? (b.num === 0 ? new vec4(0.9, 0.2, 0.2, 0.85) : new vec4(0.25, 0.85, 0.5, 0.85))
                     : new vec4(0.9, 0.2, 0.2, 0.9);
             }
         }
 
+        // Check if Main 200A Breaker (B0) is ON
+        const mainBreaker = this.breakerBranches.find(item => item.num === 0);
+        const isMainOn = mainBreaker ? mainBreaker.isOn : true;
+
         // Apply state to all runs belonging to this room zone
         let affectedCount = 0;
         for (const run of this.activeRuns) {
-            if (run.roomZone && run.roomZone.toLowerCase().includes(b.room.toLowerCase())) {
-                run.isLive = b.isOn;
-                run.status = b.isOn ? "LIVE 230V AC (ENERGIZED)" : "DE-ENERGIZED (SAFE / COLD)";
-                run.color = b.isOn ? new vec4(1.0, 0.85, 0.1, 1.0) : new vec4(0.4, 0.65, 0.85, 0.9);
+            const isTargetRoom = (b.num === 0) || (run.roomZone && run.roomZone.toLowerCase().includes(b.room.toLowerCase()));
+            if (isTargetRoom) {
+                const branchBreaker = this.breakerBranches.find(br => br.room !== "all" && run.roomZone && run.roomZone.toLowerCase().includes(br.room.toLowerCase()));
+                const isBranchOn = branchBreaker ? branchBreaker.isOn : true;
+                const shouldBeLive = isMainOn && isBranchOn;
+
+                run.isLive = shouldBeLive;
+                run.status = shouldBeLive ? "LIVE 120V AC (ENERGIZED)" : "DE-ENERGIZED (SAFE / COLD)";
+                run.color = shouldBeLive ? new vec4(1.0, 0.85, 0.1, 1.0) : new vec4(0.4, 0.65, 0.85, 0.9);
                 const gaugeLabel = run.gauge || "12 AWG";
-                run.voltageOrType = b.isOn ? `Live 230V (${gaugeLabel})` : `De-Energized (${gaugeLabel})`;
+                run.voltageOrType = shouldBeLive ? `Live 120V (${gaugeLabel})` : `De-Energized (${gaugeLabel})`;
                 this.updateRunVisualPositions(run);
                 affectedCount++;
             }
         }
 
         if (this.toolPalette) {
-            const stateText = b.isOn ? "RESET: Circuits LIVE 230V ⚡" : "TRIPPED: Circuits DE-ENERGIZED (0V / SAFE) ❄️";
+            const stateText = b.isOn ? "RESET: Circuits LIVE 120V ⚡" : "TRIPPED: Circuits DE-ENERGIZED (0V / SAFE) ❄️";
             const col = b.isOn ? new vec4(0.3, 1.0, 0.6, 1.0) : new vec4(1.0, 0.4, 0.3, 1.0);
-            this.toolPalette.setStatusMessage(`⚡ Breaker B${b.num} (${b.room}) ${stateText} [${affectedCount} circuit(s)]`, col);
+            this.toolPalette.setStatusMessage(`⚡ ${b.label} ${stateText} [${affectedCount} circuit(s)]`, col);
         }
         this.updateSafetyCheck();
         return b.isOn;
+    }
+
+    private lastDemoBreakerIndex: number = 0;
+
+    // Cycles through tripping and resetting individual room breakers: B1 (Bed) -> B2 (TV) -> B3 (Sofa) -> B0 (Main)
+    public cycleBreakerTripDemo(): void {
+        const order = [1, 2, 3, 0];
+        const targetNum = order[this.lastDemoBreakerIndex % order.length];
+        this.lastDemoBreakerIndex++;
+        this.toggleBreaker(targetNum);
     }
 
     // Toggles visibility of the user's original 32 wires (preserved in memory & storage, hidden by default)
@@ -1113,6 +1135,8 @@ export class ConduitXRMain extends BaseScriptComponent {
                     this.importWiringJson();
                 } else if (k === "u") {
                     this.toggleUserRunsVisibility();
+                } else if (k === "b") {
+                    this.cycleBreakerTripDemo();
                 } else if (k === "d") {
                     const wall = this.getActiveWall();
                     if (wall && this.toolPalette) {

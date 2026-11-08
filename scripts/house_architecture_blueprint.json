@@ -4,264 +4,72 @@
     "depth": 450,
     "height": 240
   },
-  "rooms": {
-    "bedroom": {
-      "name": "Master Bedroom",
-      "bounds": {
-        "x_min": -450,
-        "x_max": -75,
-        "z_min": -225,
-        "z_max": 225
-      },
-      "accent_wall": {
-        "x_center": -262.5,
-        "y": 120,
-        "z": -225,
-        "normal": [
-          0,
-          0,
-          1
-        ]
-      },
-      "left_wall": {
-        "x": -450,
-        "y": 120,
-        "z_center": 0,
-        "normal": [
-          1,
-          0,
-          0
-        ]
-      },
-      "partition_wall": {
-        "x": -75,
-        "y": 120,
-        "z_center": -102.5,
-        "normal": [
-          -1,
-          0,
-          0
-        ]
-      }
-    },
-    "living_room": {
-      "name": "Living Room",
-      "bounds": {
-        "x_min": -75,
-        "x_max": 300,
-        "z_min": -225,
-        "z_max": 225
-      },
-      "tv_wall": {
-        "x_center": 112.5,
-        "y": 120,
-        "z": -225,
-        "normal": [
-          0,
-          0,
-          1
-        ]
-      },
-      "partition_bedroom": {
-        "x": -75,
-        "y": 120,
-        "z_center": -102.5,
-        "normal": [
-          1,
-          0,
-          0
-        ]
-      },
-      "partition_electrical": {
-        "x": 300,
-        "y": 120,
-        "z_center": -117.5,
-        "normal": [
-          -1,
-          0,
-          0
-        ]
-      }
-    },
-    "electrical_room": {
-      "name": "Electrical & MEP Utility Room",
-      "bounds": {
-        "x_min": 300,
-        "x_max": 550,
-        "z_min": -225,
-        "z_max": 225
-      },
-      "service_wall": {
-        "x_center": 425,
-        "y": 120,
-        "z": -225,
-        "normal": [
-          0,
-          0,
-          1
-        ]
-      },
-      "right_wall": {
-        "x": 550,
-        "y": 120,
-        "z_center": 0,
-        "normal": [
-          -1,
-          0,
-          0
-        ]
-      },
-      "partition_wall": {
-        "x": 300,
-        "y": 120,
-        "z_center": -117.5,
-        "normal": [
-          1,
-          0,
-          0
-        ]
-      },
-      "nec_safety_clearance_depth_cm": 90
-    }
-  },
-  "doorways": [
-    {
-      "name": "Bedroom to Living Room Passage",
-      "position": {
-        "x": -75,
-        "y_floor": 0,
-        "z_start": 20,
-        "z_end": 115
-      },
-      "width_cm": 95,
-      "height_cm": 210
-    },
-    {
-      "name": "Living Room to Electrical Room Fire Door",
-      "position": {
-        "x": 300,
-        "y_floor": 0,
-        "z_start": -10,
-        "z_end": 80
-      },
-      "width_cm": 90,
-      "height_cm": 210
-    }
-  ],
-  "planned_mep_nodes": {
-    "main_service_drop": {
-      "x": 380,
-      "y": 0,
-      "z": -216,
-      "description": "Underground 200A Utility Service Entrance Riser"
-    },
-    "main_breaker_panel": {
+  "breaker_panel": {
+    "center": {
       "x": 380,
       "y": 140,
-      "z": -205,
-      "description": "200A 42-Circuit Main Distribution Load Center"
+      "z": -208
     },
-    "emergency_disconnect_switch": {
-      "x": 452.5,
-      "y": 140,
-      "z": -205,
-      "description": "Heavy-Duty Red Safety Knife Disconnect Switch"
+    "main_breaker_200a": {
+      "x": 380,
+      "y": 175,
+      "z": -201,
+      "amperage": 200,
+      "service": "Whole House Main Disconnect"
     },
-    "battery_storage_powerwall": {
-      "x": 542.5,
-      "y": 110,
-      "z": -100,
-      "description": "13.5 kWh Lithium-Ion Energy Storage Battery"
-    },
-    "transformer_step_down": {
-      "x": 497.5,
-      "y": 47.5,
-      "z": 147.5,
-      "description": "480V to 120/240V Step-Down Transformer"
-    },
-    "fire_extinguisher": {
-      "x": 327.5,
-      "y": 112.5,
-      "z": 2.5,
-      "description": "Class C Electrical Safety Fire Extinguisher"
-    },
-    "conduit_trunk_junction": {
-      "x": 300,
-      "y": 223,
-      "z": -215,
-      "description": "High-Capacity Ceiling Feeder Penetration through Living Wall"
-    },
-    "living_tv_quad_outlet": {
-      "x": 112.5,
-      "y": 110,
-      "z": -223,
-      "description": "Quad 120V 20A Surge Receptacle for 65in TV"
-    },
-    "living_console_outlet": {
-      "x": 50,
-      "y": 40,
-      "z": -223,
-      "description": "120V 20A Duplex Receptacle for Media Console"
-    },
-    "living_sofa_outlet": {
-      "x": 290,
-      "y": 40,
-      "z": 30,
-      "description": "120V 15A Convenience Receptacle by Sofa"
-    },
-    "living_floor_lamp_switch": {
-      "x": 285,
-      "y": 120,
-      "z": -15,
-      "description": "Switched Circuit for Living Room Corner Lamp"
-    },
-    "bedroom_outlet_left": {
-      "x": -402.5,
-      "y": 40,
-      "z": -223,
-      "description": "120V 15A Duplex Receptacle (Nightstand Left)"
-    },
-    "bedroom_outlet_right": {
-      "x": -122.5,
-      "y": 40,
-      "z": -223,
-      "description": "120V 15A Duplex Receptacle (Nightstand Right)"
-    },
-    "bedroom_light_switch": {
-      "x": -85,
-      "y": 120,
-      "z": 15,
-      "description": "Single-Pole Switch by Bedroom Doorway"
-    }
-  },
-  "interactive_scenarios": [
-    {
-      "id": "scenario_main_trip",
-      "title": "Grid Power Outage & Main Breaker Trip",
-      "trigger_node": "main_breaker_panel",
-      "action": "Trip 200A Main Handle",
-      "effect": "De-energizes all circuits across Bedroom & Living Room; Emergency Battery kicks in"
-    },
-    {
-      "id": "scenario_emergency_shutoff",
-      "title": "Hazard Lockout / Tagout (LOTO)",
-      "trigger_node": "emergency_disconnect_switch",
-      "action": "Pull Red Safety Disconnect Lever",
-      "effect": "Instant mechanical isolation of all high-voltage feeders with safety warning"
-    },
-    {
-      "id": "scenario_battery_backup",
-      "title": "Solar & Battery Islanding",
-      "trigger_node": "battery_storage_powerwall",
-      "action": "Toggle Grid Island Mode",
-      "effect": "Maintains critical loads (TV, Bedroom outlets) via green indicator flow"
-    },
-    {
-      "id": "scenario_conduit_xray_trace",
-      "title": "Source-to-Load In-Wall X-Ray Tracing",
-      "trigger_node": "conduit_trunk_junction",
-      "action": "Gaze/Pinch Overhead Trunk Line",
-      "effect": "Illuminates full copper path from 200A panel, through studs, directly to the 65in TV"
-    }
-  ]
+    "branch_breakers": [
+      {
+        "num": 1,
+        "slot": "Left Row 1",
+        "terminal": {
+          "x": 366,
+          "y": 157,
+          "z": -201
+        },
+        "amperage": 20,
+        "circuit": "Master Bedroom Outlets & Lights",
+        "room": "bedroom",
+        "scenario": 1
+      },
+      {
+        "num": 2,
+        "slot": "Right Row 1",
+        "terminal": {
+          "x": 394,
+          "y": 157,
+          "z": -201
+        },
+        "amperage": 15,
+        "circuit": "Living Room 65in TV & Media Console",
+        "room": "living",
+        "scenario": 2
+      },
+      {
+        "num": 3,
+        "slot": "Left Row 2",
+        "terminal": {
+          "x": 366,
+          "y": 145,
+          "z": -201
+        },
+        "amperage": 15,
+        "circuit": "Living Room Sofa & Corner Lamp Tap-In",
+        "room": "sofa",
+        "scenario": 3
+      },
+      {
+        "num": 4,
+        "slot": "Right Row 2",
+        "terminal": {
+          "x": 394,
+          "y": 145,
+          "z": -201
+        },
+        "amperage": 30,
+        "circuit": "Utility & Energy Storage Battery System",
+        "room": "utility",
+        "scenario": 4
+      }
+    ]
+  }
 }
