@@ -110,15 +110,17 @@ export class ConduitXRMain extends BaseScriptComponent {
             }
         }
 
-        // Disable original reference walls & user runs by default so new 3D model & scenarios are cleanly shown
+        // Keep reference walls enabled and visible so users have wall framing in every room
         for (const wall of this.activeWalls) {
             if (wall.getSceneObject()) {
-                wall.getSceneObject().enabled = false;
+                wall.getSceneObject().enabled = true;
             }
         }
         this.runVisualObjects.forEach((runObj, runId) => {
-            if (runId.startsWith("run-")) {
+            if (runId.startsWith("run-") && !runId.includes("outlet") && !runId.includes("tapin")) {
                 runObj.enabled = false;
+            } else {
+                runObj.enabled = true;
             }
         });
         this.saveStateToStorage();
@@ -645,7 +647,15 @@ export class ConduitXRMain extends BaseScriptComponent {
                 bestWall = wall;
             }
         }
-        return bestWall || (this.activeWalls.length > 0 ? this.activeWalls[0] : null);
+        if (bestWall) return bestWall;
+
+        // Fall back to matching wall for point's room coordinates
+        let targetId = "wall-bedroom";
+        if (p.x >= 300.0) targetId = "wall-utility";
+        else if (p.x >= -75.0) targetId = "wall-living";
+
+        const roomWall = this.activeWalls.find(w => w.wallId === targetId);
+        return roomWall || (this.activeWalls.length > 0 ? this.activeWalls[0] : null);
     }
 
     // Computes world coordinates for a given breaker on the load center panel
@@ -2168,7 +2178,11 @@ export class ConduitXRMain extends BaseScriptComponent {
                     const parsedWalls = JSON.parse(rawWalls);
                     if (Array.isArray(parsedWalls) && parsedWalls.length > 0) {
                         for (const sw of parsedWalls) {
-                            // Anchor Foundation Walls to true architectural bedroom coordinates
+                            const zPos = Array.isArray(sw.pos) ? sw.pos[2] : (sw.pos && sw.pos.z !== undefined ? sw.pos.z : 0);
+                            // Purge legacy prebuilt room walls at Z > 50
+                            if (zPos > 50.0 && sw.wallId !== "wall-bedroom" && sw.wallId !== "wall-corner") {
+                                continue;
+                            }
                             if (sw.wallId === "wall-bedroom") {
                                 sw.pos = [-262.5, 120.0, -225.0];
                                 sw.yawDeg = 0.0;
@@ -2179,12 +2193,18 @@ export class ConduitXRMain extends BaseScriptComponent {
                                 sw.yawDeg = 90.0;
                                 sw.widthCm = 450.0;
                                 sw.heightCm = 240.0;
-                            } else if (sw.pos && sw.pos[2] > 50.0) {
-                                // Migrate any legacy prebuilt room wall coordinates into the 3D house model
-                                sw.pos = [-262.5, 120.0, -225.0];
+                            } else if (sw.wallId === "wall-living") {
+                                sw.pos = [112.5, 120.0, -225.0];
                                 sw.yawDeg = 0.0;
                                 sw.widthCm = 375.0;
                                 sw.heightCm = 240.0;
+                            } else if (sw.wallId === "wall-utility") {
+                                sw.pos = [425.0, 120.0, -225.0];
+                                sw.yawDeg = 0.0;
+                                sw.widthCm = 250.0;
+                                sw.heightCm = 240.0;
+                            } else if (zPos > 50.0) {
+                                continue;
                             }
 
                             let wall = this.activeWalls.find(w => w.wallId === sw.wallId);
@@ -2240,6 +2260,15 @@ export class ConduitXRMain extends BaseScriptComponent {
                             )) {
                                 continue;
                             }
+                            // Purge legacy runs in prebuilt space (Z > 50) and old ghost outlets
+                            const startZ = Array.isArray(s.startPoint) ? s.startPoint[2] : (s.startPoint && s.startPoint.z !== undefined ? s.startPoint.z : 0);
+                            const endZ = Array.isArray(s.endPoint) ? s.endPoint[2] : (s.endPoint && s.endPoint.z !== undefined ? s.endPoint.z : 0);
+                            if (startZ > 50.0 || endZ > 50.0) {
+                                continue;
+                            }
+                            if (s.id && (s.id.includes("outlet-1794059634526") || s.id.includes("outlet-1794058870118") || s.id.includes("outlet-1794059432207"))) {
+                                continue;
+                            }
 
                             const existing = this.activeRuns.find(r => r.id === s.id);
                             if (existing) {
@@ -2290,14 +2319,13 @@ export class ConduitXRMain extends BaseScriptComponent {
 
     // Purges prewired demo house runs, keeping ONLY user-created wires and user walls
     public purgePrewiredHouseRuns(): void {
-        const isPrewired = (id: string) => {
-            return id.startsWith("elec-") || id.startsWith("plumb-") || !id.startsWith("run-");
-        };
-
         const runsToKeep: ConduitRun[] = [];
         let purgedCount = 0;
         for (const run of this.activeRuns) {
-            if (isPrewired(run.id)) {
+            // Purge procedural house runs or legacy prebuilt runs (Z > 50)
+            const isProcedural = run.id.startsWith("elec-") || run.id.startsWith("plumb-");
+            const isPrebuiltLegacy = (run.startPoint.z > 50.0 || run.endPoint.z > 50.0) && !run.id.startsWith("scen");
+            if (isProcedural || isPrebuiltLegacy) {
                 const vis = this.runVisualObjects.get(run.id);
                 if (vis) {
                     try {
@@ -2313,10 +2341,11 @@ export class ConduitXRMain extends BaseScriptComponent {
 
         this.activeRuns = runsToKeep;
 
-        // Clean up any extra demo walls (keep only the user's bedroom & corner walls)
+        // Purge any legacy prebuilt walls (Z > 50)
         const wallsToKeep: ReferenceWall[] = [];
         for (const wall of this.activeWalls) {
-            if (wall.wallId.includes("kitchen") || wall.wallId.includes("living") || wall.wallId.includes("utility")) {
+            const wPos = wall.getSceneObject().getTransform().getWorldPosition();
+            if (wPos.z > 50.0 && wall.wallId !== "wall-bedroom" && wall.wallId !== "wall-corner") {
                 try {
                     wall.getSceneObject().destroy();
                 } catch (e) {}
@@ -2335,13 +2364,13 @@ export class ConduitXRMain extends BaseScriptComponent {
         this.updateMultiWallUI();
 
         if (purgedCount > 0) {
-            print(`[WireSight] Purged ${purgedCount} generated house runs. Preserved ${this.activeRuns.length} user-created wires.`);
+            print(`[WireSight] Purged ${purgedCount} legacy runs. Preserved ${this.activeRuns.length} architectural runs.`);
         }
     }
 
     // Restores the user's master bedroom corner walls (Wall 1 behind bed, Wall 2 along TV & wardrobe)
     public setupDefaultCornerWalls(): void {
-        print("[WireSight] Ensuring Master Bedroom Corner Walls from Architectural Blueprint...");
+        print("[WireSight] Ensuring Architectural Room Reference Walls (Bedroom, Corner, Living, Utility)...");
 
         // Wall 1: Master Bedroom Back Wall (behind bed & nightstands)
         // Position: (-262.5, 120.0, -225.0), Yaw: 0°, Width: 375cm, Height: 240cm
@@ -2361,7 +2390,7 @@ export class ConduitXRMain extends BaseScriptComponent {
         wall1.getSceneObject().getTransform().setWorldRotation(wall1.initialRotation);
         wall1.rebuildWall(wall1.initialPosition, wall1.initialRotation, 375.0, 240.0);
         wall1.setWallYaw(0.0);
-        wall1.getSceneObject().enabled = true; // Enabled and aligned directly with 3D House Model drywall
+        wall1.getSceneObject().enabled = true;
 
         // Wall 2: Master Bedroom Perpendicular Side Wall (along Wardrobe & Doorway)
         // Position: (-450.0, 120.0, 0.0), Yaw: 90°, Width: 450cm, Height: 240cm
@@ -2371,11 +2400,7 @@ export class ConduitXRMain extends BaseScriptComponent {
             wall2 = wall2Obj.createComponent(ReferenceWall.getTypeName()) as ReferenceWall;
             wall2.wallIndex = 2;
             wall2.wallId = "wall-corner";
-            if (this.activeWalls.length <= 1) {
-                this.activeWalls.push(wall2);
-            } else {
-                this.activeWalls.splice(1, 0, wall2);
-            }
+            this.activeWalls.push(wall2);
         }
         wall2.widthCm = 450.0;
         wall2.heightCm = 240.0;
@@ -2385,7 +2410,47 @@ export class ConduitXRMain extends BaseScriptComponent {
         wall2.getSceneObject().getTransform().setWorldRotation(wall2.initialRotation);
         wall2.rebuildWall(wall2.initialPosition, wall2.initialRotation, 450.0, 240.0);
         wall2.setWallYaw(90.0);
-        wall2.getSceneObject().enabled = true; // Enabled and aligned with 3D House Model side wall
+        wall2.getSceneObject().enabled = true;
+
+        // Wall 3: Living Room Media & TV Wall
+        // Position: (112.5, 120.0, -225.0), Yaw: 0°, Width: 375cm, Height: 240cm
+        let wall3 = this.activeWalls.find(w => w.wallId === "wall-living");
+        if (!wall3) {
+            const wall3Obj = global.scene.createSceneObject("HolographicReferenceWall_3");
+            wall3 = wall3Obj.createComponent(ReferenceWall.getTypeName()) as ReferenceWall;
+            wall3.wallIndex = 3;
+            wall3.wallId = "wall-living";
+            this.activeWalls.push(wall3);
+        }
+        wall3.widthCm = 375.0;
+        wall3.heightCm = 240.0;
+        wall3.initialPosition = new vec3(112.5, 120.0, -225.0);
+        wall3.initialRotation = quat.fromEulerAngles(0, 0, 0);
+        wall3.getSceneObject().getTransform().setWorldPosition(wall3.initialPosition);
+        wall3.getSceneObject().getTransform().setWorldRotation(wall3.initialRotation);
+        wall3.rebuildWall(wall3.initialPosition, wall3.initialRotation, 375.0, 240.0);
+        wall3.setWallYaw(0.0);
+        wall3.getSceneObject().enabled = true;
+
+        // Wall 4: Utility Room Breaker Panel Wall
+        // Position: (425.0, 120.0, -225.0), Yaw: 0°, Width: 250cm, Height: 240cm
+        let wall4 = this.activeWalls.find(w => w.wallId === "wall-utility");
+        if (!wall4) {
+            const wall4Obj = global.scene.createSceneObject("HolographicReferenceWall_4");
+            wall4 = wall4Obj.createComponent(ReferenceWall.getTypeName()) as ReferenceWall;
+            wall4.wallIndex = 4;
+            wall4.wallId = "wall-utility";
+            this.activeWalls.push(wall4);
+        }
+        wall4.widthCm = 250.0;
+        wall4.heightCm = 240.0;
+        wall4.initialPosition = new vec3(425.0, 120.0, -225.0);
+        wall4.initialRotation = quat.fromEulerAngles(0, 0, 0);
+        wall4.getSceneObject().getTransform().setWorldPosition(wall4.initialPosition);
+        wall4.getSceneObject().getTransform().setWorldRotation(wall4.initialRotation);
+        wall4.rebuildWall(wall4.initialPosition, wall4.initialRotation, 250.0, 240.0);
+        wall4.setWallYaw(0.0);
+        wall4.getSceneObject().enabled = true;
 
         // Renumber all active walls
         for (let i = 0; i < this.activeWalls.length; i++) {
@@ -2410,7 +2475,7 @@ export class ConduitXRMain extends BaseScriptComponent {
         this.alignBreakerPanelToActiveWall();
         this.updateMultiWallUI();
         this.saveStateToStorage();
-        print(`[WireSight] Restored ${this.activeWalls.length} bedroom corner walls successfully.`);
+        print(`[WireSight] Restored ${this.activeWalls.length} architectural room walls successfully.`);
     }
 
     // Restores the complete Master Bedroom & residential wiring circuits from Architectural Blueprint
@@ -2450,54 +2515,63 @@ export class ConduitXRMain extends BaseScriptComponent {
         const camPos = camTrans ? camTrans.getWorldPosition() : new vec3(-262.5, 120.0, 100.0);
         const centerScreen = new vec2(0.5, 0.5);
 
-        // 1. Identify which room the user is currently in based on camera X coordinates:
-        // Bedroom: X < -75 (center: -262.5)
-        // Living: -75 <= X < 300 (center: 112.5)
-        // Utility / Electrical: X >= 300 (center: 425.0)
+        // 1. Identify which room the user is currently in based on camera coordinates:
         let currentRoomId = "bedroom";
-        let defaultWallX = -262.5;
-        let defaultWallW = 375.0;
         let roomLabel = "Master Bedroom";
-
-        if (camPos.x >= 300.0) {
-            currentRoomId = "utility";
-            defaultWallX = 425.0;
-            defaultWallW = 250.0;
-            roomLabel = "Electrical Room";
-        } else if (camPos.x >= -75.0) {
-            currentRoomId = "living";
-            defaultWallX = 112.5;
-            defaultWallW = 375.0;
-            roomLabel = "Living Room";
-        }
-
-        // 2. Identify room boundaries and default bedside outlet location
+        let targetWallId = "wall-bedroom";
         let minRoomX = -430.0;
         let maxRoomX = -95.0;
         let defaultOutletX = -177.5; // Beside the master bed / nightstand
 
-        if (currentRoomId === "utility") {
+        if (camPos.x >= 300.0) {
+            currentRoomId = "utility";
+            roomLabel = "Electrical Room";
+            targetWallId = "wall-utility";
             minRoomX = 320.0;
             maxRoomX = 530.0;
             defaultOutletX = 425.0;
-        } else if (currentRoomId === "living") {
+        } else if (camPos.x >= -75.0) {
+            currentRoomId = "living";
+            roomLabel = "Living Room";
+            targetWallId = "wall-living";
             minRoomX = -55.0;
             maxRoomX = 280.0;
             defaultOutletX = 45.0;
         }
 
-        // 3. Compute outlet world position flush on the room's drywall face (Z = -221.0)
-        // Never spawn or create a new holographic wall — mount directly to the room's drywall!
+        // 2. Automatically select this room's wall as the active reference wall
+        let targetWall = this.activeWalls.find(w => w.wallId === targetWallId);
+        if (!targetWall) {
+            targetWall = this.getActiveWall();
+        }
+        if (targetWall) {
+            const wallIdx = this.activeWalls.indexOf(targetWall);
+            if (wallIdx >= 0) {
+                this.activeWallIndex = wallIdx;
+                for (let i = 0; i < this.activeWalls.length; i++) {
+                    this.activeWalls[i].setIsActiveWall(i === wallIdx);
+                }
+                this.referenceWall = targetWall;
+                this.updateMultiWallUI();
+            }
+        }
+
+        // 3. Compute outlet world position flush on the room wall surface (Z = -221.0cm)
         let outletWorldPos: vec3;
         let placedFromRay = false;
 
-        if (activeCam) {
+        if (activeCam && targetWall) {
             const rayOrigin = activeCam.screenSpaceToWorldSpace(centerScreen, 1.0);
             const rayFar = activeCam.screenSpaceToWorldSpace(centerScreen, 600.0);
             const rayDir = rayFar.sub(rayOrigin).normalize();
 
-            // Intersect user gaze ray with the room's back drywall plane at Z = -225.0
-            if (Math.abs(rayDir.z) > 0.05) {
+            const wallHit = targetWall.raycastWall(rayOrigin, rayDir);
+            if (wallHit && wallHit.isHit) {
+                const clampedX = Math.max(minRoomX, Math.min(maxRoomX, wallHit.point.x));
+                const clampedY = (wallHit.point.y >= 15.0 && wallHit.point.y <= 120.0) ? wallHit.point.y : 40.0;
+                outletWorldPos = new vec3(clampedX, clampedY, -221.0);
+                placedFromRay = true;
+            } else if (Math.abs(rayDir.z) > 0.05) {
                 const t = (-225.0 - rayOrigin.z) / rayDir.z;
                 if (t > 10.0 && t < 900.0) {
                     const hitX = rayOrigin.x + t * rayDir.x;
@@ -2519,6 +2593,13 @@ export class ConduitXRMain extends BaseScriptComponent {
         let bestDist = 999.0;
         for (const run of this.activeRuns) {
             if (run.layer !== "electrical") continue;
+            // Only search in-wall runs for THIS room
+            const midZ = (run.startPoint.z + run.endPoint.z) * 0.5;
+            if (Math.abs(midZ - (-223.0)) > 20.0) continue;
+            const minX = Math.min(run.startPoint.x, run.endPoint.x);
+            const maxX = Math.max(run.startPoint.x, run.endPoint.x);
+            if (maxX < minRoomX - 30.0 || minX > maxRoomX + 30.0) continue;
+
             const a = run.startPoint;
             const b = run.endPoint;
             const ab = b.sub(a);
@@ -2528,17 +2609,17 @@ export class ConduitXRMain extends BaseScriptComponent {
                 t = Math.max(0.0, Math.min(1.0, outletWorldPos.sub(a).dot(ab) / abLenSq));
             }
             const ptOnSeg = a.add(ab.uniformScale(t));
-            const horizDist = Math.sqrt((ptOnSeg.x - outletWorldPos.x) ** 2 + (ptOnSeg.z - outletWorldPos.z) ** 2);
+            const horizDist = Math.abs(ptOnSeg.x - outletWorldPos.x);
             if (horizDist < bestDist && horizDist < 260.0) {
                 bestDist = horizDist;
-                const tapY = Math.max(ptOnSeg.y, outletWorldPos.y + 40.0);
-                dropTop = new vec3(outletWorldPos.x, tapY, ptOnSeg.z);
+                const tapY = Math.max(ptOnSeg.y, outletWorldPos.y + 35.0);
+                dropTop = new vec3(outletWorldPos.x, tapY, -223.0);
             }
         }
 
         const outletIdx = this.activeRuns.filter(r => r.name.includes("Outlet") || r.id.includes("outlet")).length + 1;
         const newRun: ConduitRun = {
-            id: `run-outlet-${Date.now()}`,
+            id: `outlet-tapin-${Date.now()}`,
             name: `[${roomLabel}] 120V 20A Duplex Outlet #${outletIdx}`,
             layer: "electrical",
             voltageOrType: "120V AC 20A (In-Wall Tap)",
@@ -2559,6 +2640,9 @@ export class ConduitXRMain extends BaseScriptComponent {
         this.selectedRunId = newRun.id;
         this.createRunVisual(newRun, true);
         this.newOutletObject = this.runVisualObjects.get(newRun.id) || null;
+        if (this.newOutletObject) {
+            this.newOutletObject.enabled = true;
+        }
         this.inspectRun(newRun);
         this.refreshAllJunctions();
         this.updateSafetyCheck();
@@ -2570,7 +2654,7 @@ export class ConduitXRMain extends BaseScriptComponent {
                 new vec4(0.2, 1.0, 0.55, 1.0)
             );
         }
-
+        print(`[WireSight] Mounted 120V Duplex Outlet #${outletIdx} on ${targetWallId} at (${outletWorldPos.x.toFixed(1)}, ${outletWorldPos.y.toFixed(1)}, ${outletWorldPos.z.toFixed(1)})cm`);
         return newRun;
     }
 
