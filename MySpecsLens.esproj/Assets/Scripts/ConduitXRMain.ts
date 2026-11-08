@@ -2563,24 +2563,11 @@ export class ConduitXRMain extends BaseScriptComponent {
             isLive: true,
             thickness: 5.5
         };
-            layer: "electrical",
-            voltageOrType: "120V AC 20A (In-Wall Tap)",
-            installer: "AR Optical Tap-In (Zero Wall Damage)",
-            installDate: "Nov 09, 2026",
-            status: "TAP-IN READY: 1-GANG CUTOUT 5.7×9.5cm",
-            color: new vec4(1.0, 0.88, 0.15, 1.0),
-            startPoint: dropTop,
-            endPoint: outletWorldPos,
-            isWorldCoords: true,
-            roomZone: targetWall ? targetWall.wallId : "Master Bedroom",
-            gauge: "12 AWG (20A)",
-            isLive: true,
-            thickness: 5.5
-        };
 
         this.activeRuns.push(newRun);
         this.selectedRunId = newRun.id;
         this.createRunVisual(newRun, true);
+        this.newOutletObject = this.runVisualObjects.get(newRun.id) || null;
         this.inspectRun(newRun);
         this.refreshAllJunctions();
         this.updateSafetyCheck();

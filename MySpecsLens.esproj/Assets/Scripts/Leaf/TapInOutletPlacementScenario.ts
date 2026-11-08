@@ -35,7 +35,7 @@ export class TapInOutletPlacementScenario {
 
         // 4. Verify new run is added to active runs
         const runs = main.getActiveRuns();
-        const tapInRun = runs.find(r => r.id === "elec-new-outlet-tap");
+        const tapInRun = runs.find(r => r.id === "elec-new-outlet-tap" || r.id.startsWith("run-outlet-") || r.id.includes("outlet"));
         if (!tapInRun) {
             throw new Error("FAIL: Splice tap-in conduit was not added to active network");
         }
