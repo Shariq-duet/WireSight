@@ -2161,14 +2161,20 @@ export class ConduitXRMain extends BaseScriptComponent {
                         for (const sw of parsedWalls) {
                             // Anchor Foundation Walls to true architectural bedroom coordinates
                             if (sw.wallId === "wall-bedroom") {
-                                sw.pos = [-279.0, 0, 215.0];
-                                sw.yawDeg = 45.0;
-                                sw.widthCm = 290.0;
+                                sw.pos = [-262.5, 120.0, -225.0];
+                                sw.yawDeg = 0.0;
+                                sw.widthCm = 375.0;
                                 sw.heightCm = 240.0;
                             } else if (sw.wallId === "wall-corner") {
-                                sw.pos = [-697.0, -17.0, 195.0];
-                                sw.yawDeg = 135.0;
-                                sw.widthCm = 560.0;
+                                sw.pos = [-450.0, 120.0, 0.0];
+                                sw.yawDeg = 90.0;
+                                sw.widthCm = 450.0;
+                                sw.heightCm = 240.0;
+                            } else if (sw.pos && sw.pos[2] > 50.0) {
+                                // Migrate any legacy prebuilt room wall coordinates into the 3D house model
+                                sw.pos = [-262.5, 120.0, -225.0];
+                                sw.yawDeg = 0.0;
+                                sw.widthCm = 375.0;
                                 sw.heightCm = 240.0;
                             }
 
@@ -2430,53 +2436,95 @@ export class ConduitXRMain extends BaseScriptComponent {
 
     // Interactive Add Outlet / Tap-In tool: mounts a 120V 20A duplex outlet right where user aims on the wall!
     public addOutletTapIn(): ConduitRun {
-        let outletWorldPos: vec3;
-        let targetWall = this.getActiveWall();
+        const activeCam = this.getActiveCamera();
+        const camTrans = activeCam ? activeCam.getSceneObject().getTransform() : null;
+        const camPos = camTrans ? camTrans.getWorldPosition() : new vec3(-262.5, 120.0, 100.0);
         const centerScreen = new vec2(0.5, 0.5);
+
+        // 1. Identify which room the user is currently in based on camera X coordinates:
+        // Bedroom: X < -75 (center: -262.5)
+        // Living: -75 <= X < 300 (center: 112.5)
+        // Utility / Electrical: X >= 300 (center: 425.0)
+        let currentRoomId = "bedroom";
+        let defaultWallX = -262.5;
+        let defaultWallW = 375.0;
+        let roomLabel = "Master Bedroom";
+
+        if (camPos.x >= 300.0) {
+            currentRoomId = "utility";
+            defaultWallX = 425.0;
+            defaultWallW = 250.0;
+            roomLabel = "Electrical Room";
+        } else if (camPos.x >= -75.0) {
+            currentRoomId = "living";
+            defaultWallX = 112.5;
+            defaultWallW = 375.0;
+            roomLabel = "Living Room";
+        }
+
+        // 2. Select the wall FOR THIS ROOM (Never a wall in another room!)
+        let targetWall = this.activeWalls.find(w => w.wallId === `wall-${currentRoomId}`);
+        if (!targetWall && currentRoomId === "bedroom") {
+            targetWall = this.activeWalls.find(w => w.wallId === "wall-bedroom" || w.wallIndex === 1);
+        }
+
+        if (!targetWall) {
+            const wallObj = global.scene.createSceneObject(`HouseWall_${currentRoomId}`);
+            targetWall = wallObj.createComponent(ReferenceWall.getTypeName()) as ReferenceWall;
+            targetWall.wallIndex = this.activeWalls.length + 1;
+            targetWall.wallId = `wall-${currentRoomId}`;
+            this.activeWalls.push(targetWall);
+        }
+
+        // Lock targetWall to the 3D house model's true back wall plane (z = -225.0)
+        targetWall.widthCm = defaultWallW;
+        targetWall.heightCm = 240.0;
+        targetWall.initialPosition = new vec3(defaultWallX, 120.0, -225.0);
+        targetWall.initialRotation = quat.fromEulerAngles(0, 0, 0);
+        targetWall.getSceneObject().getTransform().setWorldPosition(targetWall.initialPosition);
+        targetWall.getSceneObject().getTransform().setWorldRotation(targetWall.initialRotation);
+        targetWall.rebuildWall(targetWall.initialPosition, targetWall.initialRotation, defaultWallW, 240.0);
+        targetWall.setWallYaw(0.0);
+        targetWall.getSceneObject().enabled = true;
+
+        // Synchronize active wall state and UI
+        for (let i = 0; i < this.activeWalls.length; i++) {
+            const isMatch = (this.activeWalls[i] === targetWall);
+            this.activeWalls[i].setIsActiveWall(isMatch);
+            if (isMatch) this.activeWallIndex = i;
+        }
+        this.referenceWall = targetWall;
+        if (this.lineMarkerTool) this.lineMarkerTool.setReferenceWalls(this.activeWalls);
+        this.updateMultiWallUI();
+
+        // 3. Compute outlet world position flush on THIS room's wall surface (z = -221.0)
+        let outletWorldPos: vec3;
         const hit = this.lineMarkerTool ? this.lineMarkerTool.getSurfaceHit(centerScreen) : null;
+        let placedFromHit = false;
 
-        if (hit && hit.isHit && hit.isOnWall && hit.hitWall) {
-            targetWall = hit.hitWall;
+        if (hit && hit.isHit && hit.isOnWall && hit.hitWall && hit.hitWall.wallId.includes(currentRoomId)) {
             const outletY = (hit.point.y > 15.0 && hit.point.y < 120.0) ? hit.point.y : 40.0;
-            outletWorldPos = targetWall.projectPointToWall(new vec3(hit.point.x, outletY, hit.point.z));
-        } else {
-            // Forward raycast from active camera against all active walls
-            let foundWallHit = false;
-            const activeCam = this.getActiveCamera();
-            if (activeCam) {
-                const rayOrigin = activeCam.screenSpaceToWorldSpace(centerScreen, 1.0);
-                const rayFar = activeCam.screenSpaceToWorldSpace(centerScreen, 600.0);
-                const rayDir = rayFar.sub(rayOrigin).normalize();
-                for (const wall of this.activeWalls) {
-                    const wallHit = wall.raycastWall(rayOrigin, rayDir);
-                    if (wallHit && wallHit.isHit) {
-                        targetWall = wall;
-                        outletWorldPos = wall.projectPointToWall(new vec3(wallHit.point.x, 40.0, wallHit.point.z));
-                        foundWallHit = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!foundWallHit) {
-                // If aiming at open air, mount directly flush on the Master Bedroom back wall
-                const bedWall = this.activeWalls.find(w => w.wallId === "wall-bedroom") || this.getActiveWall();
-                if (bedWall) {
-                    targetWall = bedWall;
-                    outletWorldPos = bedWall.projectPointToWall(new vec3(-262.5, 40.0, -225.0));
-                } else {
-                    outletWorldPos = new vec3(-262.5, 40.0, -221.0);
-                }
-            }
+            outletWorldPos = new vec3(hit.point.x, outletY, -221.0);
+            placedFromHit = true;
         }
 
-        // Guarantee outlet is locked flat onto the wall plane (never mid-air)
-        if (targetWall) {
-            outletWorldPos = targetWall.projectPointToWall(outletWorldPos);
+        if (!placedFromHit && activeCam) {
+            const rayOrigin = activeCam.screenSpaceToWorldSpace(centerScreen, 1.0);
+            const rayFar = activeCam.screenSpaceToWorldSpace(centerScreen, 600.0);
+            const rayDir = rayFar.sub(rayOrigin).normalize();
+            const wallHit = targetWall.raycastWall(rayOrigin, rayDir);
+            if (wallHit && wallHit.isHit) {
+                outletWorldPos = new vec3(wallHit.point.x, 40.0, -221.0);
+            } else {
+                const targetX = Math.max(defaultWallX - defaultWallW * 0.42, Math.min(defaultWallX + defaultWallW * 0.42, camPos.x));
+                outletWorldPos = new vec3(targetX, 40.0, -221.0);
+            }
+        } else if (!placedFromHit) {
+            outletWorldPos = new vec3(defaultWallX, 40.0, -221.0);
         }
 
-        // Project onto the nearest existing in-wall branch wire to create clean T-splice drop
-        let dropTop = new vec3(outletWorldPos.x, 110.0, outletWorldPos.z);
+        // 4. Project onto the nearest existing in-wall branch wire in THIS room
+        let dropTop = new vec3(outletWorldPos.x, 110.0, -223.0);
         let bestDist = 999.0;
         for (const run of this.activeRuns) {
             if (run.layer !== "electrical") continue;
@@ -2494,14 +2542,27 @@ export class ConduitXRMain extends BaseScriptComponent {
                 bestDist = horizDist;
                 const tapY = Math.max(ptOnSeg.y, outletWorldPos.y + 40.0);
                 dropTop = new vec3(outletWorldPos.x, tapY, ptOnSeg.z);
-                if (targetWall) dropTop = targetWall.projectPointToWall(dropTop);
             }
         }
 
         const outletIdx = this.activeRuns.filter(r => r.name.includes("Outlet") || r.id.includes("outlet")).length + 1;
         const newRun: ConduitRun = {
             id: `run-outlet-${Date.now()}`,
-            name: `[${targetWall ? targetWall.wallId : "Bedroom"}] 120V 20A Duplex Outlet #${outletIdx}`,
+            name: `[${roomLabel}] 120V 20A Duplex Outlet #${outletIdx}`,
+            layer: "electrical",
+            voltageOrType: "120V AC 20A (In-Wall Tap)",
+            installer: "AR Optical Tap-In (Zero Wall Damage)",
+            installDate: "Nov 09, 2026",
+            status: "TAP-IN READY: 1-GANG CUTOUT 5.7×9.5cm",
+            color: new vec4(1.0, 0.88, 0.15, 1.0),
+            startPoint: dropTop,
+            endPoint: outletWorldPos,
+            isWorldCoords: true,
+            roomZone: currentRoomId,
+            gauge: "12 AWG (20A)",
+            isLive: true,
+            thickness: 5.5
+        };
             layer: "electrical",
             voltageOrType: "120V AC 20A (In-Wall Tap)",
             installer: "AR Optical Tap-In (Zero Wall Damage)",
