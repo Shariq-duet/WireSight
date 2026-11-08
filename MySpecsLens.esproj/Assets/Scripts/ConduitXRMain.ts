@@ -64,6 +64,7 @@ export class ConduitXRMain extends BaseScriptComponent {
     // Run registry
     private activeRuns: ConduitRun[] = [...INITIAL_CONDUIT_RUNS];
     private runVisualObjects: Map<string, SceneObject> = new Map();
+    public isUserRunsVisible: boolean = false; // Disabled by default, preserved in storage
     private selectedRunId: string | null = null;
     private selectedRunIds: Set<string> = new Set();
     private activeRoomFilter: string = "all";
@@ -87,6 +88,17 @@ export class ConduitXRMain extends BaseScriptComponent {
         // Guaranteed Self-Healing: Foundation bedroom walls & 10 circuit runs are permanently maintained
         this.setupDefaultCornerWalls();
         this.setupDefaultBedroomCircuit();
+        // Disable original reference walls & user runs by default so new 3D model & scenarios are cleanly shown
+        for (const wall of this.activeWalls) {
+            if (wall.getSceneObject()) {
+                wall.getSceneObject().enabled = false;
+            }
+        }
+        this.runVisualObjects.forEach((runObj, runId) => {
+            if (runId.startsWith("run-")) {
+                runObj.enabled = false;
+            }
+        });
         this.saveStateToStorage();
     }
 
@@ -449,6 +461,25 @@ export class ConduitXRMain extends BaseScriptComponent {
         return b.isOn;
     }
 
+    // Toggles visibility of the user's original 32 wires (preserved in memory & storage, hidden by default)
+    public toggleUserRunsVisibility(): boolean {
+        this.isUserRunsVisible = !this.isUserRunsVisible;
+        const count = this.activeRuns.filter(r => r.id.startsWith("run-")).length;
+        this.runVisualObjects.forEach((runObj, runId) => {
+            if (runId.startsWith("run-")) {
+                runObj.enabled = this.isUserRunsVisible;
+            }
+        });
+        if (this.toolPalette) {
+            const msg = this.isUserRunsVisible
+                ? `👁️ Original Wires: VISIBLE (${count} runs preserved & shown)`
+                : `👁️ Original Wires: DISABLED (${count} runs safely preserved, hidden from view)`;
+            const col = this.isUserRunsVisible ? new vec4(0.3, 1.0, 0.6, 1.0) : new vec4(1.0, 0.75, 0.2, 1.0);
+            this.toolPalette.setStatusMessage(msg, col);
+        }
+        return this.isUserRunsVisible;
+    }
+
     public isWireSightActive: boolean = true;
 
     // Toggles between Real-World Room View (wires & studs hidden) and WireSight X-Ray (conduits & framing revealed)
@@ -613,6 +644,9 @@ export class ConduitXRMain extends BaseScriptComponent {
 
         const runObj = global.scene.createSceneObject(`Run_${run.id}`);
         runObj.setParent(parentGroup);
+        if (run.id.startsWith("run-") && !this.isUserRunsVisible) {
+            runObj.enabled = false;
+        }
 
         const mid = run.startPoint.add(run.endPoint).uniformScale(0.5);
         if (isWorldCoords) {
@@ -889,13 +923,17 @@ export class ConduitXRMain extends BaseScriptComponent {
             this.saveAndExportWiring();
         };
 
-        // 3c. Soft Copy JSON Export & Import
+        // 3c. Soft Copy JSON Export & Import + Toggle User Wires
         this.toolPalette.onExportJson = () => {
             this.exportWiringJson();
         };
 
         this.toolPalette.onImportJson = () => {
             this.importWiringJson();
+        };
+
+        this.toolPalette.onToggleUserWires = () => {
+            this.toggleUserRunsVisibility();
         };
 
         // 4. Remote Sofa Push Back (+30 cm)
@@ -1073,6 +1111,8 @@ export class ConduitXRMain extends BaseScriptComponent {
                     this.exportWiringJson();
                 } else if (k === "i") {
                     this.importWiringJson();
+                } else if (k === "u") {
+                    this.toggleUserRunsVisibility();
                 } else if (k === "d") {
                     const wall = this.getActiveWall();
                     if (wall && this.toolPalette) {
@@ -2107,6 +2147,7 @@ export class ConduitXRMain extends BaseScriptComponent {
         wall1.getSceneObject().getTransform().setWorldRotation(wall1.initialRotation);
         wall1.rebuildWall(wall1.initialPosition, wall1.initialRotation, 290.0, 240.0);
         wall1.setWallYaw(45.0);
+        wall1.getSceneObject().enabled = false; // Disable original preview wall
 
         // Wall 2: Master Bedroom Perpendicular Side Wall (along TV, Dresser & Wardrobe)
         // Position: (-697.0, -17.0, 195.0), Yaw: 135°, Width: 560cm, Height: 240cm
@@ -2130,6 +2171,7 @@ export class ConduitXRMain extends BaseScriptComponent {
         wall2.getSceneObject().getTransform().setWorldRotation(wall2.initialRotation);
         wall2.rebuildWall(wall2.initialPosition, wall2.initialRotation, 560.0, 240.0);
         wall2.setWallYaw(135.0);
+        wall2.getSceneObject().enabled = false; // Disable original preview wall
 
         // Renumber all active walls
         for (let i = 0; i < this.activeWalls.length; i++) {
@@ -2584,6 +2626,7 @@ export class ConduitXRMain extends BaseScriptComponent {
         // BUT physical electrical wall outlets mounted on the drywall REMAIN VISIBLE!
         if (!this.isWireSightActive) {
             for (const run of this.activeRuns) {
+                if (run.id.startsWith("run-") && !this.isUserRunsVisible) continue;
                 const outletInfo = this.isOutletPoint(run.endPoint);
                 if (outletInfo.isOutlet) {
                     this.renderPointVisual(run.endPoint, run, false, run.id === this.selectedRunId);
@@ -2604,6 +2647,7 @@ export class ConduitXRMain extends BaseScriptComponent {
         };
 
         for (const run of this.activeRuns) {
+            if (run.id.startsWith("run-") && !this.isUserRunsVisible) continue;
             if (run.layer === "electrical" && !isElec) continue;
             if (run.layer === "plumbing" && !isPlumb) continue;
 

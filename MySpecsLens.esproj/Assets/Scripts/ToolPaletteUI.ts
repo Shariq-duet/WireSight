@@ -117,6 +117,7 @@ export class ToolPaletteUI extends BaseScriptComponent {
     public onSaveWiring: (() => void) | null = null;
     public onExportJson: (() => void) | null = null;
     public onImportJson: (() => void) | null = null;
+    public onToggleUserWires: (() => void) | null = null;
 
     private isWallEditActive: boolean = false;
     private textWallEditMode: Text | null = null;
@@ -388,29 +389,45 @@ export class ToolPaletteUI extends BaseScriptComponent {
         );
         this.textClearAll = btnClear.label;
 
-        // Row 3 (y = -1.15): Soft Copy JSON Export & Import
+        // Row 3 (y = -1.15): Soft Copy JSON Export & Import + Toggle User Wires
         this.createPillButton(
             "BtnExportJson",
             this.tabWireRoot,
-            new vec3(-1.40, -1.15, 1),
-            " 📤 EXPORT JSON ",
+            new vec3(-1.90, -1.15, 1),
+            " 📤 EXPORT ",
             new vec4(0.2, 0.95, 1.0, 1.0),
             new vec4(0.1, 0.85, 0.95, 0.95),
             () => this.triggerExportJson(),
             10,
-            new vec3(1.6, 0.75, 1.5)
+            new vec3(1.15, 0.75, 1.5)
         );
 
         this.createPillButton(
             "BtnImportJson",
             this.tabWireRoot,
-            new vec3(1.40, -1.15, 1),
-            " 📥 IMPORT JSON ",
+            new vec3(-0.60, -1.15, 1),
+            " 📥 IMPORT ",
             new vec4(0.3, 1.0, 0.6, 1.0),
             new vec4(0.2, 0.9, 0.5, 0.95),
             () => this.triggerImportJson(),
             10,
-            new vec3(1.6, 0.75, 1.5)
+            new vec3(1.15, 0.75, 1.5)
+        );
+
+        this.createPillButton(
+            "BtnToggleUserWires",
+            this.tabWireRoot,
+            new vec3(1.25, -1.15, 1),
+            " 👁️ MY WIRES [U] ",
+            new vec4(1.0, 0.85, 0.2, 1.0),
+            new vec4(0.9, 0.7, 0.1, 0.95),
+            () => {
+                if (this.onToggleUserWires) {
+                    this.onToggleUserWires();
+                }
+            },
+            10,
+            new vec3(1.7, 0.75, 1.5)
         );
 
         // =========================================================================
