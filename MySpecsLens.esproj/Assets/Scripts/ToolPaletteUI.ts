@@ -118,6 +118,8 @@ export class ToolPaletteUI extends BaseScriptComponent {
     public onExportJson: (() => void) | null = null;
     public onImportJson: (() => void) | null = null;
     public onToggleUserWires: (() => void) | null = null;
+    public onCycleBreakerTrip: (() => void) | null = null;
+    public onTeleportRoom: ((roomIdx: number) => void) | null = null;
 
     private isWallEditActive: boolean = false;
     private textWallEditMode: Text | null = null;
@@ -389,36 +391,36 @@ export class ToolPaletteUI extends BaseScriptComponent {
         );
         this.textClearAll = btnClear.label;
 
-        // Row 3 (y = -1.15): Soft Copy JSON Export & Import + Toggle User Wires
+        // Row 3 (y = -1.15): Soft Copy JSON Export & Import + Toggle User Wires + Breaker Trip
         this.createPillButton(
             "BtnExportJson",
             this.tabWireRoot,
-            new vec3(-1.90, -1.15, 1),
+            new vec3(-2.25, -1.15, 1),
             " 📤 EXPORT ",
             new vec4(0.2, 0.95, 1.0, 1.0),
             new vec4(0.1, 0.85, 0.95, 0.95),
             () => this.triggerExportJson(),
             10,
-            new vec3(1.15, 0.75, 1.5)
+            new vec3(1.10, 0.75, 1.5)
         );
 
         this.createPillButton(
             "BtnImportJson",
             this.tabWireRoot,
-            new vec3(-0.60, -1.15, 1),
+            new vec3(-1.05, -1.15, 1),
             " 📥 IMPORT ",
             new vec4(0.3, 1.0, 0.6, 1.0),
             new vec4(0.2, 0.9, 0.5, 0.95),
             () => this.triggerImportJson(),
             10,
-            new vec3(1.15, 0.75, 1.5)
+            new vec3(1.10, 0.75, 1.5)
         );
 
         this.createPillButton(
             "BtnToggleUserWires",
             this.tabWireRoot,
-            new vec3(1.25, -1.15, 1),
-            " 👁️ MY WIRES [U] ",
+            new vec3(0.45, -1.15, 1),
+            " 👁️ WIRES [U] ",
             new vec4(1.0, 0.85, 0.2, 1.0),
             new vec4(0.9, 0.7, 0.1, 0.95),
             () => {
@@ -427,7 +429,23 @@ export class ToolPaletteUI extends BaseScriptComponent {
                 }
             },
             10,
-            new vec3(1.7, 0.75, 1.5)
+            new vec3(1.4, 0.75, 1.5)
+        );
+
+        this.createPillButton(
+            "BtnTripBreakerWire",
+            this.tabWireRoot,
+            new vec3(2.15, -1.15, 1),
+            " ⚡ TRIP [B] ",
+            new vec4(1.0, 0.40, 0.30, 1.0),
+            new vec4(0.9, 0.25, 0.20, 0.95),
+            () => {
+                if (this.onCycleBreakerTrip) {
+                    this.onCycleBreakerTrip();
+                }
+            },
+            10,
+            new vec3(1.4, 0.75, 1.5)
         );
 
         // =========================================================================
@@ -669,16 +687,59 @@ export class ToolPaletteUI extends BaseScriptComponent {
         );
         this.textCameraToggle = btnCamera.label;
 
+        // Row 3 (y = -0.95): Quick Room Teleports for Demo Recording
+        this.createPillButton(
+            "BtnTeleportBed",
+            this.tabSpecsRoot,
+            new vec3(-2.25, -0.95, 1),
+            " 🛏️ BEDROOM [7] ",
+            new vec4(0.3, 0.95, 1.0, 1.0),
+            new vec4(0.2, 0.80, 0.95, 0.95),
+            () => {
+                if (this.onTeleportRoom) this.onTeleportRoom(4);
+            },
+            10,
+            new vec3(1.3, 0.75, 1.5)
+        );
+
+        this.createPillButton(
+            "BtnTeleportElec",
+            this.tabSpecsRoot,
+            new vec3(-0.75, -0.95, 1),
+            " ⚡ ELEC ROOM [6] ",
+            new vec4(1.0, 0.85, 0.2, 1.0),
+            new vec4(0.9, 0.70, 0.1, 0.95),
+            () => {
+                if (this.onTeleportRoom) this.onTeleportRoom(3);
+            },
+            10,
+            new vec3(1.3, 0.75, 1.5)
+        );
+
+        this.createPillButton(
+            "BtnTeleportLiving",
+            this.tabSpecsRoot,
+            new vec3(0.75, -0.95, 1),
+            " 🛋️ LIVING [5] ",
+            new vec4(0.4, 0.95, 0.65, 1.0),
+            new vec4(0.3, 0.85, 0.55, 0.95),
+            () => {
+                if (this.onTeleportRoom) this.onTeleportRoom(2);
+            },
+            10,
+            new vec3(1.3, 0.75, 1.5)
+        );
+
         const btnCamPreset = this.createPillButton(
             "BtnCameraPreset",
             this.tabSpecsRoot,
-            new vec3(2.70, -0.95, 1),
+            new vec3(2.25, -0.95, 1),
             " 45° ISO ",
             new vec4(0.9, 0.7, 1.0, 1.0),
             new vec4(0.7, 0.4, 0.95, 0.95),
             () => this.cycleCameraPreset(),
             10,
-            new vec3(1.2, 0.7, 1.5)
+            new vec3(1.1, 0.75, 1.5)
         );
         this.textCameraPreset = btnCamPreset.label;
         this.btnCameraPresetObj = btnCamPreset.obj;

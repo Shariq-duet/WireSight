@@ -1163,8 +1163,24 @@ export class ConduitXRMain extends BaseScriptComponent {
             };
         }
 
+        // 7c7. Breaker Trip & Room Teleport Callbacks from ToolPalette UI
+        this.toolPalette.onCycleBreakerTrip = () => {
+            this.cycleBreakerTripDemo();
+        };
+
+        this.toolPalette.onTeleportRoom = (roomIdx: number) => {
+            this.teleportToRoom(roomIdx);
+        };
+
         // 7d. Keyboard Shortcuts in Preview:
         // Space / M = Summon / Hide Palette
+        // B = Cycle Breaker Trip Demo (B1 Bed -> B2 TV -> B3 Sofa -> B0 Main)
+        // H = Toggle WireSight X-Ray Mode
+        // U = Toggle Original Custom Wires
+        // 7 = Teleport to Master Bedroom
+        // 6 = Teleport to Electrical Room & Breaker Panel
+        // 5 = Teleport to Living Room
+        // 8 = Teleport to 45° Bird's Eye Overview
         // W = Start / Cancel 2-Pinch Wall Creator
         // S = Cycle Wall Size Preset (Instant 1-Click Resize)
         // R = Rotate Active Wall 45°
@@ -1175,10 +1191,29 @@ export class ConduitXRMain extends BaseScriptComponent {
         // D = Cycle Wall Distance (Push Closer / Farther)
         try {
             this.createEvent("KeyPressEvent").bind((event: KeyPressEvent) => {
-                const keyStr = event.key !== undefined ? String(event.key) : "";
-                const k = keyStr.toLowerCase();
-                const isShift = (event as any).shiftKey === true || keyStr === "W";
-                if (k === "space" || k === " " || k === "m" || (typeof Keys !== "undefined" && (event.key as any) === (Keys as any).Space)) {
+                const kVal = event.key;
+                const kStr = kVal !== undefined ? String(kVal).toLowerCase() : "";
+
+                const isKey = (keyName: string, char: string, ascii?: number): boolean => {
+                    // 1. Lens Studio Keys enum match
+                    if (typeof Keys !== "undefined") {
+                        const val = (Keys as any)[keyName];
+                        if (val !== undefined && kVal === val) return true;
+                        const valPref = (Keys as any)[`Key_${keyName}`];
+                        if (valPref !== undefined && kVal === valPref) return true;
+                    }
+                    // 2. String representation match
+                    if (kStr === char.toLowerCase() || kStr === keyName.toLowerCase()) return true;
+                    if (kVal === char || (kVal as any) === char.toUpperCase() || (kVal as any) === char.toLowerCase()) return true;
+                    // 3. Numeric / ASCII code match
+                    if (typeof kVal === "number") {
+                        if (ascii !== undefined && kVal === ascii) return true;
+                        if (char.length === 1 && (kVal === char.charCodeAt(0) || kVal === char.toUpperCase().charCodeAt(0))) return true;
+                    }
+                    return false;
+                };
+
+                if (isKey("Space", " ") || isKey("Spacebar", " ") || isKey("M", "m", 77)) {
                     if (this.toolPalette) {
                         if (this.toolPalette.getIsExpanded()) {
                             this.toolPalette.hidePalette();
@@ -1186,9 +1221,33 @@ export class ConduitXRMain extends BaseScriptComponent {
                             this.toolPalette.summonInWorld();
                         }
                     }
-                } else if (k === "o") {
+                } else if (isKey("B", "b", 66)) {
+                    this.cycleBreakerTripDemo();
+                } else if (isKey("H", "h", 72)) {
+                    this.toggleWireSightMode();
+                } else if (isKey("U", "u", 85)) {
+                    this.toggleUserRunsVisibility();
+                } else if (isKey("Seven", "7", 55) || isKey("Digit7", "7") || isKey("Key_7", "7")) {
+                    this.teleportToRoom(4); // Master Bedroom
+                } else if (isKey("Six", "6", 54) || isKey("Digit6", "6") || isKey("Key_6", "6")) {
+                    this.teleportToRoom(3); // Utility Room & Breaker Panel
+                } else if (isKey("Five", "5", 53) || isKey("Digit5", "5") || isKey("Key_5", "5")) {
+                    this.teleportToRoom(2); // Living Room
+                } else if (isKey("Four", "4", 52) || isKey("Digit4", "4") || isKey("Key_4", "4")) {
+                    this.teleportToRoom(1); // Kitchen
+                } else if (isKey("Eight", "8", 56) || isKey("Digit8", "8") || isKey("Key_8", "8")) {
+                    this.teleportToRoom(5); // 45° Bird's Eye Overview
+                } else if (isKey("Nine", "9", 57) || isKey("Zero", "0", 48)) {
+                    this.teleportToRoom(0); // Central Hallway
+                } else if (isKey("One", "1", 49) || isKey("Digit1", "1")) {
+                    if (this.toolPalette) this.toolPalette.switchTab("wire");
+                } else if (isKey("Two", "2", 50) || isKey("Digit2", "2")) {
+                    if (this.toolPalette) this.toolPalette.switchTab("wall");
+                } else if (isKey("Three", "3", 51) || isKey("Digit3", "3")) {
+                    if (this.toolPalette) this.toolPalette.switchTab("specs");
+                } else if (isKey("O", "o", 79)) {
                     this.addOutletTapIn();
-                } else if (k === "w") {
+                } else if (isKey("W", "w", 87)) {
                     if (this.wallCreatorTool) {
                         if (this.wallCreatorTool.getIsActive()) {
                             this.wallCreatorTool.cancelWallCreation();
@@ -1196,66 +1255,35 @@ export class ConduitXRMain extends BaseScriptComponent {
                             this.wallCreatorTool.startWallCreation();
                         }
                     }
-                } else if (k === "s") {
+                } else if (isKey("S", "s", 83)) {
                     this.cycleActiveWallSize();
-                } else if (k === "arrowup" || k === "up") {
-                    this.pushActiveWallDepth(20.0); // Push wall deeper into room
-                } else if (k === "arrowdown" || k === "down") {
-                    this.pushActiveWallDepth(-20.0); // Pull wall closer
-                } else if (k === "r") {
-                    // Quick 5° step rotation (or -5° with Shift)
+                } else if (isKey("Up", "arrowup", 38) || isKey("KeyUp", "up")) {
+                    this.pushActiveWallDepth(20.0);
+                } else if (isKey("Down", "arrowdown", 40) || isKey("KeyDown", "down")) {
+                    this.pushActiveWallDepth(-20.0);
+                } else if (isKey("R", "r", 82)) {
                     this.rotateActiveWall(5.0);
-                } else if (k === "]" || k === "." || k === "e") {
-                    // Fine +1° nudge (dial in exact angles like 23°)
+                } else if (kStr === "]" || kStr === "." || isKey("E", "e", 69)) {
                     this.rotateActiveWall(1.0);
-                } else if (k === "[" || k === "," || k === "q") {
-                    // Fine -1° nudge
+                } else if (kStr === "[" || kStr === "," || isKey("Q", "q", 81)) {
                     this.rotateActiveWall(-1.0);
-                } else if (k === "}" || k === ">") {
-                    // +5° step
+                } else if (kStr === "}" || kStr === ">") {
                     this.rotateActiveWall(5.0);
-                } else if (k === "{" || k === "<") {
-                    // -5° step
+                } else if (kStr === "{" || kStr === "<") {
                     this.rotateActiveWall(-5.0);
-                } else if (k === "n") {
+                } else if (isKey("N", "n", 78)) {
                     this.addNewWall();
-                } else if (k === "1") {
-                    if (this.toolPalette) this.toolPalette.switchTab("wire");
-                } else if (k === "2") {
-                    if (this.toolPalette) this.toolPalette.switchTab("wall");
-                } else if (k === "3") {
-                    if (this.toolPalette) this.toolPalette.switchTab("specs");
-                } else if (k === "4") {
-                    this.teleportToRoom(1); // Kitchen
-                } else if (k === "5") {
-                    this.teleportToRoom(2); // Living Room
-                } else if (k === "6") {
-                    this.teleportToRoom(3); // Utility Room & Breaker Panel
-                } else if (k === "7") {
-                    this.teleportToRoom(4); // Master Bedroom
-                } else if (k === "8") {
-                    this.teleportToRoom(5); // 45° Bird's Eye Overview
-                } else if (k === "9" || k === "0") {
-                    this.teleportToRoom(0); // Central Hallway
-                } else if (k === "h") {
-                    this.toggleWireSightMode();
-                } else if (k === "tab") {
+                } else if (isKey("Tab", "tab", 9)) {
                     this.cycleActiveWall();
-                } else if (k === "x") {
+                } else if (isKey("X", "x", 88)) {
                     this.deleteActiveWall();
-                } else if (k === "delete") {
+                } else if (isKey("Delete", "delete", 46) || isKey("Backspace", "backspace", 8)) {
                     this.deleteLastRun();
-                } else if (k === "v") {
+                } else if (isKey("V", "v", 86)) {
                     this.saveAndExportWiring();
-                } else if (k === "e") {
-                    this.exportWiringJson();
-                } else if (k === "i") {
+                } else if (isKey("I", "i", 73)) {
                     this.importWiringJson();
-                } else if (k === "u") {
-                    this.toggleUserRunsVisibility();
-                } else if (k === "b") {
-                    this.cycleBreakerTripDemo();
-                } else if (k === "d") {
+                } else if (isKey("D", "d", 68)) {
                     const wall = this.getActiveWall();
                     if (wall && this.toolPalette) {
                         const camPos = this.glassesCamera
