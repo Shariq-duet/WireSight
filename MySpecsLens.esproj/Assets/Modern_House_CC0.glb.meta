@@ -1,0 +1,219 @@
+- !<AssetImportMetadata/4e1ee7bb-9329-455c-891e-bc2a87386c40>
+  ImportedAssetIds:
+    .hidden/Brown: !<reference> a38037c3-e6c2-420d-ac30-e829e4c194f5
+    17c3a56a9295c73c: !<reference> 0877569e-80b0-4af1-b9cd-00c21d3f9544
+    21df3115d5bfabfa: !<reference> d59da3cc-3a1e-4e85-ab72-7d699b7b5823
+    26ba073d67b9d0dd: !<reference> 51d5a1f0-9743-4f97-b09f-a77144b23427
+    562d42b5526aa77a: !<reference> 05908ad2-f4a1-4f5b-a270-2fcfbe3a559f
+    66d68356be095b36: !<reference> 57a2bd97-a0f2-46a5-8b46-0371600f87ab
+    842f13e90577c979: !<reference> 7dd06a40-aa3a-41b0-a66f-268202e7bac6
+    88ab437fd121cc69: !<reference> c08f47bd-ce4c-4739-af21-211b45635492
+    Materials/Brown: !<reference> 762fdc62-1cc8-403e-9edc-089abb5d977d
+    Materials/Brown|Brown|GraphPassInfo: !<reference> 58db7826-7781-4768-b453-5b7e6d5be51f
+    Materials/DarkGrey: !<reference> 6d5f9cd4-d24b-4eca-8a55-711b2f5c6139
+    Materials/DarkGrey|DarkGrey|GraphPassInfo: !<reference> 2a2a0b32-8b8a-47cd-8c5a-461489b1fb54
+    Materials/Grey: !<reference> 8d2c32b1-fc8d-4dee-8e28-7d57d9d98483
+    Materials/Grey|Grey|GraphPassInfo: !<reference> 6c4670d8-9746-4753-adea-ae5671d491ef
+    Materials/White: !<reference> aac8c992-d9d9-4452-9c5a-5d743c7d81d7
+    Materials/White|White|GraphPassInfo: !<reference> 991c7233-c35c-487a-b76e-3b9c6baec8d8
+    Meshes/House1: !<reference> f976dc54-a466-4b12-a913-d523b2a37482
+    Meshes/House11: !<reference> 3b5108be-833c-42a0-9642-0b57174d499d
+    Meshes/House12: !<reference> f3754083-2ef6-4aa4-8935-9deb5f9f65ab
+    Meshes/House13: !<reference> 6978f271-aef8-467f-a151-95bd2b655a9f
+    Scene: !<reference> 4cc6b0b4-029d-4144-8aff-cba3fa2b3fb3
+    bf5a48e27349148f: !<reference> a934151e-e75d-48fc-b9f4-7aa38eeea818
+    e3552c511235f508: !<reference> c6c8af17-614b-496c-ae90-e7f4fa3fadd0
+  ImporterName: GltfImporter
+  PrimaryAsset: !<reference> 4cc6b0b4-029d-4144-8aff-cba3fa2b3fb3
+  PackageType: LegacyPackage
+  LegacyPackagePolicy: CanBeUnpackedTransparent
+  ExtraData:
+    {}
+  AssetDataMap:
+    Scene: !<own> 98ac757f-b137-4ef3-8bfa-1d3053e37302
+  DependentFiles:
+    []
+  ImporterSettings: !<GltfImporterSettings>
+    UseLegacyImporter: false
+    WithMaterials: true
+    NamingConvention: ByCategorySanitizeV2
+    PersistentIdGenerationAlgorithm: DescriptorBasedV2
+    AnimationCurveOptimization: true
+    CustomAnimationSamplingRate: 30.000000
+    ImportVertexColor: true
+    ImportTangents: true
+    ImportMorphTargetAnimation: true
+    ConvertMetersToCentimeters: true
+    RegenerateTangents: false
+    OptimizeMesh: true
+  CompressionSettings: !<ComplexCompressionSettings>
+    Presets:
+      None Compression: !<FileCompressionSettings>
+        {}
+    ExtensionMappings:
+      mesh: None Compression
+    Overrides:
+      {}
+- !<RenderMeshVisual/05908ad2-f4a1-4f5b-5d8f-d03041c5aa60>
+  PrefabRemaps:
+    []
+  Name: House1
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> aac8c992-d9d9-4452-9c5a-5d743c7d81d7
+  Mesh: !<reference> 6978f271-aef8-467f-a151-95bd2b655a9f
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<RenderMeshVisual/0877569e-80b0-4af1-4632-ff3de2c06abb>
+  PrefabRemaps:
+    []
+  Name: House1
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> 6d5f9cd4-d24b-4eca-8a55-711b2f5c6139
+  Mesh: !<reference> 3b5108be-833c-42a0-9642-0b57174d499d
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/51d5a1f0-9743-4f97-4f60-588ebb4dcbd8>
+  PrefabRemaps:
+    []
+  Name: Modern_House_CC0
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 100.000000, y: 100.000000, z: 100.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> c08f47bd-ce4c-4739-50de-dee4ba9cab6d
+  Components:
+    []
+- !<SceneObject/57a2bd97-a0f2-46a5-74b9-fc8e9ff07854>
+  PrefabRemaps:
+    []
+  Name: RootNode
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> 7dd06a40-aa3a-41b0-5990-d97dfd184539
+  Components:
+    []
+- !<SceneObject/7dd06a40-aa3a-41b0-5990-d97dfd184539>
+  PrefabRemaps:
+    []
+  Name: House1
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: -78.690071, y: 90.000000, z: 11.309933}
+    Scale: {x: 100.000000, y: 100.000000, z: 100.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> a934151e-e75d-48fc-460b-855c711157e7
+    - !<own> 0877569e-80b0-4af1-4632-ff3de2c06abb
+    - !<own> c6c8af17-614b-496c-516f-180b05c0522f
+    - !<own> 05908ad2-f4a1-4f5b-5d8f-d03041c5aa60
+- !<ObjectPrefabAssetData/98ac757f-b137-4ef3-8bfa-1d3053e37302>
+  Prototype: !<ObjectOwner/21ce64a4-4b31-4139-8f54-d3d039270593>
+    PackagePath: ""
+    objects:
+      - !<own> 51d5a1f0-9743-4f97-4f60-588ebb4dcbd8
+- !<RenderMeshVisual/a934151e-e75d-48fc-460b-855c711157e7>
+  PrefabRemaps:
+    []
+  Name: House1
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> 8d2c32b1-fc8d-4dee-8e28-7d57d9d98483
+  Mesh: !<reference> f976dc54-a466-4b12-a913-d523b2a37482
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/c08f47bd-ce4c-4739-50de-dee4ba9cab6d>
+  PrefabRemaps:
+    []
+  Name: Scenes
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> d59da3cc-3a1e-4e85-548d-82966484a7dc
+  Components:
+    []
+- !<RenderMeshVisual/c6c8af17-614b-496c-516f-180b05c0522f>
+  PrefabRemaps:
+    []
+  Name: House1
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> 762fdc62-1cc8-403e-9edc-089abb5d977d
+  Mesh: !<reference> f3754083-2ef6-4aa4-8935-9deb5f9f65ab
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/d59da3cc-3a1e-4e85-548d-82966484a7dc>
+  PrefabRemaps:
+    []
+  Name: Root Scene
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> 57a2bd97-a0f2-46a5-74b9-fc8e9ff07854
+  Components:
+    []

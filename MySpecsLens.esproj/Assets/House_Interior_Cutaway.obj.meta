@@ -1,0 +1,686 @@
+- !<AssetImportMetadata/65aeba49-9759-4ded-ba05-990268639d94>
+  ImportedAssetIds:
+    .hidden/Mat_AccentWall: !<reference> 9659ad7e-d2c4-4ec2-85a4-57cf27db259d
+    .hidden/white: !<reference> 9bb0dc91-b8aa-4ec0-9d0e-069646ef2acb
+    016b006cf10a9539: !<reference> 03bafd28-4b47-4ebb-b6fe-7ce0e99f5222
+    074cafa87efe8f00: !<reference> af94ace9-b820-46e3-94b7-603fdcb9d49a
+    0cae22870302d1a4: !<reference> ebc0dff5-398e-4d4c-ac03-0511df850e33
+    169321a2bdfcb5f8: !<reference> 366dd982-75a8-43be-89c5-4fa113e58615
+    26ba073d67b9d0dd: !<reference> 6724d7c0-9a22-40a2-8958-ea751dfe9177
+    3927be72b13a7340: !<reference> 1a08b5cb-16eb-4232-915b-bd6e62ad968f
+    3b4ca4c1bb09192d: !<reference> d6aa8f82-0af7-42ba-89f7-e7168ce9ef61
+    3e1cea318cc5e57a: !<reference> 65788b58-cbe2-4f43-9194-281b8555f5f3
+    408cd9222f9db361: !<reference> 6bd9524d-a515-4f4e-b7d1-cbb0bf45eb89
+    4a2d8ace90fb3d32: !<reference> f14514a4-5fc6-4cf8-a716-b4ca1a9956da
+    521c3100195c3f7f: !<reference> ac54002d-ed40-4c24-a77e-a46cc78daac9
+    61206c199802280e: !<reference> 3a8671ae-2a7d-4b5a-b6fe-cb30e30a051a
+    64381fd0f0979c1d: !<reference> 062c6b3b-86e0-49cd-a110-aae18a4f12d4
+    66fb09cfb3b597f3: !<reference> 077ba3b8-c3f8-4bca-8eee-0bcfc27d75be
+    81a19c1cf73531f7: !<reference> cb19afcb-917b-4b75-aa60-3c87954c78cc
+    8558dc9c699c5771: !<reference> 618fe30d-679a-4b21-9c40-115ce5996f5e
+    8bf33e2db554ba5c: !<reference> 1c03469f-1a17-4f08-98db-85593356e908
+    8f92689aea7b3155: !<reference> 499eb30d-d6a7-4813-9258-d935a3f6c736
+    900de7dd5ce55f81: !<reference> d54aaf2f-65da-4b6d-be59-43a06e65d03a
+    9984072911916fa8: !<reference> f6e6d371-48f3-4d73-9a8d-f813d9a4792d
+    Materials/Mat_AccentWall: !<reference> b8fbd32f-bff3-44f1-a22c-ea2f2181711d
+    Materials/Mat_AccentWall|Mat_AccentWall|GraphPassInfo: !<reference> 27677593-daf5-4e6f-8ef2-7f6d5ef84ffc
+    Materials/Mat_Baseboard: !<reference> 7cbe4a76-80e0-4ccc-bd28-6696d54c9876
+    Materials/Mat_Baseboard|Mat_Baseboard|GraphPassInfo: !<reference> 641417b5-5aad-4a04-8436-ff251da1672f
+    Materials/Mat_Drywall: !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+    Materials/Mat_Drywall|Mat_Drywall|GraphPassInfo: !<reference> ec5fb7d3-a988-4230-ba9d-7433d577ee1c
+    Materials/Mat_FloorTile: !<reference> 818e5ba9-b653-4d6c-aa3f-8db32363c364
+    Materials/Mat_FloorTile|Mat_FloorTile|GraphPassInfo: !<reference> 9eef1c40-20fb-40e0-9407-77720950c426
+    Materials/Mat_FloorWood: !<reference> d86b0b1f-c57f-4faa-b5bd-a49ae85d5cfb
+    Materials/Mat_FloorWood|Mat_FloorWood|GraphPassInfo: !<reference> 59964c23-fec7-49ac-8f3d-3f96aee6b83f
+    Meshes/Floor_Kitchen_Utility: !<reference> 620af99d-0aa7-4d94-9384-01c9427ebbdf
+    Meshes/Floor_Living_Bedroom: !<reference> 0790e438-9547-4a13-96bb-94f5600a5543
+    Meshes/Wall_Bedroom_EnSuite: !<reference> 34cdbe2a-4769-4123-880d-5f8771933dfb
+    Meshes/Wall_Bedroom_Partition_Header: !<reference> cb7b22db-6cab-41a5-8f0e-ba1f91f3dbea
+    Meshes/Wall_Bedroom_Partition_Left: !<reference> 4f62eb8a-d15f-4e12-b6dd-3deeda20b951
+    Meshes/Wall_Bedroom_Partition_Right: !<reference> e1f7f0a3-60c6-403f-a4c1-d12d6c91a3d6
+    Meshes/Wall_Exterior_Back: !<reference> cb7f6332-261b-4657-8f49-e539a25460ac
+    Meshes/Wall_Exterior_Front_Cutaway: !<reference> bfc8b416-9c2d-4020-82a8-fac3ed61542c
+    Meshes/Wall_Exterior_Left: !<reference> 9c8d4c20-7914-4cb9-bc51-05f961c9d69b
+    Meshes/Wall_Exterior_Right: !<reference> 3d301e11-a2d4-4194-8733-e3749db35cb2
+    Meshes/Wall_Kitchen_Partition_Header: !<reference> c7b0f5f9-7de8-4857-8943-8e1cd6d91b50
+    Meshes/Wall_Kitchen_Partition_Left: !<reference> 1f9acaa1-179a-4a38-ae34-a2e893616745
+    Meshes/Wall_Kitchen_Partition_Right: !<reference> 9c6e73a1-23df-4d48-ac94-92b153369a23
+    Meshes/Wall_Utility_Closet_Header: !<reference> 7bd70fc7-b02b-4373-b0c6-8b8fe0f40e76
+    Meshes/Wall_Utility_Closet_Left: !<reference> c820d218-c2d0-40b4-bfae-960cd8fc4112
+    Meshes/Wall_Utility_Closet_Right: !<reference> 4b66b2a6-1542-44bd-bfd4-be09346fd5e1
+    Scene: !<reference> 04bd5484-7116-483e-a490-d42b0a4d7f98
+    a551a8c972b654e5: !<reference> 12f8813e-e30f-4e94-9be6-f896627d4489
+    a705ad8f50a327ad: !<reference> 0a5ec517-5dfb-4cf8-b842-fd8d0c13adb5
+    b772b5d669d3c2c2: !<reference> 82f6c0a0-3540-4a74-a8db-673b0087ca17
+    ba018cba850373f5: !<reference> f99f62b0-7e8e-4ff4-ba43-8b2e44297454
+    c89861c06f616397: !<reference> d401693c-9f05-4d59-b8ec-5e8e85204480
+    c9e1871bbcfda955: !<reference> 0421adc2-794a-40f3-963f-3606efca8ba7
+    d0c1e0240cf71722: !<reference> eca163e7-ec09-4d3b-bf48-fe4de1c28818
+    d5b55468451a4145: !<reference> a7f445c3-0e62-45ec-b647-3c2d140b8fb1
+    d932986468df224f: !<reference> 6f885b25-c6de-437f-a9fa-33acc74a2a63
+    de85193e406b5da5: !<reference> f62892d3-3592-47f9-9c08-80e3e703262c
+    e2fd51a0f26e44de: !<reference> 3c3bd07a-76c4-420f-a6ce-2cb0fe433937
+    f86e34dd63c7061f: !<reference> 428ae5be-e1da-47d3-a8c1-86ac534a1d8c
+    f8f75b8997550473: !<reference> efeef438-00c5-4e32-89ad-549635961205
+  ImporterName: ObjImporter
+  PrimaryAsset: !<reference> 04bd5484-7116-483e-a490-d42b0a4d7f98
+  PackageType: LegacyPackage
+  LegacyPackagePolicy: CanBeUnpackedTransparent
+  ExtraData:
+    {}
+  AssetDataMap:
+    Scene: !<own> c7aaf4ac-89e4-4ff2-9caf-75686341d2dc
+  DependentFiles:
+    - House_Interior_Cutaway.mtl
+  ImporterSettings: !<D3FileImporterSettingsBase>
+    UseLegacyImporter: false
+    WithMaterials: true
+    NamingConvention: ByCategorySanitizeV2
+    PersistentIdGenerationAlgorithm: DescriptorBasedV2
+  CompressionSettings: !<ComplexCompressionSettings>
+    Presets:
+      Performance Compression: !<PerformanceCompressionSettings>
+        Level: Medium
+        Mipmap: false
+      None Compression: !<FileCompressionSettings>
+        {}
+    ExtensionMappings:
+      jpg: Performance Compression
+      mesh: None Compression
+    Overrides:
+      {}
+- !<RenderMeshVisual/03bafd28-4b47-4ebb-4901-831f1660addd>
+  PrefabRemaps:
+    []
+  Name: component_5
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> bfc8b416-9c2d-4020-82a8-fac3ed61542c
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/0421adc2-794a-40f3-69c0-c9f910357458>
+  PrefabRemaps:
+    []
+  Name: Wall_Bedroom_EnSuite
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 077ba3b8-c3f8-4bca-7111-f4303d828a41
+- !<RenderMeshVisual/062c6b3b-86e0-49cd-5eef-551e75b0ed2b>
+  PrefabRemaps:
+    []
+  Name: component_7
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> b8fbd32f-bff3-44f1-a22c-ea2f2181711d
+  Mesh: !<reference> e1f7f0a3-60c6-403f-a4c1-d12d6c91a3d6
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<RenderMeshVisual/077ba3b8-c3f8-4bca-7111-f4303d828a41>
+  PrefabRemaps:
+    []
+  Name: component_15
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> 34cdbe2a-4769-4123-880d-5f8771933dfb
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<RenderMeshVisual/0a5ec517-5dfb-4cf8-47bd-0272f3ec524a>
+  PrefabRemaps:
+    []
+  Name: component_9
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> 1f9acaa1-179a-4a38-ae34-a2e893616745
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/12f8813e-e30f-4e94-6419-07699d82bb76>
+  PrefabRemaps:
+    []
+  Name: Wall_Utility_Closet_Right
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> f6e6d371-48f3-4d73-6572-07ec265b86d2
+- !<SceneObject/1a08b5cb-16eb-4232-6ea4-42919d526970>
+  PrefabRemaps:
+    []
+  Name: Wall_Exterior_Back
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> f14514a4-5fc6-4cf8-58e9-4b35e566a925
+- !<SceneObject/1c03469f-1a17-4f08-6724-7aa6cca916f7>
+  PrefabRemaps:
+    []
+  Name: Wall_Kitchen_Partition_Header
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 82f6c0a0-3540-4a74-5724-98c4ff7835e8
+- !<SceneObject/366dd982-75a8-43be-763a-b05eec1a79ea>
+  PrefabRemaps:
+    []
+  Name: Wall_Kitchen_Partition_Right
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> ebc0dff5-398e-4d4c-53fc-faee207af1cc
+- !<RenderMeshVisual/3a8671ae-2a7d-4b5a-4901-34cf1cf5fae5>
+  PrefabRemaps:
+    []
+  Name: component_8
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> b8fbd32f-bff3-44f1-a22c-ea2f2181711d
+  Mesh: !<reference> cb7b22db-6cab-41a5-8f0e-ba1f91f3dbea
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/3c3bd07a-76c4-420f-5931-d34f01bcc6c8>
+  PrefabRemaps:
+    []
+  Name: Wall_Bedroom_Partition_Header
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 3a8671ae-2a7d-4b5a-4901-34cf1cf5fae5
+- !<SceneObject/428ae5be-e1da-47d3-573e-7953acb5e273>
+  PrefabRemaps:
+    []
+  Name: Wall_Exterior_Right
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> a7f445c3-0e62-45ec-49b8-c3d2ebf4704e
+- !<RenderMeshVisual/499eb30d-d6a7-4813-6da7-26ca5c0938c9>
+  PrefabRemaps:
+    []
+  Name: component_3
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> 9c8d4c20-7914-4cb9-bc51-05f961c9d69b
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/618fe30d-679a-4b21-63bf-eea31a6690a1>
+  PrefabRemaps:
+    []
+  Name: Wall_Bedroom_Partition_Left
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> d401693c-9f05-4d59-4713-a1717adfbb7f
+- !<RenderMeshVisual/65788b58-cbe2-4f43-6e6b-d7e47aaa0a0c>
+  PrefabRemaps:
+    []
+  Name: component_0
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> d86b0b1f-c57f-4faa-b5bd-a49ae85d5cfb
+  Mesh: !<reference> 0790e438-9547-4a13-96bb-94f5600a5543
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/6724d7c0-9a22-40a2-76a7-158ae2016e88>
+  PrefabRemaps:
+    []
+  Name: House_Interior_Cutaway
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> d54aaf2f-65da-4b6d-41a6-bc5f919a2fc5
+    - !<own> 6f885b25-c6de-437f-5605-cc5338b5d59c
+    - !<own> 1a08b5cb-16eb-4232-6ea4-42919d526970
+    - !<own> efeef438-00c5-4e32-7652-ab69ca69edfa
+    - !<own> 428ae5be-e1da-47d3-573e-7953acb5e273
+    - !<own> d6aa8f82-0af7-42ba-7608-18e97316109e
+    - !<own> 618fe30d-679a-4b21-63bf-eea31a6690a1
+    - !<own> ac54002d-ed40-4c24-5881-5b9338725536
+    - !<own> 3c3bd07a-76c4-420f-5931-d34f01bcc6c8
+    - !<own> af94ace9-b820-46e3-6b48-9fc023462b65
+    - !<own> 366dd982-75a8-43be-763a-b05eec1a79ea
+    - !<own> 1c03469f-1a17-4f08-6724-7aa6cca916f7
+    - !<own> cb19afcb-917b-4b75-559f-c3786ab38733
+    - !<own> 12f8813e-e30f-4e94-6419-07699d82bb76
+    - !<own> f99f62b0-7e8e-4ff4-45bc-74d1bbd68bab
+    - !<own> 0421adc2-794a-40f3-69c0-c9f910357458
+  Components:
+    []
+- !<RenderMeshVisual/6bd9524d-a515-4f4e-482e-344f40ba1476>
+  PrefabRemaps:
+    []
+  Name: component_14
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> 7bd70fc7-b02b-4373-b0c6-8b8fe0f40e76
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/6f885b25-c6de-437f-5605-cc5338b5d59c>
+  PrefabRemaps:
+    []
+  Name: Floor_Kitchen_Utility
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> f62892d3-3592-47f9-63f7-7f1c18fcd9d3
+- !<RenderMeshVisual/82f6c0a0-3540-4a74-5724-98c4ff7835e8>
+  PrefabRemaps:
+    []
+  Name: component_11
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> c7b0f5f9-7de8-4857-8943-8e1cd6d91b50
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<RenderMeshVisual/a7f445c3-0e62-45ec-49b8-c3d2ebf4704e>
+  PrefabRemaps:
+    []
+  Name: component_4
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> 3d301e11-a2d4-4194-8733-e3749db35cb2
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/ac54002d-ed40-4c24-5881-5b9338725536>
+  PrefabRemaps:
+    []
+  Name: Wall_Bedroom_Partition_Right
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 062c6b3b-86e0-49cd-5eef-551e75b0ed2b
+- !<SceneObject/af94ace9-b820-46e3-6b48-9fc023462b65>
+  PrefabRemaps:
+    []
+  Name: Wall_Kitchen_Partition_Left
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 0a5ec517-5dfb-4cf8-47bd-0272f3ec524a
+- !<ObjectPrefabAssetData/c7aaf4ac-89e4-4ff2-9caf-75686341d2dc>
+  Prototype: !<ObjectOwner/c9c47c3e-4ad7-4912-8b2a-7b59d7141649>
+    PackagePath: ""
+    objects:
+      - !<own> 6724d7c0-9a22-40a2-76a7-158ae2016e88
+- !<SceneObject/cb19afcb-917b-4b75-559f-c3786ab38733>
+  PrefabRemaps:
+    []
+  Name: Wall_Utility_Closet_Left
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> eca163e7-ec09-4d3b-40b7-01b21e3d77e7
+- !<RenderMeshVisual/d401693c-9f05-4d59-4713-a1717adfbb7f>
+  PrefabRemaps:
+    []
+  Name: component_6
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> b8fbd32f-bff3-44f1-a22c-ea2f2181711d
+  Mesh: !<reference> 4f62eb8a-d15f-4e12-b6dd-3deeda20b951
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/d54aaf2f-65da-4b6d-41a6-bc5f919a2fc5>
+  PrefabRemaps:
+    []
+  Name: Floor_Living_Bedroom
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 65788b58-cbe2-4f43-6e6b-d7e47aaa0a0c
+- !<SceneObject/d6aa8f82-0af7-42ba-7608-18e97316109e>
+  PrefabRemaps:
+    []
+  Name: Wall_Exterior_Front_Cutaway
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 03bafd28-4b47-4ebb-4901-831f1660addd
+- !<RenderMeshVisual/ebc0dff5-398e-4d4c-53fc-faee207af1cc>
+  PrefabRemaps:
+    []
+  Name: component_10
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> 9c6e73a1-23df-4d48-ac94-92b153369a23
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<RenderMeshVisual/eca163e7-ec09-4d3b-40b7-01b21e3d77e7>
+  PrefabRemaps:
+    []
+  Name: component_12
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> c820d218-c2d0-40b4-bfae-960cd8fc4112
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/efeef438-00c5-4e32-7652-ab69ca69edfa>
+  PrefabRemaps:
+    []
+  Name: Wall_Exterior_Left
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 499eb30d-d6a7-4813-6da7-26ca5c0938c9
+- !<RenderMeshVisual/f14514a4-5fc6-4cf8-58e9-4b35e566a925>
+  PrefabRemaps:
+    []
+  Name: component_2
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> cb7f6332-261b-4657-8f49-e539a25460ac
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<RenderMeshVisual/f62892d3-3592-47f9-63f7-7f1c18fcd9d3>
+  PrefabRemaps:
+    []
+  Name: component_1
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> 818e5ba9-b653-4d6c-aa3f-8db32363c364
+  Mesh: !<reference> 620af99d-0aa7-4d94-9384-01c9427ebbdf
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<RenderMeshVisual/f6e6d371-48f3-4d73-6572-07ec265b86d2>
+  PrefabRemaps:
+    []
+  Name: component_13
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> bb1e4460-1d76-4691-82ad-0aafd9fb805d
+  Mesh: !<reference> 4b66b2a6-1542-44bd-bfd4-be09346fd5e1
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/f99f62b0-7e8e-4ff4-45bc-74d1bbd68bab>
+  PrefabRemaps:
+    []
+  Name: Wall_Utility_Closet_Header
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 6bd9524d-a515-4f4e-482e-344f40ba1476
