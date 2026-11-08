@@ -1191,7 +1191,7 @@ export class ConduitXRMain extends BaseScriptComponent {
         // D = Cycle Wall Distance (Push Closer / Farther)
         try {
             this.createEvent("KeyPressEvent").bind((event: KeyPressEvent) => {
-                const kVal = event.key;
+                const kVal: any = event.key;
                 const kStr = kVal !== undefined ? String(kVal).toLowerCase() : "";
 
                 const isKey = (keyName: string, char: string, ascii?: number): boolean => {
@@ -1204,7 +1204,7 @@ export class ConduitXRMain extends BaseScriptComponent {
                     }
                     // 2. String representation match
                     if (kStr === char.toLowerCase() || kStr === keyName.toLowerCase()) return true;
-                    if (kVal === char || (kVal as any) === char.toUpperCase() || (kVal as any) === char.toLowerCase()) return true;
+                    if (kVal === char || kVal === char.toUpperCase() || kVal === char.toLowerCase()) return true;
                     // 3. Numeric / ASCII code match
                     if (typeof kVal === "number") {
                         if (ascii !== undefined && kVal === ascii) return true;
