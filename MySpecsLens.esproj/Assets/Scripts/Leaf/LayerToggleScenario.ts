@@ -7,7 +7,7 @@ export class LayerToggleScenario {
         const interactor = new ConduitXRLeafInteractor();
 
         // 1. Initial State: Both Layers ON
-        const palette = main.getToolPalette()!;
+        const palette = main.toolPalette!;
         if (!palette.getIsElectricalOn() || !palette.getIsPlumbingOn()) {
             throw new Error("FAIL: Initial layers must default to ON");
         }

@@ -5,7 +5,7 @@ export class TapInOutletPlacementScenario {
     public static async run(main: ConduitXRMain): Promise<boolean> {
         print("[LEAF Scenario 4] Starting TapInOutletPlacementScenario...");
         const interactor = new ConduitXRLeafInteractor();
-        const palette = main.getToolPalette()!;
+        const palette = main.toolPalette!;
 
         // 1. In VIEW mode, trying to place an outlet must be rejected/safely blocked
         if (palette.getIsCreateMode()) {
