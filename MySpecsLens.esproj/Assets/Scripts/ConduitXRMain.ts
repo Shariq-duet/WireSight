@@ -129,6 +129,8 @@ export class ConduitXRMain extends BaseScriptComponent {
             }
         });
         this.saveStateToStorage();
+        // Automatically spawn in Master Bedroom facing the wall & wiring on launch
+        this.teleportToRoom(4);
     }
 
     private findCamera(): SceneObject | null {
@@ -207,6 +209,7 @@ export class ConduitXRMain extends BaseScriptComponent {
 
             const camComp = camObj.getComponent("Component.Camera") as Camera;
             if (camComp) {
+                camComp.far = 5000.0;
                 this.glassesCamera = camComp;
                 if (this.toolPalette) {
                     this.toolPalette.setCamera(camComp);
@@ -258,8 +261,8 @@ export class ConduitXRMain extends BaseScriptComponent {
 
         if (this.glassesCamera && this.inspectorCamera) {
             this.inspectorCamera.renderTarget = this.glassesCamera.renderTarget;
-            this.inspectorCamera.near = this.glassesCamera.near || 1.0;
-            this.inspectorCamera.far = this.glassesCamera.far || 2500.0;
+            this.inspectorCamera.near = 1.0;
+            this.inspectorCamera.far = 5000.0;
             // Lens Studio camera FOV is in radians (0, PI)
             this.inspectorCamera.fov = this.glassesCamera.fov || ((65.0 * Math.PI) / 180.0);
             try {

@@ -41,7 +41,7 @@
   RenderOrder: 0
   Size: 20.000000
   Near: 1.000000
-  Far: 1000.000000
+  Far: 5000.000000
   Fov: 63.541019
   ClearColor: !<CameraClearColor>
     Mode: None
@@ -109,7 +109,7 @@
   AutoShadowFrustumSizeExtend: 2.000000
   ShadowFrustumSize: 30.000000
   ShadowFrustumNearClipPlane: 1.000000
-  ShadowFrustumFarClipPlane: 1000.000000
+  ShadowFrustumFarClipPlane: 5000.000000
   UseEnvMapFromCamera: false
   EnvMapFromCameraMode: Auto
   EstimationSharpness: 1.000000
@@ -157,7 +157,7 @@
   AutoShadowFrustumSizeExtend: 2.000000
   ShadowFrustumSize: 30.000000
   ShadowFrustumNearClipPlane: 1.000000
-  ShadowFrustumFarClipPlane: 1000.000000
+  ShadowFrustumFarClipPlane: 5000.000000
   UseEnvMapFromCamera: false
   EnvMapFromCameraMode: Auto
   EstimationSharpness: 1.000000
