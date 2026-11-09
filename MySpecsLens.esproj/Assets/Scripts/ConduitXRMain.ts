@@ -290,8 +290,9 @@ export class ConduitXRMain extends BaseScriptComponent {
         this.activeCameraMode = (this.activeCameraMode === "glasses") ? "inspector" : "glasses";
         const isGlasses = (this.activeCameraMode === "glasses");
 
-        this.glassesCamera.enabled = isGlasses;
-        this.inspectorCamera.enabled = !isGlasses;
+        // Keep primary camera enabled so Lens Studio preview viewport stays alive
+        this.glassesCamera.enabled = true;
+        if (this.inspectorCamera) this.inspectorCamera.enabled = true;
 
         if (this.glassesCameraObj) {
             const dt = this.glassesCameraObj.getComponent("Component.DeviceTracking");
@@ -387,10 +388,20 @@ export class ConduitXRMain extends BaseScriptComponent {
 
         this.orbitTarget = target;
         this.orbitDist = pos.distance(target);
-        this.inspectorCameraObj.getTransform().setWorldPosition(pos);
         const forward = target.sub(pos).normalize();
         const up = (preset === "top") ? new vec3(0, 0, -1) : new vec3(0, 1, 0);
-        this.inspectorCameraObj.getTransform().setWorldRotation(quat.lookAt(forward, up));
+        const lookRot = quat.lookAt(forward, up);
+
+        if (this.inspectorCameraObj) {
+            this.inspectorCameraObj.getTransform().setWorldPosition(pos);
+            this.inspectorCameraObj.getTransform().setWorldRotation(lookRot);
+        }
+        if (this.glassesCameraObj) {
+            const dt = this.glassesCameraObj.getComponent("Component.DeviceTracking");
+            if (dt) dt.enabled = false;
+            this.glassesCameraObj.getTransform().setWorldPosition(pos);
+            this.glassesCameraObj.getTransform().setWorldRotation(lookRot);
+        }
     }
 
     public updateCinematicCameraPan(): void {
@@ -416,9 +427,18 @@ export class ConduitXRMain extends BaseScriptComponent {
         const panTarget = new vec3(currentTargetX, 60.0, currentTargetZ);
         const panCamPos = new vec3(currentTargetX, 520.0, currentTargetZ + 680.0);
 
-        this.inspectorCameraObj.getTransform().setWorldPosition(panCamPos);
         const forward = panTarget.sub(panCamPos).normalize();
-        this.inspectorCameraObj.getTransform().setWorldRotation(quat.lookAt(forward, new vec3(0, 1, 0)));
+        const panRot = quat.lookAt(forward, new vec3(0, 1, 0));
+        if (this.inspectorCameraObj) {
+            this.inspectorCameraObj.getTransform().setWorldPosition(panCamPos);
+            this.inspectorCameraObj.getTransform().setWorldRotation(panRot);
+        }
+        if (this.glassesCameraObj) {
+            const dt = this.glassesCameraObj.getComponent("Component.DeviceTracking");
+            if (dt) dt.enabled = false;
+            this.glassesCameraObj.getTransform().setWorldPosition(panCamPos);
+            this.glassesCameraObj.getTransform().setWorldRotation(panRot);
+        }
     }
 
     public getActiveCamera(): Camera | null {
@@ -3430,9 +3450,9 @@ export class ConduitXRMain extends BaseScriptComponent {
             this.setupInspectorCamera();
         }
 
-        // 2. Switch active camera to Inspector Camera (No DeviceTracking overrides!)
+        // 2. Keep primary camera enabled so Preview viewport stays alive
         this.activeCameraMode = "inspector";
-        if (this.glassesCamera) this.glassesCamera.enabled = false;
+        if (this.glassesCamera) this.glassesCamera.enabled = true;
         if (this.inspectorCamera) this.inspectorCamera.enabled = true;
 
         // 3. Disable DeviceTracking on glasses camera to prevent tracking snapback
