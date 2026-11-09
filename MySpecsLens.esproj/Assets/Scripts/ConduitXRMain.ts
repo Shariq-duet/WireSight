@@ -74,6 +74,11 @@ export class ConduitXRMain extends BaseScriptComponent {
     private orbitDist: number = 220.0;
     private orbitTarget: vec3 = new vec3(0, 0, -200);
 
+    // Cinematic estate camera pan across all 8 rooms
+    private isCinematicPanning: boolean = false;
+    private cinematicPanProgress: number = 0.0;
+    private cinematicPanDirection: number = 1.0;
+
     // Run registry
     private activeRuns: ConduitRun[] = [...INITIAL_CONDUIT_RUNS];
     private runVisualObjects: Map<string, SceneObject> = new Map();
@@ -316,7 +321,7 @@ export class ConduitXRMain extends BaseScriptComponent {
     }
 
     public cycleInspectorPreset(): string {
-        const PRESETS: ("iso" | "side" | "top" | "orbit")[] = ["iso", "side", "top", "orbit"];
+        const PRESETS: ("iso" | "side" | "top" | "orbit" | "pan")[] = ["iso", "side", "top", "orbit", "pan"];
         this.inspectorPresetIndex = (this.inspectorPresetIndex + 1) % PRESETS.length;
         const p = PRESETS[this.inspectorPresetIndex];
         this.applyInspectorPreset(p);
@@ -329,37 +334,50 @@ export class ConduitXRMain extends BaseScriptComponent {
     }
 
     private getPresetLabel(): string {
-        const LABELS = ["45° ISO", "SIDE", "TOP-DOWN", "ORBIT"];
+        const LABELS = ["45° ISO", "SIDE", "TOP-DOWN", "ORBIT", "🎬 ESTATE PAN"];
         return LABELS[this.inspectorPresetIndex] || "45° ISO";
     }
 
-    private applyInspectorPreset(preset: "iso" | "side" | "top" | "orbit") {
+    private applyInspectorPreset(preset: "iso" | "side" | "top" | "orbit" | "pan") {
         if (!this.inspectorCameraObj) return;
 
-        let pos = new vec3(-115, 85, -70);
-        let target = new vec3(0, 0, -200);
+        let pos = new vec3(100, 850, 950);
+        let target = new vec3(100, 60, 180);
 
         if (preset === "side") {
             // Perpendicular to line of sight — directly reveals depth from glasses to wall!
+            this.isCinematicPanning = false;
             pos = new vec3(-190, 15, -100);
             target = new vec3(0, 15, -100);
             this.orbitYaw = -Math.PI / 2;
             this.orbitPitch = 0.05;
         } else if (preset === "top") {
-            // Straight down from ceiling — blueprint layout
-            pos = new vec3(0, 220, -100);
-            target = new vec3(0, 0, -100);
+            // Straight down from ceiling — blueprint layout over entire estate
+            this.isCinematicPanning = false;
+            pos = new vec3(100, 750, 180);
+            target = new vec3(100, 0, 180);
             this.orbitYaw = 0;
             this.orbitPitch = 1.25;
         } else if (preset === "orbit") {
+            this.isCinematicPanning = false;
             pos = new vec3(115, 85, -70);
             target = new vec3(0, 0, -200);
             this.orbitYaw = 0.55;
             this.orbitPitch = 0.32;
+        } else if (preset === "pan") {
+            // Smooth horizontal cinematic glide across all 8 wired rooms!
+            this.isCinematicPanning = true;
+            this.cinematicPanProgress = 0.0;
+            this.cinematicPanDirection = 1.0;
+            pos = new vec3(-650, 520, 780);
+            target = new vec3(-650, 60, 120);
+            this.orbitYaw = 0.0;
+            this.orbitPitch = 0.55;
         } else {
-            // iso (default 45-degree elevated view)
-            pos = new vec3(-115, 85, -70);
-            target = new vec3(0, 0, -200);
+            // iso (default 45-degree elevated view framing all 8 rooms)
+            this.isCinematicPanning = false;
+            pos = new vec3(100, 850, 950);
+            target = new vec3(100, 60, 180);
             this.orbitYaw = -0.55;
             this.orbitPitch = 0.32;
         }
@@ -370,6 +388,34 @@ export class ConduitXRMain extends BaseScriptComponent {
         const forward = target.sub(pos).normalize();
         const up = (preset === "top") ? new vec3(0, 0, -1) : new vec3(0, 1, 0);
         this.inspectorCameraObj.getTransform().setWorldRotation(quat.lookAt(forward, up));
+    }
+
+    public updateCinematicCameraPan(): void {
+        if (!this.isCinematicPanning || !this.inspectorCameraObj) return;
+
+        // Smoothly glide camera horizontally across the entire 8-room estate:
+        // From West (Bathroom X = -650) to East (Garage X = 750)
+        const dt = 0.016;
+        this.cinematicPanProgress += dt * 0.06 * this.cinematicPanDirection;
+        if (this.cinematicPanProgress >= 1.0) {
+            this.cinematicPanProgress = 1.0;
+            this.cinematicPanDirection = -1.0;
+        } else if (this.cinematicPanProgress <= 0.0) {
+            this.cinematicPanProgress = 0.0;
+            this.cinematicPanDirection = 1.0;
+        }
+
+        // Sinusoidal easing
+        const t = (1.0 - Math.cos(this.cinematicPanProgress * Math.PI)) * 0.5;
+        const currentTargetX = -650.0 + t * 1400.0; // from -650 to +750
+        const currentTargetZ = 120.0 + Math.sin(t * Math.PI) * 70.0;
+
+        const panTarget = new vec3(currentTargetX, 60.0, currentTargetZ);
+        const panCamPos = new vec3(currentTargetX, 520.0, currentTargetZ + 680.0);
+
+        this.inspectorCameraObj.getTransform().setWorldPosition(panCamPos);
+        const forward = panTarget.sub(panCamPos).normalize();
+        this.inspectorCameraObj.getTransform().setWorldRotation(quat.lookAt(forward, new vec3(0, 1, 0)));
     }
 
     public getActiveCamera(): Camera | null {
@@ -1281,8 +1327,10 @@ export class ConduitXRMain extends BaseScriptComponent {
                     this.teleportToRoom(1); // Kitchen
                 } else if (isKey("Eight", "8", 56) || isKey("Digit8", "8") || isKey("Key_8", "8")) {
                     this.teleportToRoom(5); // 45° Bird's Eye Overview
-                } else if (isKey("Nine", "9", 57) || isKey("Zero", "0", 48)) {
+                } else if (isKey("Nine", "9", 57) || isKey("Digit9", "9") || isKey("Key_9", "9")) {
                     this.teleportToRoom(0); // Central Hallway
+                } else if (isKey("Zero", "0", 48) || isKey("Digit0", "0") || isKey("Key_0", "0")) {
+                    this.teleportToRoom(10); // 🎬 Cinematic Estate Pan (Glides across all 8 wired rooms)
                 } else if (isKey("One", "1", 49) || isKey("Digit1", "1")) {
                     if (this.toolPalette) this.toolPalette.switchTab("wire");
                 } else if (isKey("Two", "2", 50) || isKey("Digit2", "2")) {
@@ -1397,6 +1445,7 @@ export class ConduitXRMain extends BaseScriptComponent {
             this.renderConduitLinesDebug();
             this.updateSafetyCheck();
             this.billboardLabelsToCamera();
+            this.updateCinematicCameraPan();
         });
     }
 
@@ -1689,6 +1738,7 @@ export class ConduitXRMain extends BaseScriptComponent {
 
             // A. If in Inspector camera mode and not pinching, drag orbits the camera around room
             if (this.activeCameraMode === "inspector" && !this.activePinch && !this.activeWallPinch && this.inspectorCameraObj) {
+                this.isCinematicPanning = false;
                 if (this.lastDragPos) {
                     const dx = touchPos.x - this.lastDragPos.x;
                     const dy = touchPos.y - this.lastDragPos.y;
@@ -3403,6 +3453,14 @@ export class ConduitXRMain extends BaseScriptComponent {
         this.orbitDist = dist;
         this.orbitPitch = Math.asin(Math.max(-0.99, Math.min(0.99, offset.y / dist)));
         this.orbitYaw = Math.atan2(offset.x, offset.z);
+
+        if (room.id === "panoramic") {
+            this.isCinematicPanning = true;
+            this.cinematicPanProgress = 0.0;
+            this.cinematicPanDirection = 1.0;
+        } else {
+            this.isCinematicPanning = false;
+        }
 
         // 6. Update all tools with the active camera
         const activeCam = this.inspectorCamera || this.glassesCamera;

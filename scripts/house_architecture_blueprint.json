@@ -1,9 +1,91 @@
 {
   "house_dimensions_cm": {
-    "width": 1000,
-    "depth": 450,
+    "width": 1700,
+    "depth": 825,
     "height": 240
   },
+  "rooms": [
+    {
+      "id": "bedroom",
+      "name": "Master Bedroom",
+      "bounds": {
+        "min_x": -450,
+        "max_x": -75,
+        "min_z": -225,
+        "max_z": 225
+      }
+    },
+    {
+      "id": "living",
+      "name": "Living Room",
+      "bounds": {
+        "min_x": -75,
+        "max_x": 300,
+        "min_z": -225,
+        "max_z": 225
+      }
+    },
+    {
+      "id": "utility",
+      "name": "Electrical MEP Room",
+      "bounds": {
+        "min_x": 300,
+        "max_x": 550,
+        "min_z": -225,
+        "max_z": 225
+      }
+    },
+    {
+      "id": "bathroom",
+      "name": "Luxury Bathroom",
+      "bounds": {
+        "min_x": -750,
+        "max_x": -450,
+        "min_z": -225,
+        "max_z": 225
+      }
+    },
+    {
+      "id": "garage",
+      "name": "Garage & Workshop",
+      "bounds": {
+        "min_x": 550,
+        "max_x": 950,
+        "min_z": -225,
+        "max_z": 225
+      }
+    },
+    {
+      "id": "dining",
+      "name": "Formal Dining Room",
+      "bounds": {
+        "min_x": -450,
+        "max_x": -75,
+        "min_z": 235,
+        "max_z": 600
+      }
+    },
+    {
+      "id": "kitchen",
+      "name": "Modern Gourmet Kitchen",
+      "bounds": {
+        "min_x": -75,
+        "max_x": 300,
+        "min_z": 235,
+        "max_z": 600
+      }
+    },
+    {
+      "id": "office",
+      "name": "Home Office / Tech Lab",
+      "bounds": {
+        "min_x": 300,
+        "max_x": 650,
+        "min_z": 235,
+        "max_z": 600
+      }
+    }
+  ],
   "breaker_panel": {
     "center": {
       "x": 380,
@@ -69,6 +151,84 @@
         "circuit": "Utility & Energy Storage Battery System",
         "room": "utility",
         "scenario": 4
+      },
+      {
+        "num": 5,
+        "slot": "Left Row 3",
+        "terminal": {
+          "x": 366,
+          "y": 133,
+          "z": -201
+        },
+        "amperage": 20,
+        "circuit": "Kitchen Small Appliances & Island GFCI",
+        "room": "kitchen",
+        "scenario": 5
+      },
+      {
+        "num": 6,
+        "slot": "Right Row 3",
+        "terminal": {
+          "x": 394,
+          "y": 133,
+          "z": -201
+        },
+        "amperage": 50,
+        "circuit": "Garage 50A 240V Level-2 EV Fast Charger",
+        "room": "garage",
+        "scenario": 6
+      },
+      {
+        "num": 7,
+        "slot": "Left Row 4",
+        "terminal": {
+          "x": 366,
+          "y": 121,
+          "z": -201
+        },
+        "amperage": 20,
+        "circuit": "Bathroom Vanity GFCI & Exhaust Fan",
+        "room": "bathroom",
+        "scenario": 7
+      },
+      {
+        "num": 8,
+        "slot": "Right Row 4",
+        "terminal": {
+          "x": 394,
+          "y": 121,
+          "z": -201
+        },
+        "amperage": 15,
+        "circuit": "Home Office Tech Workstation Clean Power",
+        "room": "office",
+        "scenario": 8
+      },
+      {
+        "num": 9,
+        "slot": "Left Row 5",
+        "terminal": {
+          "x": 366,
+          "y": 109,
+          "z": -201
+        },
+        "amperage": 15,
+        "circuit": "Formal Dining Room Chandelier & Sconces",
+        "room": "dining",
+        "scenario": 9
+      },
+      {
+        "num": 10,
+        "slot": "Right Row 5",
+        "terminal": {
+          "x": 394,
+          "y": 109,
+          "z": -201
+        },
+        "amperage": 30,
+        "circuit": "Central HVAC Dedicated Air Handler",
+        "room": "utility",
+        "scenario": 10
       }
     ]
   }

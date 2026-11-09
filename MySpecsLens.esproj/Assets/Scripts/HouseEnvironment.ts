@@ -23,12 +23,12 @@ export const HOUSE_ROOMS: RoomZoneInfo[] = [
     },
     {
         id: "kitchen",
-        name: "Kitchen Zone",
+        name: "Modern Gourmet Kitchen",
         icon: "🍳",
-        label: "KITCHEN (20A GFCI & WATER RISERS)",
-        center: new vec3(112.5, 120, -225),
-        cameraPos: new vec3(112.5, 120, 100),
-        cameraRot: quat.fromEulerAngles(0, 0, 0)
+        label: "KITCHEN (ISLAND, 20A GFCI & REFRIGERATOR)",
+        center: new vec3(112.5, 100, 420),
+        cameraPos: new vec3(112.5, 135, 660),
+        cameraRot: quat.fromEulerAngles(-0.10, 0, 0)
     },
     {
         id: "living",
@@ -62,9 +62,54 @@ export const HOUSE_ROOMS: RoomZoneInfo[] = [
         name: "Architectural Cutaway Overview",
         icon: "📐",
         label: "BIRD'S-EYE 45° ISOMETRIC HOUSE OVERVIEW",
-        center: new vec3(50, 0, 0),
-        cameraPos: new vec3(50, 480, 480),
-        cameraRot: quat.fromEulerAngles(-0.70, 0, 0)
+        center: new vec3(100, 60, 180),
+        cameraPos: new vec3(100, 850, 950),
+        cameraRot: quat.fromEulerAngles(-0.72, 0, 0)
+    },
+    {
+        id: "bathroom",
+        name: "Luxury Bathroom",
+        icon: "🚿",
+        label: "LUXURY BATHROOM (DOUBLE VANITY, SHOWER & 20A GFCI)",
+        center: new vec3(-600, 120, -225),
+        cameraPos: new vec3(-600, 130, 80),
+        cameraRot: quat.fromEulerAngles(0, 0, 0)
+    },
+    {
+        id: "garage",
+        name: "Garage & Workshop",
+        icon: "🔧",
+        label: "GARAGE / WORKSHOP (50A LEVEL-2 EV CHARGER & BENCH)",
+        center: new vec3(750, 120, -225),
+        cameraPos: new vec3(750, 140, 100),
+        cameraRot: quat.fromEulerAngles(0, 0, 0)
+    },
+    {
+        id: "dining",
+        name: "Formal Dining Room",
+        icon: "🍷",
+        label: "FORMAL DINING (WALNUT TABLE & PENDANT CHANDELIER)",
+        center: new vec3(-262.5, 100, 420),
+        cameraPos: new vec3(-262.5, 135, 660),
+        cameraRot: quat.fromEulerAngles(-0.10, 0, 0)
+    },
+    {
+        id: "office",
+        name: "Home Office / Tech Lab",
+        icon: "💻",
+        label: "TECH WORKSTATION (DUAL MONITORS & CLEAN POWER)",
+        center: new vec3(475, 100, 420),
+        cameraPos: new vec3(475, 135, 660),
+        cameraRot: quat.fromEulerAngles(-0.10, 0, 0)
+    },
+    {
+        id: "panoramic",
+        name: "Cinematic Estate Pan",
+        icon: "🎬",
+        label: "CINEMATIC PANNING VIEW (ALL 8 WIRED ROOMS)",
+        center: new vec3(100, 60, 180),
+        cameraPos: new vec3(100, 480, 780),
+        cameraRot: quat.fromEulerAngles(-0.55, 0, 0)
     }
 ];
 
