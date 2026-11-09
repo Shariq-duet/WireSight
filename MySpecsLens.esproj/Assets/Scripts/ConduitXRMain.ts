@@ -129,8 +129,19 @@ export class ConduitXRMain extends BaseScriptComponent {
             }
         });
         this.saveStateToStorage();
-        // Automatically spawn in Master Bedroom facing the wall & wiring on launch
-        this.teleportToRoom(4);
+        // Start in First-Person Glasses Mode with DeviceTracking enabled for full WASD free-roam
+        this.activeCameraMode = "glasses";
+        if (this.glassesCamera) this.glassesCamera.enabled = true;
+        if (this.inspectorCamera) this.inspectorCamera.enabled = false;
+        if (this.glassesCameraObj) {
+            const dt = this.glassesCameraObj.getComponent("Component.DeviceTracking");
+            if (dt) {
+                dt.enabled = true;
+                if (typeof (dt as any).requestDeviceTrackingMode === "function") {
+                    (dt as any).requestDeviceTrackingMode(DeviceTrackingMode.World);
+                }
+            }
+        }
     }
 
     private findCamera(): SceneObject | null {
@@ -266,9 +277,7 @@ export class ConduitXRMain extends BaseScriptComponent {
             // Lens Studio camera FOV is in radians (0, PI)
             this.inspectorCamera.fov = this.glassesCamera.fov || ((65.0 * Math.PI) / 180.0);
             try {
-                if (this.glassesCamera.renderOrder !== undefined) {
-                    this.inspectorCamera.renderOrder = this.glassesCamera.renderOrder;
-                }
+                this.inspectorCamera.renderOrder = (this.glassesCamera.renderOrder || 0) + 1;
                 if (this.glassesCamera.renderLayer) {
                     this.inspectorCamera.renderLayer = this.glassesCamera.renderLayer;
                 }
@@ -290,13 +299,19 @@ export class ConduitXRMain extends BaseScriptComponent {
         this.activeCameraMode = (this.activeCameraMode === "glasses") ? "inspector" : "glasses";
         const isGlasses = (this.activeCameraMode === "glasses");
 
-        // Keep primary camera enabled so Lens Studio preview viewport stays alive
+        // Primary camera always stays enabled so Lens Studio preview viewport stays alive
         this.glassesCamera.enabled = true;
-        if (this.inspectorCamera) this.inspectorCamera.enabled = true;
+        // Inspector camera is strictly enabled ONLY in inspector mode to avoid double-rendering
+        this.inspectorCamera.enabled = !isGlasses;
 
         if (this.glassesCameraObj) {
             const dt = this.glassesCameraObj.getComponent("Component.DeviceTracking");
-            if (dt) dt.enabled = isGlasses;
+            if (dt) {
+                dt.enabled = isGlasses;
+                if (isGlasses && typeof (dt as any).requestDeviceTrackingMode === "function") {
+                    (dt as any).requestDeviceTrackingMode(DeviceTrackingMode.World);
+                }
+            }
         }
 
         const activeCamComp = isGlasses ? this.glassesCamera : this.inspectorCamera;
@@ -314,7 +329,7 @@ export class ConduitXRMain extends BaseScriptComponent {
             this.toolPalette.updateCameraPresetText(this.getPresetLabel(), !isGlasses);
 
             const msg = isGlasses
-                ? "🎥 Glasses POV (First Person)"
+                ? "🎥 Glasses POV (Free Roam WASD)"
                 : `🎥 3rd-Person Inspector [${this.getPresetLabel()}]`;
             this.toolPalette.setStatusMessage(msg, new vec4(0.3, 0.95, 1.0, 1.0));
             this.toolPalette.summonInWorld();
@@ -396,7 +411,7 @@ export class ConduitXRMain extends BaseScriptComponent {
             this.inspectorCameraObj.getTransform().setWorldPosition(pos);
             this.inspectorCameraObj.getTransform().setWorldRotation(lookRot);
         }
-        if (this.glassesCameraObj) {
+        if (this.activeCameraMode === "inspector" && this.glassesCameraObj) {
             const dt = this.glassesCameraObj.getComponent("Component.DeviceTracking");
             if (dt) dt.enabled = false;
             this.glassesCameraObj.getTransform().setWorldPosition(pos);
@@ -3444,6 +3459,29 @@ export class ConduitXRMain extends BaseScriptComponent {
     public teleportToRoom(roomIndex: number): string {
         if (roomIndex < 0 || roomIndex >= HOUSE_ROOMS.length) return "";
         const room = HOUSE_ROOMS[roomIndex];
+
+        if (this.activeCameraMode === "glasses") {
+            // Glasses POV: teleport user to room entrance while preserving WASD free roam & DeviceTracking
+            if (this.glassesCameraObj) {
+                this.glassesCameraObj.getTransform().setWorldPosition(room.cameraPos);
+                this.glassesCameraObj.getTransform().setWorldRotation(room.cameraRot);
+                const dt = this.glassesCameraObj.getComponent("Component.DeviceTracking");
+                if (dt) {
+                    dt.enabled = true;
+                    if (typeof (dt as any).requestDeviceTrackingMode === "function") {
+                        (dt as any).requestDeviceTrackingMode(DeviceTrackingMode.World);
+                    }
+                }
+            }
+            if (this.glassesCamera) this.glassesCamera.enabled = true;
+            if (this.inspectorCamera) this.inspectorCamera.enabled = false;
+
+            if (this.toolPalette) {
+                this.toolPalette.setStatusMessage(`🚪 ${room.icon} ${room.name} (Glasses Free Roam)`, new vec4(0.3, 0.95, 1.0, 1.0));
+                this.toolPalette.summonInWorld();
+            }
+            return room.id;
+        }
 
         // 1. Ensure Inspector Camera exists
         if (!this.inspectorCamera || !this.inspectorCameraObj) {

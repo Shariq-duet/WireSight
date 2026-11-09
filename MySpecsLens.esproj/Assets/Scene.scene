@@ -8755,7 +8755,7 @@
   PrefabRemaps:
     []
   Name: Device Tracking
-  Enabled: false
+  Enabled: true
   DeviceTrackingMode: World
   RotationOptions: !<RotationOptions>
     InvertRotation: false
